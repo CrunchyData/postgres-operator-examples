@@ -1,0 +1,28 @@
+apiVersion: postgres-operator.crunchydata.com/v1beta1
+kind: PostgresCluster
+metadata:
+  name: hippo-gcs
+spec:
+  image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-ha:centos8-13.3-4.7.0
+  postgresVersion: 13
+  instances:
+    - volumeClaimSpec:
+        accessModes:
+        - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: 1Gi
+  archive:
+    pgbackrest:
+      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:centos8-13.3-4.7.0
+      repoHost:
+        dedicated: {}
+      configuration:
+      - secret:
+          name: pgo-gcs-creds
+      global:
+        repo1-path: /pgbackrest/postgres-operator/hippo-gcs/repo1
+      repos:
+      - name: repo1
+        gcs:
+          bucket: "<YOUR_GCS_BUCKET_NAME>"

@@ -1,0 +1,13 @@
+namespace: postgres-operator
+
+secretGenerator:
+- name: pgo-gcs-creds
+  files:
+  - gcs.conf
+  - gcs-key.json
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+resources:
+- postgres.yaml

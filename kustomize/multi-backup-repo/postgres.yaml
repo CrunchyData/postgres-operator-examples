@@ -1,0 +1,46 @@
+apiVersion: postgres-operator.crunchydata.com/v1beta1
+kind: PostgresCluster
+metadata:
+  name: hippo-multi-repo
+spec:
+  image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-ha:centos8-13.3-4.7.0
+  postgresVersion: 13
+  instances:
+    - volumeClaimSpec:
+        accessModes:
+        - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: 1Gi
+  archive:
+    pgbackrest:
+      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:centos8-13.3-4.7.0
+      repoHost:
+        dedicated: {}
+      configuration:
+      - secret:
+          name: pgo-multi-repo-creds
+      global:
+        repo2-path: /pgbackrest/postgres-operator/hippo-multi-repo/repo2
+        repo3-path: /pgbackrest/postgres-operator/hippo-multi-repo/repo3
+        repo4-path: /pgbackrest/postgres-operator/hippo-multi-repo/repo4
+      repos:
+      - name: repo1
+        volume:
+          volumeClaimSpec:
+            accessModes:
+            - "ReadWriteOnce"
+            resources:
+              requests:
+                storage: 1Gi
+      - name: repo2
+        s3:
+          bucket: "<YOUR_AWS_S3_BUCKET_NAME>"
+          endpoint: "<YOUR_AWS_S3_ENDPOINT>"
+          region: "<YOUR_AWS_S3_REGION>"
+      - name: repo3
+        gcs:
+          bucket: "<YOUR_GCS_BUCKET_NAME>"
+      - name: repo4
+        azure:
+          container: "<YOUR_AZURE_CONTAINER>"

@@ -1,0 +1,30 @@
+apiVersion: postgres-operator.crunchydata.com/v1beta1
+kind: PostgresCluster
+metadata:
+  name: hippo-s3
+spec:
+  image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-ha:centos8-13.3-4.7.0
+  postgresVersion: 13
+  instances:
+    - volumeClaimSpec:
+        accessModes:
+        - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: 1Gi
+  archive:
+    pgbackrest:
+      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:centos8-13.3-4.7.0
+      repoHost:
+        dedicated: {}
+      configuration:
+      - secret:
+          name: pgo-s3-creds
+      global:
+        repo1-path: /pgbackrest/postgres-operator/hippo-s3/repo1
+      repos:
+      - name: repo1
+        s3:
+          bucket: "<YOUR_AWS_S3_BUCKET_NAME>"
+          endpoint: "<YOUR_AWS_S3_ENDPOINT>"
+          region: "<YOUR_AWS_S3_REGION>"

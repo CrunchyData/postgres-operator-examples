@@ -1,0 +1,12 @@
+namespace: postgres-operator
+
+secretGenerator:
+- name: pgo-azure-creds
+  files:
+  - azure.conf
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+resources:
+- postgres.yaml

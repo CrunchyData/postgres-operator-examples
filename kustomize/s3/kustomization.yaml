@@ -1,0 +1,12 @@
+namespace: postgres-operator
+
+secretGenerator:
+- name: pgo-s3-creds
+  files:
+  - s3.conf
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+resources:
+- postgres.yaml

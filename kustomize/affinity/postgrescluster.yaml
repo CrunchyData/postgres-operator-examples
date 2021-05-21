@@ -1,0 +1,92 @@
+apiVersion: postgres-operator.crunchydata.com/v1beta1
+kind: PostgresCluster
+metadata:
+  name: affinitydb
+spec:
+  image: us.gcr.io/container-suite/crunchy-postgres-ha:centos8-13.2-ci-latest
+  postgresVersion: 13
+  instances:
+    - name: instance1
+      affinity:
+        nodeAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - preference:
+                matchExpressions:
+                  - key: pgo-key
+                    operator: In
+                    values:
+                      - instance
+              weight: 1
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                - key: pgo-key
+                  operator: NotIn
+                  values:
+                    - "repo-host"
+      volumeClaimSpec:
+        accessModes:
+        - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: 1Gi
+    - name: instance2
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: postgres-operator.crunchydata.com/instance
+                      operator: Exists
+                topologyKey: topology.kubernetes.io/zone
+              weight: 10
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                - key: pgo-key
+                  operator: NotIn
+                  values:
+                    - "repo-host"
+      volumeClaimSpec:
+        accessModes:
+        - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: 1Gi
+  archive:
+    pgbackrest:
+      image: us.gcr.io/container-suite/crunchy-pgbackrest:centos8-13.2-ci-latest
+      repoHost:
+        dedicated:
+          affinity:
+            nodeAffinity:
+              requiredDuringSchedulingIgnoredDuringExecution:
+                nodeSelectorTerms:
+                - matchExpressions:
+                  - key: pgo-key
+                    operator: In
+                    values:
+                    - repo-host
+      repos:
+      - name: repo1
+        volume:
+          volumeClaimSpec:
+            accessModes:
+            - "ReadWriteOnce"
+            resources:
+              requests:
+                storage: 1Gi
+      - name: repo2
+        volume:
+          volumeClaimSpec:
+            accessModes:
+            - "ReadWriteOnce"
+            resources:
+              requests:
+                storage: 1Gi
+  proxy:
+    pgBouncer:
+      image: us.gcr.io/container-suite/crunchy-pgbouncer:centos8-13.2-ci-latest
+      

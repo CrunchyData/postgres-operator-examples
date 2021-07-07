@@ -1,0 +1,20 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres-operator
+spec:
+  replicas: 1
+  template:
+    spec:
+      containers:
+      - name: operator
+        image: postgres-operator
+        env:
+        - name: CRUNCHY_DEBUG
+          value: "true"
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+      serviceAccountName: postgres-operator

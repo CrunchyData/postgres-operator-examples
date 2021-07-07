@@ -1,0 +1,15 @@
+namespace: postgres-operator
+
+secretGenerator:
+- name: pgo-multi-repo-creds
+  files:
+  - azure.conf
+  - gcs.conf
+  - gcs-key.json
+  - s3.conf
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+resources:
+- postgres.yaml

@@ -1,0 +1,3 @@
+[global]
+repo1-azure-account=<YOUR_AZURE_ACCOUNT>
+repo1-azure-key=<YOUR_AZURE_KEY>

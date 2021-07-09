@@ -22,7 +22,6 @@ helm.sh/chart: {{ include "install.chart" . }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{ include "install.crunchyLabels" .}}
 {{- end }}
 
 {{/*

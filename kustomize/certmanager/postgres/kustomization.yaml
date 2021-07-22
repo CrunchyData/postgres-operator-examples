@@ -1,0 +1,6 @@
+namespace: zoo
+
+resources:
+- cert.yaml
+- cert-repl.yaml
+- postgres.yaml

@@ -1,0 +1,4 @@
+resources:
+- selfsigned-clusterissuer.yaml
+- ca-cert.yaml
+- ca-issuer.yaml

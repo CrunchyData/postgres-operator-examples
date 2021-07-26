@@ -1,4 +1,4 @@
-namespace: zoo
+namespace: postgres-operator
 
 resources:
 - cert.yaml

@@ -2,7 +2,7 @@ apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   labels:
-    app.kubernetes.io/name: postgres-operator-monitoring
+    app.kubernetes.io/name: pgo-monitoring
     vendor: crunchydata
   name: alertmanagerdata
 spec:
@@ -11,15 +11,12 @@ spec:
   resources:
     requests:
       storage: 5Gi
-  storageClassName: standard
-
 ---
-
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   labels:
-    app.kubernetes.io/name: postgres-operator-monitoring
+    app.kubernetes.io/name: pgo-monitoring
     vendor: crunchydata
   name: grafanadata
 spec:
@@ -28,15 +25,12 @@ spec:
   resources:
     requests:
       storage: 5Gi
-  storageClassName: standard
-
 ---
-
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   labels:
-    app.kubernetes.io/name: postgres-operator-monitoring
+    app.kubernetes.io/name: pgo-monitoring
     vendor: crunchydata
   name: prometheusdata
 spec:
@@ -45,4 +39,3 @@ spec:
   resources:
     requests:
       storage: 5Gi
-  storageClassName: standard

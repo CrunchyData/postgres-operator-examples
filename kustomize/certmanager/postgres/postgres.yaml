@@ -10,8 +10,7 @@ spec:
   customTLSSecret:
     name: hippo-tls
   instances:
-    - name: pgc
-      replicas: 2
+    - replicas: 2
       dataVolumeClaimSpec:
         accessModes:
         - "ReadWriteOnce"

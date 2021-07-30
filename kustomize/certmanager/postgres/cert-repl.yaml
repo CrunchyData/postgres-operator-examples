@@ -9,26 +9,20 @@ spec:
   renewBefore: 360h # 15d
   subject:
     organizations:
-    - crunchydata
+    - hippo-org
   # The use of the common name field has been deprecated since 2000 and is
   # discouraged from being used.
   commonName: _crunchyrepl
   isCA: false
   privateKey:
-    algorithm: RSA
-    encoding: PKCS1
-    size: 2048
+    algorithm: ECDSA
+    size: 256
   usages:
-    - server auth
-    - client auth
+    - digital signature
+    - key encipherment
   # At least one of a DNS Name, URI, or IP address is required.
   dnsNames:
   - _crunchyrepl
-  # uris:
-  # - spiffe://cluster.local/ns/zoo/hippo
-  #ipAddresses:
-  #- 192.168.0.5
-  # Issuer references are always required.
   issuerRef:
     name: ca-issuer
     # We can reference ClusterIssuers by changing the kind here.

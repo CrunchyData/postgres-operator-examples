@@ -8,6 +8,10 @@ The best way to get started is to fork this repository and experiment with the e
 
 Each of the examples has its own README that guides you through the process of deploying it.
 
+You can find the full [PGO documentation](https://access.crunchydata.com/documentation/postgres-operator/v5/) for the project here:
+
+[https://access.crunchydata.com/documentation/postgres-operator/v5/](https://access.crunchydata.com/documentation/postgres-operator/v5/)
+
 You can find out more information about [PGO](https://github.com/CrunchyData/postgres-operator), the [Postgres Operator](https://github.com/CrunchyData/postgres-operator) from [Crunchy Data](https://www.crunchydata.com) at the project page:
 
 [https://github.com/CrunchyData/postgres-operator](https://github.com/CrunchyData/postgres-operator)

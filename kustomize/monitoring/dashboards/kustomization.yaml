@@ -1,0 +1,14 @@
+kind: Kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+configMapGenerator:
+- name: grafana-dashboards
+  files:
+    - pgbackrest.json
+    - pod_details.json
+    - postgres_overview.json
+    - postgresql_details.json
+    - postgresql_service_health.json
+    - prometheus_alerts.json
+    - query_statistics.json
+generatorOptions:
+ disableNameSuffixHash: true

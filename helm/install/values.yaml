@@ -4,5 +4,22 @@ image:
   repository: registry.developers.crunchydata.com/crunchydata
   tag: ubi8-5.0.2-0
 
+relatedImages:
+  postgres_13:
+    repository: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-ha
+    tag: centos8-13.4-0
+  postgres_13_gis_3.1:
+    repository: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis-ha
+    tag: centos8-13.4-3.1-0
+  pgbackrest:
+    repository: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest
+    tag: centos8-2.33-2
+  pgbouncer:
+    repository: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer
+    tag: centos8-1.15-2
+  pgexporter:
+    repository: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter
+    tag: ubi8-5.0.2-0
+
 ## Install in default or single namespace mode
 singleNamespace: false

@@ -22,7 +22,7 @@ spec:
         - name: RELATED_IMAGE_PGBOUNCER
           value: "registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:centos8-1.15-2"
         - name: RELATED_IMAGE_PGEXPORTER
-          value: "registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-5.0.1-0"
+          value: "registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-5.0.2-0"
         securityContext:
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: true

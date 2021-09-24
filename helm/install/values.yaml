@@ -2,7 +2,7 @@
 ## Provide image repository and tag
 image:
   repository: registry.developers.crunchydata.com/crunchydata
-  tag: ubi8-5.0.2-0
+  tag: ubi8-5.0.3-0
 
 relatedImages:
   postgres_13:

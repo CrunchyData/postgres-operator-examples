@@ -1,5 +1,3 @@
-
----
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
@@ -290,6 +288,44 @@ spec:
                           may also be set using the RELATED_IMAGE_PGBACKREST environment
                           variable
                         type: string
+                      jobs:
+                        description: Jobs field allows configuration for all backup
+                          jobs
+                        properties:
+                          priorityClassName:
+                            description: 'Priority class name for the pgBackRest backup
+                              Job pods. Changing this value causes PostgreSQL to restart.
+                              More info: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/'
+                            type: string
+                          resources:
+                            description: Resource limits for backup jobs. Includes
+                              manual, scheduled and replica create backups
+                            properties:
+                              limits:
+                                additionalProperties:
+                                  anyOf:
+                                  - type: integer
+                                  - type: string
+                                  pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                  x-kubernetes-int-or-string: true
+                                description: 'Limits describes the maximum amount
+                                  of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                                type: object
+                              requests:
+                                additionalProperties:
+                                  anyOf:
+                                  - type: integer
+                                  - type: string
+                                  pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                  x-kubernetes-int-or-string: true
+                                description: 'Requests describes the minimum amount
+                                  of compute resources required. If Requests is omitted
+                                  for a container, it defaults to Limits if that is
+                                  explicitly specified, otherwise to an implementation-defined
+                                  value. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                                type: object
+                            type: object
+                        type: object
                       manual:
                         description: Defines details for manual pgBackRest backup
                           Jobs
@@ -322,415 +358,274 @@ spec:
                             type: object
                         type: object
                       repoHost:
-                        description: Defines a pgBackRest repository host
+                        description: Defines configuration for a pgBackRest dedicated
+                          repository host.  This section is only applicable if at
+                          least one "volume" (i.e. PVC-based) repository is defined
+                          in the "repos" section, therefore enabling a dedicated repository
+                          host Deployment.
                         properties:
-                          dedicated:
-                            description: Defines a dedicated repository host configuration
+                          affinity:
+                            description: 'Scheduling constraints of the Dedicated
+                              repo host pod. Changing this value causes repo host
+                              to restart. More info: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node'
                             properties:
-                              affinity:
-                                description: 'Scheduling constraints of the Dedicated
-                                  repo host pod. Changing this value causes repo host
-                                  to restart. More info: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node'
+                              nodeAffinity:
+                                description: Describes node affinity scheduling rules
+                                  for the pod.
                                 properties:
-                                  nodeAffinity:
-                                    description: Describes node affinity scheduling
-                                      rules for the pod.
-                                    properties:
-                                      preferredDuringSchedulingIgnoredDuringExecution:
-                                        description: The scheduler will prefer to
-                                          schedule pods to nodes that satisfy the
-                                          affinity expressions specified by this field,
-                                          but it may choose a node that violates one
-                                          or more of the expressions. The node that
-                                          is most preferred is the one with the greatest
-                                          sum of weights, i.e. for each node that
-                                          meets all of the scheduling requirements
-                                          (resource request, requiredDuringScheduling
-                                          affinity expressions, etc.), compute a sum
-                                          by iterating through the elements of this
-                                          field and adding "weight" to the sum if
-                                          the node matches the corresponding matchExpressions;
-                                          the node(s) with the highest sum are the
-                                          most preferred.
-                                        items:
-                                          description: An empty preferred scheduling
-                                            term matches all objects with implicit
-                                            weight 0 (i.e. it's a no-op). A null preferred
-                                            scheduling term matches no objects (i.e.
-                                            is also a no-op).
+                                  preferredDuringSchedulingIgnoredDuringExecution:
+                                    description: The scheduler will prefer to schedule
+                                      pods to nodes that satisfy the affinity expressions
+                                      specified by this field, but it may choose a
+                                      node that violates one or more of the expressions.
+                                      The node that is most preferred is the one with
+                                      the greatest sum of weights, i.e. for each node
+                                      that meets all of the scheduling requirements
+                                      (resource request, requiredDuringScheduling
+                                      affinity expressions, etc.), compute a sum by
+                                      iterating through the elements of this field
+                                      and adding "weight" to the sum if the node matches
+                                      the corresponding matchExpressions; the node(s)
+                                      with the highest sum are the most preferred.
+                                    items:
+                                      description: An empty preferred scheduling term
+                                        matches all objects with implicit weight 0
+                                        (i.e. it's a no-op). A null preferred scheduling
+                                        term matches no objects (i.e. is also a no-op).
+                                      properties:
+                                        preference:
+                                          description: A node selector term, associated
+                                            with the corresponding weight.
                                           properties:
-                                            preference:
-                                              description: A node selector term, associated
-                                                with the corresponding weight.
-                                              properties:
-                                                matchExpressions:
-                                                  description: A list of node selector
-                                                    requirements by node's labels.
-                                                  items:
-                                                    description: A node selector requirement
-                                                      is a selector that contains
-                                                      values, a key, and an operator
-                                                      that relates the key and values.
-                                                    properties:
-                                                      key:
-                                                        description: The label key
-                                                          that the selector applies
-                                                          to.
-                                                        type: string
-                                                      operator:
-                                                        description: Represents a
-                                                          key's relationship to a
-                                                          set of values. Valid operators
-                                                          are In, NotIn, Exists, DoesNotExist.
-                                                          Gt, and Lt.
-                                                        type: string
-                                                      values:
-                                                        description: An array of string
-                                                          values. If the operator
-                                                          is In or NotIn, the values
-                                                          array must be non-empty.
-                                                          If the operator is Exists
-                                                          or DoesNotExist, the values
-                                                          array must be empty. If
-                                                          the operator is Gt or Lt,
-                                                          the values array must have
-                                                          a single element, which
-                                                          will be interpreted as an
-                                                          integer. This array is replaced
-                                                          during a strategic merge
-                                                          patch.
-                                                        items:
-                                                          type: string
-                                                        type: array
-                                                    required:
-                                                    - key
-                                                    - operator
-                                                    type: object
-                                                  type: array
-                                                matchFields:
-                                                  description: A list of node selector
-                                                    requirements by node's fields.
-                                                  items:
-                                                    description: A node selector requirement
-                                                      is a selector that contains
-                                                      values, a key, and an operator
-                                                      that relates the key and values.
-                                                    properties:
-                                                      key:
-                                                        description: The label key
-                                                          that the selector applies
-                                                          to.
-                                                        type: string
-                                                      operator:
-                                                        description: Represents a
-                                                          key's relationship to a
-                                                          set of values. Valid operators
-                                                          are In, NotIn, Exists, DoesNotExist.
-                                                          Gt, and Lt.
-                                                        type: string
-                                                      values:
-                                                        description: An array of string
-                                                          values. If the operator
-                                                          is In or NotIn, the values
-                                                          array must be non-empty.
-                                                          If the operator is Exists
-                                                          or DoesNotExist, the values
-                                                          array must be empty. If
-                                                          the operator is Gt or Lt,
-                                                          the values array must have
-                                                          a single element, which
-                                                          will be interpreted as an
-                                                          integer. This array is replaced
-                                                          during a strategic merge
-                                                          patch.
-                                                        items:
-                                                          type: string
-                                                        type: array
-                                                    required:
-                                                    - key
-                                                    - operator
-                                                    type: object
-                                                  type: array
-                                              type: object
-                                            weight:
-                                              description: Weight associated with
-                                                matching the corresponding nodeSelectorTerm,
-                                                in the range 1-100.
-                                              format: int32
-                                              type: integer
-                                          required:
-                                          - preference
-                                          - weight
-                                          type: object
-                                        type: array
-                                      requiredDuringSchedulingIgnoredDuringExecution:
-                                        description: If the affinity requirements
-                                          specified by this field are not met at scheduling
-                                          time, the pod will not be scheduled onto
-                                          the node. If the affinity requirements specified
-                                          by this field cease to be met at some point
-                                          during pod execution (e.g. due to an update),
-                                          the system may or may not try to eventually
-                                          evict the pod from its node.
-                                        properties:
-                                          nodeSelectorTerms:
-                                            description: Required. A list of node
-                                              selector terms. The terms are ORed.
-                                            items:
-                                              description: A null or empty node selector
-                                                term matches no objects. The requirements
-                                                of them are ANDed. The TopologySelectorTerm
-                                                type implements a subset of the NodeSelectorTerm.
-                                              properties:
-                                                matchExpressions:
-                                                  description: A list of node selector
-                                                    requirements by node's labels.
-                                                  items:
-                                                    description: A node selector requirement
-                                                      is a selector that contains
-                                                      values, a key, and an operator
-                                                      that relates the key and values.
-                                                    properties:
-                                                      key:
-                                                        description: The label key
-                                                          that the selector applies
-                                                          to.
-                                                        type: string
-                                                      operator:
-                                                        description: Represents a
-                                                          key's relationship to a
-                                                          set of values. Valid operators
-                                                          are In, NotIn, Exists, DoesNotExist.
-                                                          Gt, and Lt.
-                                                        type: string
-                                                      values:
-                                                        description: An array of string
-                                                          values. If the operator
-                                                          is In or NotIn, the values
-                                                          array must be non-empty.
-                                                          If the operator is Exists
-                                                          or DoesNotExist, the values
-                                                          array must be empty. If
-                                                          the operator is Gt or Lt,
-                                                          the values array must have
-                                                          a single element, which
-                                                          will be interpreted as an
-                                                          integer. This array is replaced
-                                                          during a strategic merge
-                                                          patch.
-                                                        items:
-                                                          type: string
-                                                        type: array
-                                                    required:
-                                                    - key
-                                                    - operator
-                                                    type: object
-                                                  type: array
-                                                matchFields:
-                                                  description: A list of node selector
-                                                    requirements by node's fields.
-                                                  items:
-                                                    description: A node selector requirement
-                                                      is a selector that contains
-                                                      values, a key, and an operator
-                                                      that relates the key and values.
-                                                    properties:
-                                                      key:
-                                                        description: The label key
-                                                          that the selector applies
-                                                          to.
-                                                        type: string
-                                                      operator:
-                                                        description: Represents a
-                                                          key's relationship to a
-                                                          set of values. Valid operators
-                                                          are In, NotIn, Exists, DoesNotExist.
-                                                          Gt, and Lt.
-                                                        type: string
-                                                      values:
-                                                        description: An array of string
-                                                          values. If the operator
-                                                          is In or NotIn, the values
-                                                          array must be non-empty.
-                                                          If the operator is Exists
-                                                          or DoesNotExist, the values
-                                                          array must be empty. If
-                                                          the operator is Gt or Lt,
-                                                          the values array must have
-                                                          a single element, which
-                                                          will be interpreted as an
-                                                          integer. This array is replaced
-                                                          during a strategic merge
-                                                          patch.
-                                                        items:
-                                                          type: string
-                                                        type: array
-                                                    required:
-                                                    - key
-                                                    - operator
-                                                    type: object
-                                                  type: array
-                                              type: object
-                                            type: array
-                                        required:
-                                        - nodeSelectorTerms
-                                        type: object
-                                    type: object
-                                  podAffinity:
-                                    description: Describes pod affinity scheduling
-                                      rules (e.g. co-locate this pod in the same node,
-                                      zone, etc. as some other pod(s)).
-                                    properties:
-                                      preferredDuringSchedulingIgnoredDuringExecution:
-                                        description: The scheduler will prefer to
-                                          schedule pods to nodes that satisfy the
-                                          affinity expressions specified by this field,
-                                          but it may choose a node that violates one
-                                          or more of the expressions. The node that
-                                          is most preferred is the one with the greatest
-                                          sum of weights, i.e. for each node that
-                                          meets all of the scheduling requirements
-                                          (resource request, requiredDuringScheduling
-                                          affinity expressions, etc.), compute a sum
-                                          by iterating through the elements of this
-                                          field and adding "weight" to the sum if
-                                          the node has pods which matches the corresponding
-                                          podAffinityTerm; the node(s) with the highest
-                                          sum are the most preferred.
-                                        items:
-                                          description: The weights of all of the matched
-                                            WeightedPodAffinityTerm fields are added
-                                            per-node to find the most preferred node(s)
-                                          properties:
-                                            podAffinityTerm:
-                                              description: Required. A pod affinity
-                                                term, associated with the corresponding
-                                                weight.
-                                              properties:
-                                                labelSelector:
-                                                  description: A label query over
-                                                    a set of resources, in this case
-                                                    pods.
-                                                  properties:
-                                                    matchExpressions:
-                                                      description: matchExpressions
-                                                        is a list of label selector
-                                                        requirements. The requirements
-                                                        are ANDed.
-                                                      items:
-                                                        description: A label selector
-                                                          requirement is a selector
-                                                          that contains values, a
-                                                          key, and an operator that
-                                                          relates the key and values.
-                                                        properties:
-                                                          key:
-                                                            description: key is the
-                                                              label key that the selector
-                                                              applies to.
-                                                            type: string
-                                                          operator:
-                                                            description: operator
-                                                              represents a key's relationship
-                                                              to a set of values.
-                                                              Valid operators are
-                                                              In, NotIn, Exists and
-                                                              DoesNotExist.
-                                                            type: string
-                                                          values:
-                                                            description: values is
-                                                              an array of string values.
-                                                              If the operator is In
-                                                              or NotIn, the values
-                                                              array must be non-empty.
-                                                              If the operator is Exists
-                                                              or DoesNotExist, the
-                                                              values array must be
-                                                              empty. This array is
-                                                              replaced during a strategic
-                                                              merge patch.
-                                                            items:
-                                                              type: string
-                                                            type: array
-                                                        required:
-                                                        - key
-                                                        - operator
-                                                        type: object
-                                                      type: array
-                                                    matchLabels:
-                                                      additionalProperties:
-                                                        type: string
-                                                      description: matchLabels is
-                                                        a map of {key,value} pairs.
-                                                        A single {key,value} in the
-                                                        matchLabels map is equivalent
-                                                        to an element of matchExpressions,
-                                                        whose key field is "key",
-                                                        the operator is "In", and
-                                                        the values array contains
-                                                        only "value". The requirements
-                                                        are ANDed.
-                                                      type: object
-                                                  type: object
-                                                namespaces:
-                                                  description: namespaces specifies
-                                                    which namespaces the labelSelector
-                                                    applies to (matches against);
-                                                    null or empty list means "this
-                                                    pod's namespace"
-                                                  items:
+                                            matchExpressions:
+                                              description: A list of node selector
+                                                requirements by node's labels.
+                                              items:
+                                                description: A node selector requirement
+                                                  is a selector that contains values,
+                                                  a key, and an operator that relates
+                                                  the key and values.
+                                                properties:
+                                                  key:
+                                                    description: The label key that
+                                                      the selector applies to.
                                                     type: string
-                                                  type: array
-                                                topologyKey:
-                                                  description: This pod should be
-                                                    co-located (affinity) or not co-located
-                                                    (anti-affinity) with the pods
-                                                    matching the labelSelector in
-                                                    the specified namespaces, where
-                                                    co-located is defined as running
-                                                    on a node whose value of the label
-                                                    with key topologyKey matches that
-                                                    of any node on which any of the
-                                                    selected pods is running. Empty
-                                                    topologyKey is not allowed.
-                                                  type: string
-                                              required:
-                                              - topologyKey
-                                              type: object
-                                            weight:
-                                              description: weight associated with
-                                                matching the corresponding podAffinityTerm,
-                                                in the range 1-100.
-                                              format: int32
-                                              type: integer
-                                          required:
-                                          - podAffinityTerm
-                                          - weight
+                                                  operator:
+                                                    description: Represents a key's
+                                                      relationship to a set of values.
+                                                      Valid operators are In, NotIn,
+                                                      Exists, DoesNotExist. Gt, and
+                                                      Lt.
+                                                    type: string
+                                                  values:
+                                                    description: An array of string
+                                                      values. If the operator is In
+                                                      or NotIn, the values array must
+                                                      be non-empty. If the operator
+                                                      is Exists or DoesNotExist, the
+                                                      values array must be empty.
+                                                      If the operator is Gt or Lt,
+                                                      the values array must have a
+                                                      single element, which will be
+                                                      interpreted as an integer. This
+                                                      array is replaced during a strategic
+                                                      merge patch.
+                                                    items:
+                                                      type: string
+                                                    type: array
+                                                required:
+                                                - key
+                                                - operator
+                                                type: object
+                                              type: array
+                                            matchFields:
+                                              description: A list of node selector
+                                                requirements by node's fields.
+                                              items:
+                                                description: A node selector requirement
+                                                  is a selector that contains values,
+                                                  a key, and an operator that relates
+                                                  the key and values.
+                                                properties:
+                                                  key:
+                                                    description: The label key that
+                                                      the selector applies to.
+                                                    type: string
+                                                  operator:
+                                                    description: Represents a key's
+                                                      relationship to a set of values.
+                                                      Valid operators are In, NotIn,
+                                                      Exists, DoesNotExist. Gt, and
+                                                      Lt.
+                                                    type: string
+                                                  values:
+                                                    description: An array of string
+                                                      values. If the operator is In
+                                                      or NotIn, the values array must
+                                                      be non-empty. If the operator
+                                                      is Exists or DoesNotExist, the
+                                                      values array must be empty.
+                                                      If the operator is Gt or Lt,
+                                                      the values array must have a
+                                                      single element, which will be
+                                                      interpreted as an integer. This
+                                                      array is replaced during a strategic
+                                                      merge patch.
+                                                    items:
+                                                      type: string
+                                                    type: array
+                                                required:
+                                                - key
+                                                - operator
+                                                type: object
+                                              type: array
+                                          type: object
+                                        weight:
+                                          description: Weight associated with matching
+                                            the corresponding nodeSelectorTerm, in
+                                            the range 1-100.
+                                          format: int32
+                                          type: integer
+                                      required:
+                                      - preference
+                                      - weight
+                                      type: object
+                                    type: array
+                                  requiredDuringSchedulingIgnoredDuringExecution:
+                                    description: If the affinity requirements specified
+                                      by this field are not met at scheduling time,
+                                      the pod will not be scheduled onto the node.
+                                      If the affinity requirements specified by this
+                                      field cease to be met at some point during pod
+                                      execution (e.g. due to an update), the system
+                                      may or may not try to eventually evict the pod
+                                      from its node.
+                                    properties:
+                                      nodeSelectorTerms:
+                                        description: Required. A list of node selector
+                                          terms. The terms are ORed.
+                                        items:
+                                          description: A null or empty node selector
+                                            term matches no objects. The requirements
+                                            of them are ANDed. The TopologySelectorTerm
+                                            type implements a subset of the NodeSelectorTerm.
+                                          properties:
+                                            matchExpressions:
+                                              description: A list of node selector
+                                                requirements by node's labels.
+                                              items:
+                                                description: A node selector requirement
+                                                  is a selector that contains values,
+                                                  a key, and an operator that relates
+                                                  the key and values.
+                                                properties:
+                                                  key:
+                                                    description: The label key that
+                                                      the selector applies to.
+                                                    type: string
+                                                  operator:
+                                                    description: Represents a key's
+                                                      relationship to a set of values.
+                                                      Valid operators are In, NotIn,
+                                                      Exists, DoesNotExist. Gt, and
+                                                      Lt.
+                                                    type: string
+                                                  values:
+                                                    description: An array of string
+                                                      values. If the operator is In
+                                                      or NotIn, the values array must
+                                                      be non-empty. If the operator
+                                                      is Exists or DoesNotExist, the
+                                                      values array must be empty.
+                                                      If the operator is Gt or Lt,
+                                                      the values array must have a
+                                                      single element, which will be
+                                                      interpreted as an integer. This
+                                                      array is replaced during a strategic
+                                                      merge patch.
+                                                    items:
+                                                      type: string
+                                                    type: array
+                                                required:
+                                                - key
+                                                - operator
+                                                type: object
+                                              type: array
+                                            matchFields:
+                                              description: A list of node selector
+                                                requirements by node's fields.
+                                              items:
+                                                description: A node selector requirement
+                                                  is a selector that contains values,
+                                                  a key, and an operator that relates
+                                                  the key and values.
+                                                properties:
+                                                  key:
+                                                    description: The label key that
+                                                      the selector applies to.
+                                                    type: string
+                                                  operator:
+                                                    description: Represents a key's
+                                                      relationship to a set of values.
+                                                      Valid operators are In, NotIn,
+                                                      Exists, DoesNotExist. Gt, and
+                                                      Lt.
+                                                    type: string
+                                                  values:
+                                                    description: An array of string
+                                                      values. If the operator is In
+                                                      or NotIn, the values array must
+                                                      be non-empty. If the operator
+                                                      is Exists or DoesNotExist, the
+                                                      values array must be empty.
+                                                      If the operator is Gt or Lt,
+                                                      the values array must have a
+                                                      single element, which will be
+                                                      interpreted as an integer. This
+                                                      array is replaced during a strategic
+                                                      merge patch.
+                                                    items:
+                                                      type: string
+                                                    type: array
+                                                required:
+                                                - key
+                                                - operator
+                                                type: object
+                                              type: array
                                           type: object
                                         type: array
-                                      requiredDuringSchedulingIgnoredDuringExecution:
-                                        description: If the affinity requirements
-                                          specified by this field are not met at scheduling
-                                          time, the pod will not be scheduled onto
-                                          the node. If the affinity requirements specified
-                                          by this field cease to be met at some point
-                                          during pod execution (e.g. due to a pod
-                                          label update), the system may or may not
-                                          try to eventually evict the pod from its
-                                          node. When there are multiple elements,
-                                          the lists of nodes corresponding to each
-                                          podAffinityTerm are intersected, i.e. all
-                                          terms must be satisfied.
-                                        items:
-                                          description: Defines a set of pods (namely
-                                            those matching the labelSelector relative
-                                            to the given namespace(s)) that this pod
-                                            should be co-located (affinity) or not
-                                            co-located (anti-affinity) with, where
-                                            co-located is defined as running on a
-                                            node whose value of the label with key
-                                            <topologyKey> matches that of any node
-                                            on which a pod of the set of pods is running
+                                    required:
+                                    - nodeSelectorTerms
+                                    type: object
+                                type: object
+                              podAffinity:
+                                description: Describes pod affinity scheduling rules
+                                  (e.g. co-locate this pod in the same node, zone,
+                                  etc. as some other pod(s)).
+                                properties:
+                                  preferredDuringSchedulingIgnoredDuringExecution:
+                                    description: The scheduler will prefer to schedule
+                                      pods to nodes that satisfy the affinity expressions
+                                      specified by this field, but it may choose a
+                                      node that violates one or more of the expressions.
+                                      The node that is most preferred is the one with
+                                      the greatest sum of weights, i.e. for each node
+                                      that meets all of the scheduling requirements
+                                      (resource request, requiredDuringScheduling
+                                      affinity expressions, etc.), compute a sum by
+                                      iterating through the elements of this field
+                                      and adding "weight" to the sum if the node has
+                                      pods which matches the corresponding podAffinityTerm;
+                                      the node(s) with the highest sum are the most
+                                      preferred.
+                                    items:
+                                      description: The weights of all of the matched
+                                        WeightedPodAffinityTerm fields are added per-node
+                                        to find the most preferred node(s)
+                                      properties:
+                                        podAffinityTerm:
+                                          description: Required. A pod affinity term,
+                                            associated with the corresponding weight.
                                           properties:
                                             labelSelector:
                                               description: A label query over a set
@@ -815,163 +710,146 @@ spec:
                                           required:
                                           - topologyKey
                                           type: object
-                                        type: array
-                                    type: object
-                                  podAntiAffinity:
-                                    description: Describes pod anti-affinity scheduling
-                                      rules (e.g. avoid putting this pod in the same
-                                      node, zone, etc. as some other pod(s)).
-                                    properties:
-                                      preferredDuringSchedulingIgnoredDuringExecution:
-                                        description: The scheduler will prefer to
-                                          schedule pods to nodes that satisfy the
-                                          anti-affinity expressions specified by this
-                                          field, but it may choose a node that violates
-                                          one or more of the expressions. The node
-                                          that is most preferred is the one with the
-                                          greatest sum of weights, i.e. for each node
-                                          that meets all of the scheduling requirements
-                                          (resource request, requiredDuringScheduling
-                                          anti-affinity expressions, etc.), compute
-                                          a sum by iterating through the elements
-                                          of this field and adding "weight" to the
-                                          sum if the node has pods which matches the
-                                          corresponding podAffinityTerm; the node(s)
-                                          with the highest sum are the most preferred.
-                                        items:
-                                          description: The weights of all of the matched
-                                            WeightedPodAffinityTerm fields are added
-                                            per-node to find the most preferred node(s)
+                                        weight:
+                                          description: weight associated with matching
+                                            the corresponding podAffinityTerm, in
+                                            the range 1-100.
+                                          format: int32
+                                          type: integer
+                                      required:
+                                      - podAffinityTerm
+                                      - weight
+                                      type: object
+                                    type: array
+                                  requiredDuringSchedulingIgnoredDuringExecution:
+                                    description: If the affinity requirements specified
+                                      by this field are not met at scheduling time,
+                                      the pod will not be scheduled onto the node.
+                                      If the affinity requirements specified by this
+                                      field cease to be met at some point during pod
+                                      execution (e.g. due to a pod label update),
+                                      the system may or may not try to eventually
+                                      evict the pod from its node. When there are
+                                      multiple elements, the lists of nodes corresponding
+                                      to each podAffinityTerm are intersected, i.e.
+                                      all terms must be satisfied.
+                                    items:
+                                      description: Defines a set of pods (namely those
+                                        matching the labelSelector relative to the
+                                        given namespace(s)) that this pod should be
+                                        co-located (affinity) or not co-located (anti-affinity)
+                                        with, where co-located is defined as running
+                                        on a node whose value of the label with key
+                                        <topologyKey> matches that of any node on
+                                        which a pod of the set of pods is running
+                                      properties:
+                                        labelSelector:
+                                          description: A label query over a set of
+                                            resources, in this case pods.
                                           properties:
-                                            podAffinityTerm:
-                                              description: Required. A pod affinity
-                                                term, associated with the corresponding
-                                                weight.
-                                              properties:
-                                                labelSelector:
-                                                  description: A label query over
-                                                    a set of resources, in this case
-                                                    pods.
-                                                  properties:
-                                                    matchExpressions:
-                                                      description: matchExpressions
-                                                        is a list of label selector
-                                                        requirements. The requirements
-                                                        are ANDed.
-                                                      items:
-                                                        description: A label selector
-                                                          requirement is a selector
-                                                          that contains values, a
-                                                          key, and an operator that
-                                                          relates the key and values.
-                                                        properties:
-                                                          key:
-                                                            description: key is the
-                                                              label key that the selector
-                                                              applies to.
-                                                            type: string
-                                                          operator:
-                                                            description: operator
-                                                              represents a key's relationship
-                                                              to a set of values.
-                                                              Valid operators are
-                                                              In, NotIn, Exists and
-                                                              DoesNotExist.
-                                                            type: string
-                                                          values:
-                                                            description: values is
-                                                              an array of string values.
-                                                              If the operator is In
-                                                              or NotIn, the values
-                                                              array must be non-empty.
-                                                              If the operator is Exists
-                                                              or DoesNotExist, the
-                                                              values array must be
-                                                              empty. This array is
-                                                              replaced during a strategic
-                                                              merge patch.
-                                                            items:
-                                                              type: string
-                                                            type: array
-                                                        required:
-                                                        - key
-                                                        - operator
-                                                        type: object
-                                                      type: array
-                                                    matchLabels:
-                                                      additionalProperties:
-                                                        type: string
-                                                      description: matchLabels is
-                                                        a map of {key,value} pairs.
-                                                        A single {key,value} in the
-                                                        matchLabels map is equivalent
-                                                        to an element of matchExpressions,
-                                                        whose key field is "key",
-                                                        the operator is "In", and
-                                                        the values array contains
-                                                        only "value". The requirements
-                                                        are ANDed.
-                                                      type: object
-                                                  type: object
-                                                namespaces:
-                                                  description: namespaces specifies
-                                                    which namespaces the labelSelector
-                                                    applies to (matches against);
-                                                    null or empty list means "this
-                                                    pod's namespace"
-                                                  items:
+                                            matchExpressions:
+                                              description: matchExpressions is a list
+                                                of label selector requirements. The
+                                                requirements are ANDed.
+                                              items:
+                                                description: A label selector requirement
+                                                  is a selector that contains values,
+                                                  a key, and an operator that relates
+                                                  the key and values.
+                                                properties:
+                                                  key:
+                                                    description: key is the label
+                                                      key that the selector applies
+                                                      to.
                                                     type: string
-                                                  type: array
-                                                topologyKey:
-                                                  description: This pod should be
-                                                    co-located (affinity) or not co-located
-                                                    (anti-affinity) with the pods
-                                                    matching the labelSelector in
-                                                    the specified namespaces, where
-                                                    co-located is defined as running
-                                                    on a node whose value of the label
-                                                    with key topologyKey matches that
-                                                    of any node on which any of the
-                                                    selected pods is running. Empty
-                                                    topologyKey is not allowed.
-                                                  type: string
-                                              required:
-                                              - topologyKey
+                                                  operator:
+                                                    description: operator represents
+                                                      a key's relationship to a set
+                                                      of values. Valid operators are
+                                                      In, NotIn, Exists and DoesNotExist.
+                                                    type: string
+                                                  values:
+                                                    description: values is an array
+                                                      of string values. If the operator
+                                                      is In or NotIn, the values array
+                                                      must be non-empty. If the operator
+                                                      is Exists or DoesNotExist, the
+                                                      values array must be empty.
+                                                      This array is replaced during
+                                                      a strategic merge patch.
+                                                    items:
+                                                      type: string
+                                                    type: array
+                                                required:
+                                                - key
+                                                - operator
+                                                type: object
+                                              type: array
+                                            matchLabels:
+                                              additionalProperties:
+                                                type: string
+                                              description: matchLabels is a map of
+                                                {key,value} pairs. A single {key,value}
+                                                in the matchLabels map is equivalent
+                                                to an element of matchExpressions,
+                                                whose key field is "key", the operator
+                                                is "In", and the values array contains
+                                                only "value". The requirements are
+                                                ANDed.
                                               type: object
-                                            weight:
-                                              description: weight associated with
-                                                matching the corresponding podAffinityTerm,
-                                                in the range 1-100.
-                                              format: int32
-                                              type: integer
-                                          required:
-                                          - podAffinityTerm
-                                          - weight
                                           type: object
-                                        type: array
-                                      requiredDuringSchedulingIgnoredDuringExecution:
-                                        description: If the anti-affinity requirements
-                                          specified by this field are not met at scheduling
-                                          time, the pod will not be scheduled onto
-                                          the node. If the anti-affinity requirements
-                                          specified by this field cease to be met
-                                          at some point during pod execution (e.g.
-                                          due to a pod label update), the system may
-                                          or may not try to eventually evict the pod
-                                          from its node. When there are multiple elements,
-                                          the lists of nodes corresponding to each
-                                          podAffinityTerm are intersected, i.e. all
-                                          terms must be satisfied.
-                                        items:
-                                          description: Defines a set of pods (namely
-                                            those matching the labelSelector relative
-                                            to the given namespace(s)) that this pod
-                                            should be co-located (affinity) or not
-                                            co-located (anti-affinity) with, where
-                                            co-located is defined as running on a
-                                            node whose value of the label with key
-                                            <topologyKey> matches that of any node
-                                            on which a pod of the set of pods is running
+                                        namespaces:
+                                          description: namespaces specifies which
+                                            namespaces the labelSelector applies to
+                                            (matches against); null or empty list
+                                            means "this pod's namespace"
+                                          items:
+                                            type: string
+                                          type: array
+                                        topologyKey:
+                                          description: This pod should be co-located
+                                            (affinity) or not co-located (anti-affinity)
+                                            with the pods matching the labelSelector
+                                            in the specified namespaces, where co-located
+                                            is defined as running on a node whose
+                                            value of the label with key topologyKey
+                                            matches that of any node on which any
+                                            of the selected pods is running. Empty
+                                            topologyKey is not allowed.
+                                          type: string
+                                      required:
+                                      - topologyKey
+                                      type: object
+                                    type: array
+                                type: object
+                              podAntiAffinity:
+                                description: Describes pod anti-affinity scheduling
+                                  rules (e.g. avoid putting this pod in the same node,
+                                  zone, etc. as some other pod(s)).
+                                properties:
+                                  preferredDuringSchedulingIgnoredDuringExecution:
+                                    description: The scheduler will prefer to schedule
+                                      pods to nodes that satisfy the anti-affinity
+                                      expressions specified by this field, but it
+                                      may choose a node that violates one or more
+                                      of the expressions. The node that is most preferred
+                                      is the one with the greatest sum of weights,
+                                      i.e. for each node that meets all of the scheduling
+                                      requirements (resource request, requiredDuringScheduling
+                                      anti-affinity expressions, etc.), compute a
+                                      sum by iterating through the elements of this
+                                      field and adding "weight" to the sum if the
+                                      node has pods which matches the corresponding
+                                      podAffinityTerm; the node(s) with the highest
+                                      sum are the most preferred.
+                                    items:
+                                      description: The weights of all of the matched
+                                        WeightedPodAffinityTerm fields are added per-node
+                                        to find the most preferred node(s)
+                                      properties:
+                                        podAffinityTerm:
+                                          description: Required. A pod affinity term,
+                                            associated with the corresponding weight.
                                           properties:
                                             labelSelector:
                                               description: A label query over a set
@@ -1056,88 +934,124 @@ spec:
                                           required:
                                           - topologyKey
                                           type: object
-                                        type: array
-                                    type: object
+                                        weight:
+                                          description: weight associated with matching
+                                            the corresponding podAffinityTerm, in
+                                            the range 1-100.
+                                          format: int32
+                                          type: integer
+                                      required:
+                                      - podAffinityTerm
+                                      - weight
+                                      type: object
+                                    type: array
+                                  requiredDuringSchedulingIgnoredDuringExecution:
+                                    description: If the anti-affinity requirements
+                                      specified by this field are not met at scheduling
+                                      time, the pod will not be scheduled onto the
+                                      node. If the anti-affinity requirements specified
+                                      by this field cease to be met at some point
+                                      during pod execution (e.g. due to a pod label
+                                      update), the system may or may not try to eventually
+                                      evict the pod from its node. When there are
+                                      multiple elements, the lists of nodes corresponding
+                                      to each podAffinityTerm are intersected, i.e.
+                                      all terms must be satisfied.
+                                    items:
+                                      description: Defines a set of pods (namely those
+                                        matching the labelSelector relative to the
+                                        given namespace(s)) that this pod should be
+                                        co-located (affinity) or not co-located (anti-affinity)
+                                        with, where co-located is defined as running
+                                        on a node whose value of the label with key
+                                        <topologyKey> matches that of any node on
+                                        which a pod of the set of pods is running
+                                      properties:
+                                        labelSelector:
+                                          description: A label query over a set of
+                                            resources, in this case pods.
+                                          properties:
+                                            matchExpressions:
+                                              description: matchExpressions is a list
+                                                of label selector requirements. The
+                                                requirements are ANDed.
+                                              items:
+                                                description: A label selector requirement
+                                                  is a selector that contains values,
+                                                  a key, and an operator that relates
+                                                  the key and values.
+                                                properties:
+                                                  key:
+                                                    description: key is the label
+                                                      key that the selector applies
+                                                      to.
+                                                    type: string
+                                                  operator:
+                                                    description: operator represents
+                                                      a key's relationship to a set
+                                                      of values. Valid operators are
+                                                      In, NotIn, Exists and DoesNotExist.
+                                                    type: string
+                                                  values:
+                                                    description: values is an array
+                                                      of string values. If the operator
+                                                      is In or NotIn, the values array
+                                                      must be non-empty. If the operator
+                                                      is Exists or DoesNotExist, the
+                                                      values array must be empty.
+                                                      This array is replaced during
+                                                      a strategic merge patch.
+                                                    items:
+                                                      type: string
+                                                    type: array
+                                                required:
+                                                - key
+                                                - operator
+                                                type: object
+                                              type: array
+                                            matchLabels:
+                                              additionalProperties:
+                                                type: string
+                                              description: matchLabels is a map of
+                                                {key,value} pairs. A single {key,value}
+                                                in the matchLabels map is equivalent
+                                                to an element of matchExpressions,
+                                                whose key field is "key", the operator
+                                                is "In", and the values array contains
+                                                only "value". The requirements are
+                                                ANDed.
+                                              type: object
+                                          type: object
+                                        namespaces:
+                                          description: namespaces specifies which
+                                            namespaces the labelSelector applies to
+                                            (matches against); null or empty list
+                                            means "this pod's namespace"
+                                          items:
+                                            type: string
+                                          type: array
+                                        topologyKey:
+                                          description: This pod should be co-located
+                                            (affinity) or not co-located (anti-affinity)
+                                            with the pods matching the labelSelector
+                                            in the specified namespaces, where co-located
+                                            is defined as running on a node whose
+                                            value of the label with key topologyKey
+                                            matches that of any node on which any
+                                            of the selected pods is running. Empty
+                                            topologyKey is not allowed.
+                                          type: string
+                                      required:
+                                      - topologyKey
+                                      type: object
+                                    type: array
                                 type: object
-                              resources:
-                                description: Resource requirements for the dedicated
-                                  repository host
-                                properties:
-                                  limits:
-                                    additionalProperties:
-                                      anyOf:
-                                      - type: integer
-                                      - type: string
-                                      pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
-                                      x-kubernetes-int-or-string: true
-                                    description: 'Limits describes the maximum amount
-                                      of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
-                                    type: object
-                                  requests:
-                                    additionalProperties:
-                                      anyOf:
-                                      - type: integer
-                                      - type: string
-                                      pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
-                                      x-kubernetes-int-or-string: true
-                                    description: 'Requests describes the minimum amount
-                                      of compute resources required. If Requests is
-                                      omitted for a container, it defaults to Limits
-                                      if that is explicitly specified, otherwise to
-                                      an implementation-defined value. More info:
-                                      https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
-                                    type: object
-                                type: object
-                              tolerations:
-                                description: 'Tolerations of a PgBackRest repo host
-                                  pod. Changing this value causes a restart. More
-                                  info: https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration'
-                                items:
-                                  description: The pod this Toleration is attached
-                                    to tolerates any taint that matches the triple
-                                    <key,value,effect> using the matching operator
-                                    <operator>.
-                                  properties:
-                                    effect:
-                                      description: Effect indicates the taint effect
-                                        to match. Empty means match all taint effects.
-                                        When specified, allowed values are NoSchedule,
-                                        PreferNoSchedule and NoExecute.
-                                      type: string
-                                    key:
-                                      description: Key is the taint key that the toleration
-                                        applies to. Empty means match all taint keys.
-                                        If the key is empty, operator must be Exists;
-                                        this combination means to match all values
-                                        and all keys.
-                                      type: string
-                                    operator:
-                                      description: Operator represents a key's relationship
-                                        to the value. Valid operators are Exists and
-                                        Equal. Defaults to Equal. Exists is equivalent
-                                        to wildcard for value, so that a pod can tolerate
-                                        all taints of a particular category.
-                                      type: string
-                                    tolerationSeconds:
-                                      description: TolerationSeconds represents the
-                                        period of time the toleration (which must
-                                        be of effect NoExecute, otherwise this field
-                                        is ignored) tolerates the taint. By default,
-                                        it is not set, which means tolerate the taint
-                                        forever (do not evict). Zero and negative
-                                        values will be treated as 0 (evict immediately)
-                                        by the system.
-                                      format: int64
-                                      type: integer
-                                    value:
-                                      description: Value is the taint value the toleration
-                                        matches to. If the operator is Exists, the
-                                        value should be empty, otherwise just a regular
-                                        string.
-                                      type: string
-                                  type: object
-                                type: array
                             type: object
+                          priorityClassName:
+                            description: 'Priority class name for the pgBackRest repo
+                              host pod. Changing this value causes PostgreSQL to restart.
+                              More info: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/'
+                            type: string
                           resources:
                             description: Resource requirements for a pgBackRest repository
                               host
@@ -1276,6 +1190,166 @@ spec:
                                   must be defined
                                 type: boolean
                             type: object
+                          tolerations:
+                            description: 'Tolerations of a PgBackRest repo host pod.
+                              Changing this value causes a restart. More info: https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration'
+                            items:
+                              description: The pod this Toleration is attached to
+                                tolerates any taint that matches the triple <key,value,effect>
+                                using the matching operator <operator>.
+                              properties:
+                                effect:
+                                  description: Effect indicates the taint effect to
+                                    match. Empty means match all taint effects. When
+                                    specified, allowed values are NoSchedule, PreferNoSchedule
+                                    and NoExecute.
+                                  type: string
+                                key:
+                                  description: Key is the taint key that the toleration
+                                    applies to. Empty means match all taint keys.
+                                    If the key is empty, operator must be Exists;
+                                    this combination means to match all values and
+                                    all keys.
+                                  type: string
+                                operator:
+                                  description: Operator represents a key's relationship
+                                    to the value. Valid operators are Exists and Equal.
+                                    Defaults to Equal. Exists is equivalent to wildcard
+                                    for value, so that a pod can tolerate all taints
+                                    of a particular category.
+                                  type: string
+                                tolerationSeconds:
+                                  description: TolerationSeconds represents the period
+                                    of time the toleration (which must be of effect
+                                    NoExecute, otherwise this field is ignored) tolerates
+                                    the taint. By default, it is not set, which means
+                                    tolerate the taint forever (do not evict). Zero
+                                    and negative values will be treated as 0 (evict
+                                    immediately) by the system.
+                                  format: int64
+                                  type: integer
+                                value:
+                                  description: Value is the taint value the toleration
+                                    matches to. If the operator is Exists, the value
+                                    should be empty, otherwise just a regular string.
+                                  type: string
+                              type: object
+                            type: array
+                          topologySpreadConstraints:
+                            description: 'Topology spread constraints of a Dedicated
+                              repo host pod. Changing this value causes the repo host
+                              to restart. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/'
+                            items:
+                              description: TopologySpreadConstraint specifies how
+                                to spread matching pods among the given topology.
+                              properties:
+                                labelSelector:
+                                  description: LabelSelector is used to find matching
+                                    pods. Pods that match this label selector are
+                                    counted to determine the number of pods in their
+                                    corresponding topology domain.
+                                  properties:
+                                    matchExpressions:
+                                      description: matchExpressions is a list of label
+                                        selector requirements. The requirements are
+                                        ANDed.
+                                      items:
+                                        description: A label selector requirement
+                                          is a selector that contains values, a key,
+                                          and an operator that relates the key and
+                                          values.
+                                        properties:
+                                          key:
+                                            description: key is the label key that
+                                              the selector applies to.
+                                            type: string
+                                          operator:
+                                            description: operator represents a key's
+                                              relationship to a set of values. Valid
+                                              operators are In, NotIn, Exists and
+                                              DoesNotExist.
+                                            type: string
+                                          values:
+                                            description: values is an array of string
+                                              values. If the operator is In or NotIn,
+                                              the values array must be non-empty.
+                                              If the operator is Exists or DoesNotExist,
+                                              the values array must be empty. This
+                                              array is replaced during a strategic
+                                              merge patch.
+                                            items:
+                                              type: string
+                                            type: array
+                                        required:
+                                        - key
+                                        - operator
+                                        type: object
+                                      type: array
+                                    matchLabels:
+                                      additionalProperties:
+                                        type: string
+                                      description: matchLabels is a map of {key,value}
+                                        pairs. A single {key,value} in the matchLabels
+                                        map is equivalent to an element of matchExpressions,
+                                        whose key field is "key", the operator is
+                                        "In", and the values array contains only "value".
+                                        The requirements are ANDed.
+                                      type: object
+                                  type: object
+                                maxSkew:
+                                  description: 'MaxSkew describes the degree to which
+                                    pods may be unevenly distributed. When `whenUnsatisfiable=DoNotSchedule`,
+                                    it is the maximum permitted difference between
+                                    the number of matching pods in the target topology
+                                    and the global minimum. For example, in a 3-zone
+                                    cluster, MaxSkew is set to 1, and pods with the
+                                    same labelSelector spread as 1/1/0: | zone1 |
+                                    zone2 | zone3 | |   P   |   P   |       | - if
+                                    MaxSkew is 1, incoming pod can only be scheduled
+                                    to zone3 to become 1/1/1; scheduling it onto zone1(zone2)
+                                    would make the ActualSkew(2-0) on zone1(zone2)
+                                    violate MaxSkew(1). - if MaxSkew is 2, incoming
+                                    pod can be scheduled onto any zone. When `whenUnsatisfiable=ScheduleAnyway`,
+                                    it is used to give higher precedence to topologies
+                                    that satisfy it. It''s a required field. Default
+                                    value is 1 and 0 is not allowed.'
+                                  format: int32
+                                  type: integer
+                                topologyKey:
+                                  description: TopologyKey is the key of node labels.
+                                    Nodes that have a label with this key and identical
+                                    values are considered to be in the same topology.
+                                    We consider each <key, value> as a "bucket", and
+                                    try to put balanced number of pods into each bucket.
+                                    It's a required field.
+                                  type: string
+                                whenUnsatisfiable:
+                                  description: 'WhenUnsatisfiable indicates how to
+                                    deal with a pod if it doesn''t satisfy the spread
+                                    constraint. - DoNotSchedule (default) tells the
+                                    scheduler not to schedule it. - ScheduleAnyway
+                                    tells the scheduler to schedule the pod in any
+                                    location,   but giving higher precedence to topologies
+                                    that would help reduce the   skew. A constraint
+                                    is considered "Unsatisfiable" for an incoming
+                                    pod if and only if every possible node assigment
+                                    for that pod would violate "MaxSkew" on some topology.
+                                    For example, in a 3-zone cluster, MaxSkew is set
+                                    to 1, and pods with the same labelSelector spread
+                                    as 3/1/1: | zone1 | zone2 | zone3 | | P P P |   P   |   P   |
+                                    If WhenUnsatisfiable is set to DoNotSchedule,
+                                    incoming pod can only be scheduled to zone2(zone3)
+                                    to become 3/2/1(3/1/2) as ActualSkew(2-1) on zone2(zone3)
+                                    satisfies MaxSkew(1). In other words, the cluster
+                                    can still be imbalanced, but scheduler won''t
+                                    make it *more* imbalanced. It''s a required field.'
+                                  type: string
+                              required:
+                              - maxSkew
+                              - topologyKey
+                              - whenUnsatisfiable
+                              type: object
+                            type: array
                         type: object
                       repos:
                         description: Defines a pgBackRest repository
@@ -1366,6 +1440,7 @@ spec:
                                         info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#access-modes-1'
                                       items:
                                         type: string
+                                      minItems: 1
                                       type: array
                                     dataSource:
                                       description: 'This field can be used to specify
@@ -1429,7 +1504,11 @@ spec:
                                             it defaults to Limits if that is explicitly
                                             specified, otherwise to an implementation-defined
                                             value. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                                          required:
+                                          - storage
                                           type: object
+                                      required:
+                                      - requests
                                       type: object
                                     selector:
                                       description: A label query over volumes to consider
@@ -1497,6 +1576,9 @@ spec:
                                       description: VolumeName is the binding reference
                                         to the PersistentVolume backing this claim.
                                       type: string
+                                  required:
+                                  - accessModes
+                                  - resources
                                   type: object
                               required:
                               - volumeClaimSpec
@@ -1504,6 +1586,7 @@ spec:
                           required:
                           - name
                           type: object
+                        minItems: 1
                         type: array
                         x-kubernetes-list-map-keys:
                         - name
@@ -2217,6 +2300,11 @@ spec:
                             items:
                               type: string
                             type: array
+                          priorityClassName:
+                            description: 'Priority class name for the pgBackRest restore
+                              Job pod. Changing this value causes PostgreSQL to restart.
+                              More info: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/'
+                            type: string
                           repoName:
                             description: The name of the pgBackRest repo within the
                               source PostgresCluster that contains the backups that
@@ -2301,6 +2389,45 @@ spec:
                         - enabled
                         - repoName
                         type: object
+                      sidecars:
+                        description: Configuration for pgBackRest sidecar containers
+                        properties:
+                          pgbackrest:
+                            description: Defines the configuration for the pgBackRest
+                              sidecar container
+                            properties:
+                              resources:
+                                description: Resource requirements for a sidecar container
+                                properties:
+                                  limits:
+                                    additionalProperties:
+                                      anyOf:
+                                      - type: integer
+                                      - type: string
+                                      pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                      x-kubernetes-int-or-string: true
+                                    description: 'Limits describes the maximum amount
+                                      of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                                    type: object
+                                  requests:
+                                    additionalProperties:
+                                      anyOf:
+                                      - type: integer
+                                      - type: string
+                                      pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                      x-kubernetes-int-or-string: true
+                                    description: 'Requests describes the minimum amount
+                                      of compute resources required. If Requests is
+                                      omitted for a container, it defaults to Limits
+                                      if that is explicitly specified, otherwise to
+                                      an implementation-defined value. More info:
+                                      https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                                    type: object
+                                type: object
+                            type: object
+                        type: object
+                    required:
+                    - repos
                     type: object
                 required:
                 - pgbackrest
@@ -3081,6 +3208,11 @@ spec:
                         items:
                           type: string
                         type: array
+                      priorityClassName:
+                        description: 'Priority class name for the pgBackRest restore
+                          Job pod. Changing this value causes PostgreSQL to restart.
+                          More info: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/'
+                        type: string
                       repoName:
                         description: The name of the pgBackRest repo within the source
                           PostgresCluster that contains the backups that should be
@@ -3162,7 +3294,76 @@ spec:
                     required:
                     - repoName
                     type: object
+                  volumes:
+                    description: Defines any existing volumes to reuse for this PostgresCluster.
+                    properties:
+                      pgBackRestVolume:
+                        description: Defines the existing pgBackRest repo volume and
+                          directory to use in the current PostgresCluster.
+                        properties:
+                          directory:
+                            description: The existing directory. When not set, a move
+                              Job is not created for the associated volume.
+                            type: string
+                          pvcName:
+                            description: The existing PVC name.
+                            type: string
+                        required:
+                        - pvcName
+                        type: object
+                      pgDataVolume:
+                        description: Defines the existing pgData volume and directory
+                          to use in the current PostgresCluster.
+                        properties:
+                          directory:
+                            description: The existing directory. When not set, a move
+                              Job is not created for the associated volume.
+                            type: string
+                          pvcName:
+                            description: The existing PVC name.
+                            type: string
+                        required:
+                        - pvcName
+                        type: object
+                      pgWALVolume:
+                        description: Defines the existing pg_wal volume and directory
+                          to use in the current PostgresCluster. Note that a defined
+                          pg_wal volume MUST be accompanied by a pgData volume.
+                        properties:
+                          directory:
+                            description: The existing directory. When not set, a move
+                              Job is not created for the associated volume.
+                            type: string
+                          pvcName:
+                            description: The existing PVC name.
+                            type: string
+                        required:
+                        - pvcName
+                        type: object
+                    type: object
                 type: object
+              databaseInitSQL:
+                description: DatabaseInitSQL defines a ConfigMap containing custom
+                  SQL that will be run after the cluster is initialized. This ConfigMap
+                  must be in the same namespace as the cluster.
+                properties:
+                  key:
+                    description: Key is the ConfigMap data key that points to a SQL
+                      string
+                    type: string
+                  name:
+                    description: Name is the name of a ConfigMap
+                    type: string
+                required:
+                - key
+                - name
+                type: object
+              disableDefaultPodScheduling:
+                description: Whether or not the PostgreSQL cluster should use the
+                  defined default scheduling constraints. If the field is unset or
+                  false, the default scheduling constraints will be used in addition
+                  to any custom constraints provided.
+                type: boolean
               image:
                 description: The image name to use for PostgreSQL containers. When
                   omitted, the value comes from an operator environment variable.
@@ -3170,6 +3371,14 @@ spec:
                   e.g. RELATED_IMAGE_POSTGRES_13. For PostGIS enabled PostgreSQL images,
                   the format is RELATED_IMAGE_POSTGRES_{postgresVersion}_GIS_{postGISVersion},
                   e.g. RELATED_IMAGE_POSTGRES_13_GIS_3.1.
+                type: string
+              imagePullPolicy:
+                description: 'ImagePullPolicy is used to determine when Kubernetes
+                  will attempt to pull (download) container images. More info: https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy'
+                enum:
+                - Always
+                - Never
+                - IfNotPresent
                 type: string
               imagePullSecrets:
                 description: The image pull secrets used to pull from a private registry
@@ -3823,6 +4032,7 @@ spec:
                             the volume should have. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#access-modes-1'
                           items:
                             type: string
+                          minItems: 1
                           type: array
                         dataSource:
                           description: 'This field can be used to specify either:
@@ -3878,7 +4088,11 @@ spec:
                                 for a container, it defaults to Limits if that is
                                 explicitly specified, otherwise to an implementation-defined
                                 value. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                              required:
+                              - storage
                               type: object
+                          required:
+                          - requests
                           type: object
                         selector:
                           description: A label query over volumes to consider for
@@ -3939,6 +4153,9 @@ spec:
                           description: VolumeName is the binding reference to the
                             PersistentVolume backing this claim.
                           type: string
+                      required:
+                      - accessModes
+                      - resources
                       type: object
                     metadata:
                       description: Metadata contains metadata for PostgresCluster
@@ -3955,6 +4172,10 @@ spec:
                       type: object
                     name:
                       default: ""
+                      type: string
+                    priorityClassName:
+                      description: 'Priority class name for the PostgreSQL pod. Changing
+                        this value causes PostgreSQL to restart. More info: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/'
                       type: string
                     replicas:
                       default: 1
@@ -3986,6 +4207,42 @@ spec:
                             it defaults to Limits if that is explicitly specified,
                             otherwise to an implementation-defined value. More info:
                             https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                          type: object
+                      type: object
+                    sidecars:
+                      description: Configuration for instance sidecar containers
+                      properties:
+                        replicaCertCopy:
+                          description: Defines the configuration for the replica cert
+                            copy sidecar container
+                          properties:
+                            resources:
+                              description: Resource requirements for a sidecar container
+                              properties:
+                                limits:
+                                  additionalProperties:
+                                    anyOf:
+                                    - type: integer
+                                    - type: string
+                                    pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                    x-kubernetes-int-or-string: true
+                                  description: 'Limits describes the maximum amount
+                                    of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                                  type: object
+                                requests:
+                                  additionalProperties:
+                                    anyOf:
+                                    - type: integer
+                                    - type: string
+                                    pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                    x-kubernetes-int-or-string: true
+                                  description: 'Requests describes the minimum amount
+                                    of compute resources required. If Requests is
+                                    omitted for a container, it defaults to Limits
+                                    if that is explicitly specified, otherwise to
+                                    an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                                  type: object
+                              type: object
                           type: object
                       type: object
                     tolerations:
@@ -4031,6 +4288,112 @@ spec:
                             type: string
                         type: object
                       type: array
+                    topologySpreadConstraints:
+                      description: 'Topology spread constraints of a PostgreSQL pod.
+                        Changing this value causes PostgreSQL to restart. More info:
+                        https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/'
+                      items:
+                        description: TopologySpreadConstraint specifies how to spread
+                          matching pods among the given topology.
+                        properties:
+                          labelSelector:
+                            description: LabelSelector is used to find matching pods.
+                              Pods that match this label selector are counted to determine
+                              the number of pods in their corresponding topology domain.
+                            properties:
+                              matchExpressions:
+                                description: matchExpressions is a list of label selector
+                                  requirements. The requirements are ANDed.
+                                items:
+                                  description: A label selector requirement is a selector
+                                    that contains values, a key, and an operator that
+                                    relates the key and values.
+                                  properties:
+                                    key:
+                                      description: key is the label key that the selector
+                                        applies to.
+                                      type: string
+                                    operator:
+                                      description: operator represents a key's relationship
+                                        to a set of values. Valid operators are In,
+                                        NotIn, Exists and DoesNotExist.
+                                      type: string
+                                    values:
+                                      description: values is an array of string values.
+                                        If the operator is In or NotIn, the values
+                                        array must be non-empty. If the operator is
+                                        Exists or DoesNotExist, the values array must
+                                        be empty. This array is replaced during a
+                                        strategic merge patch.
+                                      items:
+                                        type: string
+                                      type: array
+                                  required:
+                                  - key
+                                  - operator
+                                  type: object
+                                type: array
+                              matchLabels:
+                                additionalProperties:
+                                  type: string
+                                description: matchLabels is a map of {key,value} pairs.
+                                  A single {key,value} in the matchLabels map is equivalent
+                                  to an element of matchExpressions, whose key field
+                                  is "key", the operator is "In", and the values array
+                                  contains only "value". The requirements are ANDed.
+                                type: object
+                            type: object
+                          maxSkew:
+                            description: 'MaxSkew describes the degree to which pods
+                              may be unevenly distributed. When `whenUnsatisfiable=DoNotSchedule`,
+                              it is the maximum permitted difference between the number
+                              of matching pods in the target topology and the global
+                              minimum. For example, in a 3-zone cluster, MaxSkew is
+                              set to 1, and pods with the same labelSelector spread
+                              as 1/1/0: | zone1 | zone2 | zone3 | |   P   |   P   |       |
+                              - if MaxSkew is 1, incoming pod can only be scheduled
+                              to zone3 to become 1/1/1; scheduling it onto zone1(zone2)
+                              would make the ActualSkew(2-0) on zone1(zone2) violate
+                              MaxSkew(1). - if MaxSkew is 2, incoming pod can be scheduled
+                              onto any zone. When `whenUnsatisfiable=ScheduleAnyway`,
+                              it is used to give higher precedence to topologies that
+                              satisfy it. It''s a required field. Default value is
+                              1 and 0 is not allowed.'
+                            format: int32
+                            type: integer
+                          topologyKey:
+                            description: TopologyKey is the key of node labels. Nodes
+                              that have a label with this key and identical values
+                              are considered to be in the same topology. We consider
+                              each <key, value> as a "bucket", and try to put balanced
+                              number of pods into each bucket. It's a required field.
+                            type: string
+                          whenUnsatisfiable:
+                            description: 'WhenUnsatisfiable indicates how to deal
+                              with a pod if it doesn''t satisfy the spread constraint.
+                              - DoNotSchedule (default) tells the scheduler not to
+                              schedule it. - ScheduleAnyway tells the scheduler to
+                              schedule the pod in any location,   but giving higher
+                              precedence to topologies that would help reduce the   skew.
+                              A constraint is considered "Unsatisfiable" for an incoming
+                              pod if and only if every possible node assigment for
+                              that pod would violate "MaxSkew" on some topology. For
+                              example, in a 3-zone cluster, MaxSkew is set to 1, and
+                              pods with the same labelSelector spread as 3/1/1: |
+                              zone1 | zone2 | zone3 | | P P P |   P   |   P   | If
+                              WhenUnsatisfiable is set to DoNotSchedule, incoming
+                              pod can only be scheduled to zone2(zone3) to become
+                              3/2/1(3/1/2) as ActualSkew(2-1) on zone2(zone3) satisfies
+                              MaxSkew(1). In other words, the cluster can still be
+                              imbalanced, but scheduler won''t make it *more* imbalanced.
+                              It''s a required field.'
+                            type: string
+                        required:
+                        - maxSkew
+                        - topologyKey
+                        - whenUnsatisfiable
+                        type: object
+                      type: array
                     walVolumeClaimSpec:
                       description: 'Defines a separate PersistentVolumeClaim for PostgreSQL''s
                         write-ahead log. More info: https://www.postgresql.org/docs/current/wal.html'
@@ -4040,6 +4403,7 @@ spec:
                             the volume should have. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#access-modes-1'
                           items:
                             type: string
+                          minItems: 1
                           type: array
                         dataSource:
                           description: 'This field can be used to specify either:
@@ -4095,7 +4459,11 @@ spec:
                                 for a container, it defaults to Limits if that is
                                 explicitly specified, otherwise to an implementation-defined
                                 value. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                              required:
+                              - storage
                               type: object
+                          required:
+                          - requests
                           type: object
                         selector:
                           description: A label query over volumes to consider for
@@ -4156,6 +4524,9 @@ spec:
                           description: VolumeName is the binding reference to the
                             PersistentVolume backing this claim.
                           type: string
+                      required:
+                      - accessModes
+                      - resources
                       type: object
                   required:
                   - dataVolumeClaimSpec
@@ -4521,7 +4892,7 @@ spec:
               postgresVersion:
                 description: The major version of PostgreSQL installed in the PostgreSQL
                   image
-                maximum: 13
+                maximum: 14
                 minimum: 10
                 type: integer
               proxy:
@@ -5533,6 +5904,10 @@ spec:
                         format: int32
                         minimum: 1024
                         type: integer
+                      priorityClassName:
+                        description: 'Priority class name for the pgBouncer pod. Changing
+                          this value causes PostgreSQL to restart. More info: https://kubernetes.io/docs/concepts/scheduling-eviction/pod-priority-preemption/'
+                        type: string
                       replicas:
                         default: 1
                         description: Number of desired PgBouncer pods.
@@ -5566,6 +5941,56 @@ spec:
                               a container, it defaults to Limits if that is explicitly
                               specified, otherwise to an implementation-defined value.
                               More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                            type: object
+                        type: object
+                      service:
+                        description: Specification of the service that exposes PgBouncer.
+                        properties:
+                          type:
+                            description: 'More info: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types'
+                            enum:
+                            - ClusterIP
+                            - NodePort
+                            - LoadBalancer
+                            type: string
+                        required:
+                        - type
+                        type: object
+                      sidecars:
+                        description: Configuration for pgBouncer sidecar containers
+                        properties:
+                          pgbouncerConfig:
+                            description: Defines the configuration for the pgBouncer
+                              config sidecar container
+                            properties:
+                              resources:
+                                description: Resource requirements for a sidecar container
+                                properties:
+                                  limits:
+                                    additionalProperties:
+                                      anyOf:
+                                      - type: integer
+                                      - type: string
+                                      pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                      x-kubernetes-int-or-string: true
+                                    description: 'Limits describes the maximum amount
+                                      of compute resources allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                                    type: object
+                                  requests:
+                                    additionalProperties:
+                                      anyOf:
+                                      - type: integer
+                                      - type: string
+                                      pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                      x-kubernetes-int-or-string: true
+                                    description: 'Requests describes the minimum amount
+                                      of compute resources required. If Requests is
+                                      omitted for a container, it defaults to Limits
+                                      if that is explicitly specified, otherwise to
+                                      an implementation-defined value. More info:
+                                      https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                                    type: object
+                                type: object
                             type: object
                         type: object
                       tolerations:
@@ -5611,9 +6036,132 @@ spec:
                               type: string
                           type: object
                         type: array
+                      topologySpreadConstraints:
+                        description: 'Topology spread constraints of a PgBouncer pod.
+                          Changing this value causes PgBouncer to restart. More info:
+                          https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/'
+                        items:
+                          description: TopologySpreadConstraint specifies how to spread
+                            matching pods among the given topology.
+                          properties:
+                            labelSelector:
+                              description: LabelSelector is used to find matching
+                                pods. Pods that match this label selector are counted
+                                to determine the number of pods in their corresponding
+                                topology domain.
+                              properties:
+                                matchExpressions:
+                                  description: matchExpressions is a list of label
+                                    selector requirements. The requirements are ANDed.
+                                  items:
+                                    description: A label selector requirement is a
+                                      selector that contains values, a key, and an
+                                      operator that relates the key and values.
+                                    properties:
+                                      key:
+                                        description: key is the label key that the
+                                          selector applies to.
+                                        type: string
+                                      operator:
+                                        description: operator represents a key's relationship
+                                          to a set of values. Valid operators are
+                                          In, NotIn, Exists and DoesNotExist.
+                                        type: string
+                                      values:
+                                        description: values is an array of string
+                                          values. If the operator is In or NotIn,
+                                          the values array must be non-empty. If the
+                                          operator is Exists or DoesNotExist, the
+                                          values array must be empty. This array is
+                                          replaced during a strategic merge patch.
+                                        items:
+                                          type: string
+                                        type: array
+                                    required:
+                                    - key
+                                    - operator
+                                    type: object
+                                  type: array
+                                matchLabels:
+                                  additionalProperties:
+                                    type: string
+                                  description: matchLabels is a map of {key,value}
+                                    pairs. A single {key,value} in the matchLabels
+                                    map is equivalent to an element of matchExpressions,
+                                    whose key field is "key", the operator is "In",
+                                    and the values array contains only "value". The
+                                    requirements are ANDed.
+                                  type: object
+                              type: object
+                            maxSkew:
+                              description: 'MaxSkew describes the degree to which
+                                pods may be unevenly distributed. When `whenUnsatisfiable=DoNotSchedule`,
+                                it is the maximum permitted difference between the
+                                number of matching pods in the target topology and
+                                the global minimum. For example, in a 3-zone cluster,
+                                MaxSkew is set to 1, and pods with the same labelSelector
+                                spread as 1/1/0: | zone1 | zone2 | zone3 | |   P   |   P   |       |
+                                - if MaxSkew is 1, incoming pod can only be scheduled
+                                to zone3 to become 1/1/1; scheduling it onto zone1(zone2)
+                                would make the ActualSkew(2-0) on zone1(zone2) violate
+                                MaxSkew(1). - if MaxSkew is 2, incoming pod can be
+                                scheduled onto any zone. When `whenUnsatisfiable=ScheduleAnyway`,
+                                it is used to give higher precedence to topologies
+                                that satisfy it. It''s a required field. Default value
+                                is 1 and 0 is not allowed.'
+                              format: int32
+                              type: integer
+                            topologyKey:
+                              description: TopologyKey is the key of node labels.
+                                Nodes that have a label with this key and identical
+                                values are considered to be in the same topology.
+                                We consider each <key, value> as a "bucket", and try
+                                to put balanced number of pods into each bucket. It's
+                                a required field.
+                              type: string
+                            whenUnsatisfiable:
+                              description: 'WhenUnsatisfiable indicates how to deal
+                                with a pod if it doesn''t satisfy the spread constraint.
+                                - DoNotSchedule (default) tells the scheduler not
+                                to schedule it. - ScheduleAnyway tells the scheduler
+                                to schedule the pod in any location,   but giving
+                                higher precedence to topologies that would help reduce
+                                the   skew. A constraint is considered "Unsatisfiable"
+                                for an incoming pod if and only if every possible
+                                node assigment for that pod would violate "MaxSkew"
+                                on some topology. For example, in a 3-zone cluster,
+                                MaxSkew is set to 1, and pods with the same labelSelector
+                                spread as 3/1/1: | zone1 | zone2 | zone3 | | P P P
+                                |   P   |   P   | If WhenUnsatisfiable is set to DoNotSchedule,
+                                incoming pod can only be scheduled to zone2(zone3)
+                                to become 3/2/1(3/1/2) as ActualSkew(2-1) on zone2(zone3)
+                                satisfies MaxSkew(1). In other words, the cluster
+                                can still be imbalanced, but scheduler won''t make
+                                it *more* imbalanced. It''s a required field.'
+                              type: string
+                          required:
+                          - maxSkew
+                          - topologyKey
+                          - whenUnsatisfiable
+                          type: object
+                        type: array
                     type: object
                 required:
                 - pgBouncer
+                type: object
+              service:
+                description: Specification of the service that exposes the PostgreSQL
+                  primary instance.
+                properties:
+                  type:
+                    description: 'More info: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types'
+                    enum:
+                    - ClusterIP
+                    - NodePort
+                    - LoadBalancer
+                    type: string
+                required:
+                - type
                 type: object
               shutdown:
                 description: Whether or not the PostgreSQL cluster should be stopped.
@@ -5639,6 +6187,16 @@ spec:
                 required:
                 - repoName
                 type: object
+              supplementalGroups:
+                description: 'A list of group IDs applied to the process of a container.
+                  These can be useful when accessing shared file systems with constrained
+                  permissions. More info: https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#security-context'
+                items:
+                  format: int64
+                  maximum: 2147483647
+                  minimum: 1
+                  type: integer
+                type: array
               users:
                 description: Users to create inside PostgreSQL and the databases they
                   should access. The default creates one user that can access one
@@ -5762,6 +6320,10 @@ spec:
                 x-kubernetes-list-map-keys:
                 - type
                 x-kubernetes-list-type: map
+              databaseInitSQL:
+                description: DatabaseInitSQL state of custom database initialization
+                  in the cluster
+                type: string
               databaseRevision:
                 description: Identifies the databases that have been installed into
                   PostgreSQL.
@@ -5882,7 +6444,7 @@ spec:
                   repos:
                     description: Status information for pgBackRest repositories
                     items:
-                      description: RepoVolumeStatus the status of a pgBackRest repository
+                      description: RepoStatus the status of a pgBackRest repository
                       properties:
                         bound:
                           description: Whether or not the pgBackRest repository PersistentVolumeClaim

@@ -16,8 +16,6 @@ spec:
   backups:
     pgbackrest:
       image: {{ .Values.pgBackRest}}
-      repoHost:
-        dedicated: {}
       repos:
       - name: repo1
         volume:

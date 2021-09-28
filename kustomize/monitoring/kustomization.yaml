@@ -3,6 +3,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 namespace: postgres-operator
 resources:
   - pvcs.yaml
+  - ./dashboards
 # configuration files
   - prometheus-config.yaml
   - alertmanager-config.yaml
@@ -22,14 +23,8 @@ resources:
   - service.yaml
 configMapGenerator:
 - name: grafana-dashboards
+  behavior: merge
   files:
-    - dashboards/pgbackrest.json
-    - dashboards/pod_details.json
-    - dashboards/postgres_overview.json
-    - dashboards/postgresql_details.json
-    - dashboards/postgresql_service_health.json
-    - dashboards/prometheus_alerts.json
-    - dashboards/query_statistics.json
-    - dashboards/crunchy_grafana_dashboards.yml
+    - crunchy_grafana_dashboards.yml
 generatorOptions:
  disableNameSuffixHash: true

@@ -6,6 +6,7 @@ metadata:
     {{- include "install.labels" . | nindent 4 }}
 spec:
   replicas: 1
+  strategy: { type: Recreate }
   selector:
     matchLabels:
       {{- include "install.crunchyLabels" . | nindent 6 }}

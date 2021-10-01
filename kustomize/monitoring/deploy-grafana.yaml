@@ -77,7 +77,8 @@ spec:
       restartPolicy: Always
       securityContext:
         fsGroup: 26
-        # supplementalGroups : 65534
+        # supplementalGroups:
+        # - 65534
       schedulerName: default-scheduler
       serviceAccount: grafana
       serviceAccountName: grafana

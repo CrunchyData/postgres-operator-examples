@@ -1,0 +1,20 @@
+apiVersion: postgres-operator.crunchydata.com/v1beta1
+kind: PostgresCluster
+metadata:
+  name: over
+spec:
+
+  backups:
+    pgbackrest:
+      image: registry.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.35-0
+      repos:
+      - name: repo1
+        schedules:
+          full: "0 1 * * 0"
+        volume:
+          volumeClaimSpec:
+            accessModes:
+            - "ReadWriteOnce"
+            resources:
+              requests:
+                storage: 1Gi

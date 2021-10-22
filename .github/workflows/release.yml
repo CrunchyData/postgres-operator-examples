@@ -1,0 +1,34 @@
+name: Release the chart
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  charts:
+    runs-on: ubuntu-latest
+    env:
+      HELM_REPO_USERNAME: ${{ secrets.HELM_REPO_USERNAME }} 
+      HELM_REPO_PASSWORD: ${{ secrets.HELM_REPO_PASSWORD }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Helm
+        uses: azure/setup-helm@v1
+
+      - name: Install Helm Push
+        run: |
+          helm plugin install https://github.com/chartmuseum/helm-push.git
+
+      - name: Add Shared Chart Museum as `chartmuseum`
+        run: |
+          helm repo add chartmuseum http://${env.HELM_REPO_USERNAME}:${env.HELM_REPO_PASSWORD}@chartmuseum.shared.thatgame.co/
+
+      - name: Package the chart
+        run: |
+          helm package helm/install
+
+      - name: Upload the package
+        run: |
+          helm cm-push pgo-0.1.0.tgz chartmuseum --force

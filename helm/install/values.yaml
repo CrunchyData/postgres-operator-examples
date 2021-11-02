@@ -12,6 +12,8 @@ relatedImages:
     image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:centos8-13.5-0
   postgres_13_gis_3.1:
     image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:centos8-13.5-3.1-0
+  pgadmin:
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-pgadmin4:centos8-4.20-0
   pgbackrest:
     image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:centos8-2.36-0
   pgbouncer:

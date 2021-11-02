@@ -11,6 +11,9 @@ relatedImages:
   postgres_13_gis_3.1:
     repository: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis-ha
     tag: centos8-13.4-3.1-0
+  pgadmin:
+    repository: registry.developers.crunchydata.com/crunchydata/crunchy-pgadmin4
+    tag: centos8-4.20-0
   pgbackrest:
     repository: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest
     tag: centos8-2.33-2

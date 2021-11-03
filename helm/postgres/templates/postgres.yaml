@@ -1,10 +1,10 @@
 apiVersion: postgres-operator.crunchydata.com/v1beta1
 kind: PostgresCluster
 metadata:
-  name: {{ .Values.name }}
+  name: {{ required "You must give your Postgres cluster a name" .Values.name }}
 spec:
-  image: {{ .Values.postgres }}
-  postgresVersion: {{ .Values.postgresVersion }}
+  image: {{ default "registry.developers.crunchydata.com/crunchydata/crunchy-postgres:centos8-13.4-1" .Values.postgres | quote }}
+  postgresVersion: {{ default 13 .Values.postgresVersion }}
   instances:
     - name: instance1
       dataVolumeClaimSpec:
@@ -15,7 +15,7 @@ spec:
             storage: 1Gi
   backups:
     pgbackrest:
-      image: {{ .Values.pgBackRest}}
+      image: {{ default "registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:centos8-2.35-0" .Values.pgBackRest | quote }}
       repos:
       - name: repo1
         volume:
@@ -25,14 +25,6 @@ spec:
             resources:
               requests:
                 storage: 1Gi
-      - name: repo2
-        volume:
-          volumeClaimSpec:
-            accessModes:
-            - "ReadWriteOnce"
-            resources:
-              requests:
-                storage: 1Gi
   proxy:
     pgBouncer:
-      image: {{ .Values.pgBouncer}}
+      image: {{ default "registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:centos8-1.15-3" .Values.pgBouncer | quote}}

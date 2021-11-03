@@ -2,11 +2,18 @@
 # Cluster name
 name: hippo
 
-# PostgreSQL Version
-# Version should match version defined in PostgreSQL images
-postgresVersion: 13
+# postgresVersion should match the version of Potsgres you are deploying from
+# the image. This defaults to the below value.
+# postgresVersion: 13
 
-# Images
-postgres: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:centos8-13.4-1
-pgBackRest: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:centos8-2.35-0
-pgBouncer: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:centos8-1.15-3
+# postgres can be a Postgres or GIS-enabled Postgres image. This defaults to the
+# below value
+# postgres: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:centos8-13.4-1
+
+# pgBackRest is the pgBackRest backup utility image. This defaults to the below
+# value
+# pgBackRest: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:centos8-2.35-0
+
+# pgBouncer is the image for the PgBouncer connection pooler. This defaults to
+# the below value
+# pgBouncer: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:centos8-1.15-3

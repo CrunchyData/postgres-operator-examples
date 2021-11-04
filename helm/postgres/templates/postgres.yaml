@@ -1,21 +1,46 @@
 apiVersion: postgres-operator.crunchydata.com/v1beta1
 kind: PostgresCluster
 metadata:
-  name: {{ required "You must give your Postgres cluster a name" .Values.name }}
+  name: {{ default .Release.Name .Values.name }}
 spec:
-  image: {{ default "registry.developers.crunchydata.com/crunchydata/crunchy-postgres:centos8-13.4-1" .Values.postgres | quote }}
   postgresVersion: {{ default 13 .Values.postgresVersion }}
+{{- if .Values.postGISVersion }}
+  postGISVersion: {{ quote .Values.postGISVersion }}
+{{- end }}
+{{- if .Values.imagePostgres }}
+  image: {{ .Values.imagePostgres | quote }}
+{{- end }}
+{{- if .Values.port }}
+  port: {{ .Values.port }}
+{{- end }}
+{{- if .Values.instances }}
   instances:
-    - name: instance1
+{{ toYaml .Values.instances | indent 4 }}
+{{- else }}
+  instances:
+    - name: {{ default "instance1" .Values.instanceName | quote }}
+      replicas: {{ default 1 .Values.instanceReplicas }}
       dataVolumeClaimSpec:
         accessModes:
         - "ReadWriteOnce"
         resources:
           requests:
-            storage: 1Gi
+            storage: {{ default "1Gi" .Values.instanceSize | quote }}
+{{- if or .Values.instanceMemory .Values.instanceCPU }}
+      resources:
+        limits:
+          cpu: {{ default "" .Values.instanceCPU | quote }}
+          memory: {{ default "" .Values.instanceMemory | quote }}
+{{- end }}
+{{- end }}
   backups:
     pgbackrest:
-      image: {{ default "registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:centos8-2.35-0" .Values.pgBackRest | quote }}
+{{- if .Values.imagePgBackRest }}
+      image: {{ .Values.imagePgBackRest | quote }}
+{{- end }}
+{{- if .Values.pgBackRestConfig }}
+{{ toYaml .Values.pgBackRestConfig | indent 6 }}
+{{- else }}
       repos:
       - name: repo1
         volume:
@@ -24,7 +49,86 @@ spec:
             - "ReadWriteOnce"
             resources:
               requests:
-                storage: 1Gi
+                storage: {{ default "1Gi" .Values.backupsSize | quote }}
+{{- end }}
+{{- if or .Values.pgBouncerReplicas .Values.pgBouncerConfig }}
   proxy:
     pgBouncer:
-      image: {{ default "registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:centos8-1.15-3" .Values.pgBouncer | quote}}
+{{- if .Values.imagePgBouncer }}
+      image: {{ .Values.imagePgBouncer | quote }}
+{{- end }}
+{{- if .Values.pgBouncerConfig }}
+{{ toYaml .Values.pgBouncerConfig | indent 6 }}
+{{- else }}
+      replicas: {{ .Values.pgBouncerReplicas }}
+{{- end }}
+{{- end }}
+{{- if .Values.patroni }}
+  patroni:
+{{ toYaml .Values.patroni | indent 4 }}
+{{- end }}
+{{- if .Values.users }}
+  users:
+{{ toYaml .Values.users | indent 4 }}
+{{- end }}
+{{- if .Values.service }}
+  service:
+{{ toYaml .Values.service | indent 4 }}
+{{- end }}
+{{- if .Values.dataSource }}
+  service:
+{{ toYaml .Values.dataSource | indent 4 }}
+{{- end }}
+{{- if .Values.databaseInitSQL }}
+  databaseInitSQL:
+    name: {{ required "A ConfigMap name is required for running bootstrap SQL." .Values.databaseInitSQL.name | quote }}
+    key: {{ required "A key in a ConfigMap containing any bootstrap SQL is required." .Values.databaseInitSQL.key | quote }}
+{{- end }}
+{{- if .Values.imagePullPolicy }}
+  imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
+{{- end }}
+{{- if .Values.imagePullSecrets }}
+  imagePullSecrets:
+{{ toYaml .Values.imagePullSecrets | indent 4 }}
+{{- end }}
+{{- if .Values.disableDefaultPodScheduling }}
+  disableDefaultPodScheduling: true
+{{- end }}
+{{- if .Values.metadata }}
+  metadata:
+{{ toYaml .Values.metadata | indent 4 }}
+{{- end }}
+{{- if .Values.monitoring }}
+  monitoring:
+    pgmonitor:
+      exporter:
+        image: {{ default "" .Values.imageExporter | quote }}
+{{- if .Values.monitoringConfig }}
+{{ toYaml .Values.monitoringConfig | indent 8 }}
+{{- end }}
+{{- end }}
+{{- if .Values.shutdown }}
+  shutdown: true
+{{- end }}
+{{- if .Values.standby }}
+  standby:
+    enabled: {{ .Values.standby.enabled }}
+    repoName: {{ required "repoName must be set when enabling standby mode." .Values.standby.repoName }}
+{{- end }}
+{{- if .Values.supplementalGroups }}
+  supplementalGroups:
+{{ toYaml .Values.supplementalGroups | indent 4 }}
+{{- end }}
+{{- if .Values.openshift }}
+  openshift: true
+{{- else if eq .Values.openshift false }}
+  openshift: false
+{{- end }}
+{{- if .Values.customTLSSecret }}
+  customTLSSecret:
+{{ toYaml .Values.customTLSSecret | indent 4 }}
+{{- end }}
+{{- if .Values.customReplicationTLSSecret }}
+  customReplicationTLSSecret:
+{{ toYaml .Values.customReplicationTLSSecret | indent 4 }}
+{{- end }}

@@ -1,19 +1,228 @@
 ---
-# Cluster name
-name: hippo
+# For a full explanation of how to set up the custom resource, please refer to
+# the documentation:
+#    https://access.crunchydata.com/documentation/postgres-operator/v5/
 
-# postgresVersion should match the version of Potsgres you are deploying from
-# the image. This defaults to the below value.
+###########
+# General #
+###########
+
+# name is the name of the cluster. This defaults to the name of the Helm
+# release.
+# name: hippo
+
+# postgresVersion sets the version to deploy. This version number needs to be
+# available as one of the "RELATED_IMAGE_POSTGRES_..." images as part of the PGO
+# installation if you want to deploy the image without setting the "postgres"
+# image variable. This defaults to the below value.
 # postgresVersion: 13
 
-# postgres can be a Postgres or GIS-enabled Postgres image. This defaults to the
-# below value
-# postgres: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:centos8-13.4-1
+# postGISVersion if sets and coupled with a PostGIS enabled container, enables
+# PostGIS. This version number needs to be available as one of the
+# "RELATED_IMAGE_POSTGRES_..." images as part of the PGO installation if you
+# want to deploy the image without setting the "postgres" image variable.
+# postGISVersion: 3.1
 
-# pgBackRest is the pgBackRest backup utility image. This defaults to the below
-# value
-# pgBackRest: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:centos8-2.35-0
+# NOTE: pgBackRest is enabled by default. It must be set in
+# "RELATED_IMAGE_PGBACKREST" on the PGO deployment, otherwise you will need to
+# override the "pgBackRest" image.
 
-# pgBouncer is the image for the PgBouncer connection pooler. This defaults to
-# the below value
-# pgBouncer: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:centos8-1.15-3
+# pgBouncerReplicas sets the number of pgBouncer instances to deploy. The
+# default is 0. You need to set this to at least 1 to deploy pgBouncer or set
+# "pgBouncerConfig". Setting "pgBouncerConfig" will override the value of
+# pgBouncerReplicas. The "RELATED_IMAGE_PGBOUNCER" in the PGO deployment must be
+# set if you want to enable this without explicitly setting "pgBouncer".
+# pgBouncerReplicas: 1
+
+# monitoring enables the ability to monitor the Postgres cluster through a
+# metrics exporter than can be scraped by Prometheus. This defaults to the value
+# below.
+# monitoring: false
+
+###################
+# Image Overrides #
+###################
+
+# imagePostgres can be a Postgres or GIS-enabled Postgres image. This defaults to the
+# below value. "postgresVersion" needs to match the version of Postgres that is
+# used here. If using the GIS-enabled Postgres image, you need to ensure
+# "postGISVersion" matches the version of PostGIS used.
+# imagePostgres: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:centos8-13.4-1
+
+# imagePgBackRest is the pgBackRest backup utility image. This defaults to the
+# below value.
+# imagePgBackRest: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:centos8-2.35-0
+
+# imagePgBouncer is the image for the PgBouncer connection pooler. This defaults
+# to the below value.
+# imagePgBouncer: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:centos8-1.15-3
+
+# imageExporter is the image name for the exporter used as a part of monitoring.
+# This defaults to the value below.
+# imageExporter: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-5.0.3-0
+
+###########################
+# Basic Postgres Settings #
+###########################
+
+# instanceName lets you set the name of your instances. This defaults to
+# the value below. Setting "instances" overrides this value.
+# instanceName: instance1
+
+# instanceSize sets the size of the volume that contains the data. This defaults
+# to the value below. Settings "instances" overrides this value.
+# instanceSize: 1Gi
+
+# instanceMemory sets the memory limit for the Postgres instances. This defaults
+# to no limit being set, but an example value is set below. Settings "instances"
+# overrides this value.
+# instanceMemory: 2Gi
+
+# instanceCPU sets the CPU limit for the Postgres instances. This defaults to
+# no limit being set, but an example value is set below. Setting "instances"
+# overrides this value.
+# instanceCPU: 1000m
+
+# instanceReplicas lets you set the total number of Postgres replicas. This
+# defaults to the value below. More than on replica enables high availability
+# (HA). Settings "instances" overrides this value.
+# instanceReplicas: 1
+
+##############################
+# Advanced Postgres Settings #
+##############################
+
+# instances allows you to define one or more Postgres instance sets. By default,
+# PGO will only deploy a single instance. Each instance set has similar
+# characteristics to the other instances in the set, e.g. storage size, resource
+# etc. You can have multiple replicas within an instance set.
+#
+# This allows you to fully customize the topology of your Postgres instances.
+#
+# For example, to set up an instance set with HA (due to the default pod
+# topology spread constraints)
+#
+# instances:
+#   - name: pgha1
+#     replicas: 2
+#     dataVolumeClaimSpec:
+#       accessModes:
+#       - "ReadWriteOnce"
+#       resources:
+#         requests:
+#           storage: 1Gi
+# instances: {}
+
+# port sets the port that Postgres listens on. Defaults to 5432.
+# port: 5432
+
+# patroni lets you set the Patroni configuration for the Postgres cluster.
+# for example, to set up synchronous replication:
+# patroni:
+#   dynamicConfiguration:
+#     synchronous_mode: true
+#     postgresql:
+#       parameters:
+#         synchronous_commit: "on"
+# patroni: {}
+
+# users sets any custom Postgres users and databases that they have  access to
+# as well as any permossions assoicated with the user account.
+# users: {}
+
+# dataSource specifies a data source for bootstrapping a Postgres cluster.
+# dataSource: {}
+
+# customTLSSecret references a Secret that contains the relevant information for
+# bringing external TLS artifacts to a PostgreSQL cluster. This provides the
+# TLS for the cluster itself.
+# customTLSSecret: {}
+
+# customReplicationTLSSecret references a Secret that contains the relevant
+# information for bringing external TLS artifacts to a PostgreSQL cluster. This
+# provides the information for the replication user.
+# customReplicationTLSSecret: {}
+
+# databaseInitSQL referencs a ConfigMap that contains a SQL file that should be
+# run a cluster bootstrap.
+# databaseInitSQL:
+#   name: bootstrap-sql
+#   key: bootstrap.sql
+
+# standby sets whether or not to run this as a standby cluster. Both of the
+# values below are required to enable a standby cluster. Setting "enabled" to
+# "true" eunables the standby cluster while "repoName" points to a pgBackRest
+# archive to replay WAL files from.
+# standby:
+#   enabled: false
+#   repoName: repo1
+
+# shutdown when set scales the entire workload to zero. By default this is not
+# set.
+# shutdown: true
+
+#################################
+# Backups / pgBackRest Settings #
+#################################
+
+# backupsSize sets the storage size of the backups to a PVC. This can be
+# overridden by "pgBackRestConfig", if set. Defaults to the value velow.
+# backupsSize: 1Gi
+
+# pgBackRestConfig allows for the configuration of every pgBackRest option
+# except for "image", which is set by "pgBackRest".
+# pgBackRestConfig: {}
+
+################################
+# Pooling / pgBouncer Settings #
+################################
+
+# pgBouncerConfig sets all of the pgBouncer portion of the spec except for
+# image. To set image, you need to set the "pgBouncer" setting.
+# pgBouncerConfig: {}
+
+#######################
+# Monitoring Settings #
+#######################
+
+# monitoringConfig sets all of the monitoring portion of the spec except for the
+# image. To set the image, which also enables monitoring, you need to set the
+# "monitoring" setting.
+# monitoringConfig: {}
+
+#######################
+# Kubernetes Settings #
+#######################
+
+# metadata contains any metadata that should be applied to all PGO managed
+# objects in this Postgres cluster. This includes "annotations" and "labels" as
+# subkeys.
+# metadata: {}
+
+# service customizes the Service that exposes the Postgres primary.
+# service: {}
+
+# imagePullPolicy sets the pull policy for all the images. This defaults to
+# the Kubernetes heuristic:
+# https://kubernetes.io/docs/concepts/containers/images/#imagepullpolicy-defaulting
+# imagePullPolicy: IfNotPresent
+
+# imagePullSecrets references Secrets that credentials for pulling image from
+# private repositories
+# imagePullSecrets: []
+
+# supplementalGroups sets any group IDs that should be assigned to
+# Pods, particularly around file system contraints within a system
+# supplementalGroups: []
+
+# disableDefaultPodScheduling if set to true, will disable any of the default
+# scheduling constraints for Pods, such as the default Pod Topology Spread
+# Constraints. If set to false or unset, the default scheduling constraints will
+# be used in addition to any customizations that are added in.
+# disableDefaultPodScheduling: false
+
+# openshift can set explicitly if this is an OpenShift cluster, or a cluster
+# that uses a SecurityContextConstraint. This usually does not need to be set,
+# but you may want to explicitly set it to "false" when using a SCC like
+# "anyuid"
+# openshift: false

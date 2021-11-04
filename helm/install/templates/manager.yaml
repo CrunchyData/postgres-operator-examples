@@ -23,7 +23,7 @@ spec:
           value: "true"
         {{- range  $image_name, $image_val := .Values.relatedImages }}
         - name: RELATED_IMAGE_{{ $image_name | upper }}
-          value: "{{ $image_val.repository }}:{{ $image_val.tag }}"
+          value: "{{ $image_val.image }}"
         {{- end }}
         {{- if .Values.singleNamespace }}
         - name: PGO_TARGET_NAMESPACE

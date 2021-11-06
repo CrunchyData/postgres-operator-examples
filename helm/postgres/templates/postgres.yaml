@@ -40,6 +40,21 @@ spec:
 {{- end }}
 {{- if .Values.pgBackRestConfig }}
 {{ toYaml .Values.pgBackRestConfig | indent 6 }}
+{{- else if .Values.s3 }}
+      configuration:
+      - secret:
+          name: {{ default .Release.Name .Values.name }}-pgbackrest-secret
+      global:
+        repo1-path: /pgbackrest/{{ .Release.Namespace }}/{{ default .Release.Name .Values.name }}/repo1
+{{- if .Values.s3.encryptionPassphrase }}
+        repo1-cipher-type: aes-256-cbc
+{{- end }}
+      repos:
+      - name: repo1
+        s3:
+          bucket: {{ .Values.s3.bucket | quote }}
+          endpoint: {{ .Values.s3.endpoint | quote }}
+          region: {{ .Values.s3.region | quote }}
 {{- else }}
       repos:
       - name: repo1

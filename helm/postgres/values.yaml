@@ -169,6 +169,26 @@
 # overridden by "pgBackRestConfig", if set. Defaults to the value velow.
 # backupsSize: 1Gi
 
+# s3 allows for AWS S3 or an S3 compatible storage system to be used for
+# backups. This allows for a quick setup with S3; if you need more advanced
+# setup, use pgBackRestConfig.
+# s3:
+#   # bucket specifies the S3 bucket to use,
+#   bucket: ""
+#   # endpoint specifies the S3 endpoint to use.
+#   endpoint: ""
+#   # region specifies the S3 region to use. If your S3 storage system does not
+#   # use "region", fill this in with a random vaule.
+#   region: ""
+#   # key is the S3 key. This is stored in a Secret.
+#   key: ""
+#   # keySecret is the S3 key secret. This is tored in a Secret.
+#   keySecret: ""
+#   # encryptionPassphrase is an optional parameter to enable encrypted backups
+#   # with pgBackRest. This is encrypted by pgBackRest and does not use S3's
+#   # built-in encrpytion system.
+#   encryptionPassphrase: ""
+
 # pgBackRestConfig allows for the configuration of every pgBackRest option
 # except for "image", which is set by "pgBackRest".
 # pgBackRestConfig: {}

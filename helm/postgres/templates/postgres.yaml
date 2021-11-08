@@ -40,6 +40,34 @@ spec:
 {{- end }}
 {{- if .Values.pgBackRestConfig }}
 {{ toYaml .Values.pgBackRestConfig | indent 6 }}
+{{- else if .Values.multiBackupRepos }}
+      configuration:
+      - secret:
+          name: {{ default .Release.Name .Values.name }}-pgbackrest-secret
+      global:
+        {{- range $index, $repo := .Values.multiBackupRepos }}
+        {{- if $repo.s3 }}
+        repo{{ add $index 1 }}-path: /pgbackrest/{{ $.Release.Namespace }}/{{ default $.Release.Name $.Values.name }}/repo{{ add $index 1 }}
+        {{- end }}
+        {{- end }}
+      repos:
+      {{- range $index, $repo := .Values.multiBackupRepos }}
+      - name: repo{{ add $index 1 }}
+        {{- if $repo.volume }}
+        volume:
+          volumeClaimSpec:
+            accessModes:
+            - "ReadWriteOnce"
+            resources:
+              requests:
+                storage: {{ default "1Gi" $repo.volume.backupsSize | quote }}
+        {{- else if $repo.s3 }}
+        s3:
+          bucket: {{ $repo.s3.bucket | quote }}
+          endpoint: {{ $repo.s3.endpoint | quote }}
+          region: {{ $repo.s3.region | quote }}
+        {{- end }}
+      {{- end }}
 {{- else if .Values.s3 }}
       configuration:
       - secret:

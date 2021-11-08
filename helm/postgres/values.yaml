@@ -165,8 +165,8 @@
 # Backups / pgBackRest Settings #
 #################################
 
-# backupsSize sets the storage size of the backups to a PVC. This can be
-# overridden by "pgBackRestConfig", if set. Defaults to the value velow.
+# backupsSize sets the storage size of the backups to a volume in Kubernetes.
+# can be overridden by "pgBackRestConfig", if set. Defaults to the value velow.
 # backupsSize: 1Gi
 
 # s3 allows for AWS S3 or an S3 compatible storage system to be used for
@@ -188,6 +188,27 @@
 #   # with pgBackRest. This is encrypted by pgBackRest and does not use S3's
 #   # built-in encrpytion system.
 #   encryptionPassphrase: ""
+
+# multiBackupRepos allows for backing up to multiple repositories. This is
+# effectively uses the "quickstarts" for each of the backup types (volume, s3,
+# gcs, azure). You can have any permutation of these types. You can set up to 4.
+# can be overwritten by "pgBackRestConfig".
+#
+# You can't set "multiBackupRepos" and any of the individual quickstarts at the
+# same time. "multiBackupRepos" will take precedence.
+#
+# Below is an example that enables one of each backup type. Note all of the
+# available quickstart options are presented below; please see the backup types
+# if you want to see how each option works.
+# multiBackupRepos:
+# - volume:
+#     backupsSize: 1Gi
+# - s3:
+#     bucket: ""
+#     endpoint: ""
+#     region: ""
+#     key: ""
+#     keySecret: ""
 
 # pgBackRestConfig allows for the configuration of every pgBackRest option
 # except for "image", which is set by "pgBackRest".

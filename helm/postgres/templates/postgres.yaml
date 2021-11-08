@@ -4,19 +4,19 @@ metadata:
   name: {{ default .Release.Name .Values.name }}
 spec:
   postgresVersion: {{ default 13 .Values.postgresVersion }}
-{{- if .Values.postGISVersion }}
+  {{- if .Values.postGISVersion }}
   postGISVersion: {{ quote .Values.postGISVersion }}
-{{- end }}
-{{- if .Values.imagePostgres }}
+  {{- end }}
+  {{- if .Values.imagePostgres }}
   image: {{ .Values.imagePostgres | quote }}
-{{- end }}
-{{- if .Values.port }}
+  {{- end }}
+  {{- if .Values.port }}
   port: {{ .Values.port }}
-{{- end }}
-{{- if .Values.instances }}
+  {{- end }}
+  {{- if .Values.instances }}
   instances:
 {{ toYaml .Values.instances | indent 4 }}
-{{- else }}
+  {{- else }}
   instances:
     - name: {{ default "instance1" .Values.instanceName | quote }}
       replicas: {{ default 1 .Values.instanceReplicas }}
@@ -26,21 +26,21 @@ spec:
         resources:
           requests:
             storage: {{ default "1Gi" .Values.instanceSize | quote }}
-{{- if or .Values.instanceMemory .Values.instanceCPU }}
+      {{- if or .Values.instanceMemory .Values.instanceCPU }}
       resources:
         limits:
           cpu: {{ default "" .Values.instanceCPU | quote }}
           memory: {{ default "" .Values.instanceMemory | quote }}
-{{- end }}
-{{- end }}
+      {{- end }}
+  {{- end }}
   backups:
     pgbackrest:
-{{- if .Values.imagePgBackRest }}
+      {{- if .Values.imagePgBackRest }}
       image: {{ .Values.imagePgBackRest | quote }}
-{{- end }}
-{{- if .Values.pgBackRestConfig }}
+      {{- end }}
+      {{- if .Values.pgBackRestConfig }}
 {{ toYaml .Values.pgBackRestConfig | indent 6 }}
-{{- else if .Values.multiBackupRepos }}
+      {{- else if .Values.multiBackupRepos }}
       configuration:
       - secret:
           name: {{ default .Release.Name .Values.name }}-pgbackrest-secret
@@ -74,22 +74,22 @@ spec:
           container: {{ $repo.azure.container | quote }}
         {{- end }}
       {{- end }}
-{{- else if .Values.s3 }}
+      {{- else if .Values.s3 }}
       configuration:
       - secret:
           name: {{ default .Release.Name .Values.name }}-pgbackrest-secret
       global:
         repo1-path: /pgbackrest/{{ .Release.Namespace }}/{{ default .Release.Name .Values.name }}/repo1
-{{- if .Values.s3.encryptionPassphrase }}
+        {{- if .Values.s3.encryptionPassphrase }}
         repo1-cipher-type: aes-256-cbc
-{{- end }}
+        {{- end }}
       repos:
       - name: repo1
         s3:
           bucket: {{ .Values.s3.bucket | quote }}
           endpoint: {{ .Values.s3.endpoint | quote }}
           region: {{ .Values.s3.region | quote }}
-{{- else if .Values.gcs }}
+      {{- else if .Values.gcs }}
       configuration:
       - secret:
           name: {{ default .Release.Name .Values.name }}-pgbackrest-secret
@@ -99,7 +99,7 @@ spec:
       - name: repo1
         gcs:
           bucket: {{ .Values.gcs.bucket | quote }}
-{{- else if .Values.azure }}
+      {{- else if .Values.azure }}
       configuration:
       - secret:
           name: {{ default .Release.Name .Values.name }}-pgbackrest-secret
@@ -109,7 +109,7 @@ spec:
       - name: repo1
         azure:
           container: {{ .Values.azure.container | quote }}
-{{- else }}
+      {{- else }}
       repos:
       - name: repo1
         volume:
@@ -119,85 +119,85 @@ spec:
             resources:
               requests:
                 storage: {{ default "1Gi" .Values.backupsSize | quote }}
-{{- end }}
-{{- if or .Values.pgBouncerReplicas .Values.pgBouncerConfig }}
+      {{- end }}
+  {{- if or .Values.pgBouncerReplicas .Values.pgBouncerConfig }}
   proxy:
     pgBouncer:
-{{- if .Values.imagePgBouncer }}
+      {{- if .Values.imagePgBouncer }}
       image: {{ .Values.imagePgBouncer | quote }}
-{{- end }}
-{{- if .Values.pgBouncerConfig }}
+      {{- end }}
+      {{- if .Values.pgBouncerConfig }}
 {{ toYaml .Values.pgBouncerConfig | indent 6 }}
-{{- else }}
+      {{- else }}
       replicas: {{ .Values.pgBouncerReplicas }}
-{{- end }}
-{{- end }}
-{{- if .Values.patroni }}
+      {{- end }}
+  {{- end }}
+  {{- if .Values.patroni }}
   patroni:
 {{ toYaml .Values.patroni | indent 4 }}
-{{- end }}
-{{- if .Values.users }}
+  {{- end }}
+  {{- if .Values.users }}
   users:
 {{ toYaml .Values.users | indent 4 }}
-{{- end }}
-{{- if .Values.service }}
+  {{- end }}
+  {{- if .Values.service }}
   service:
 {{ toYaml .Values.service | indent 4 }}
-{{- end }}
-{{- if .Values.dataSource }}
+  {{- end }}
+  {{- if .Values.dataSource }}
   service:
 {{ toYaml .Values.dataSource | indent 4 }}
-{{- end }}
-{{- if .Values.databaseInitSQL }}
+  {{- end }}
+  {{- if .Values.databaseInitSQL }}
   databaseInitSQL:
     name: {{ required "A ConfigMap name is required for running bootstrap SQL." .Values.databaseInitSQL.name | quote }}
     key: {{ required "A key in a ConfigMap containing any bootstrap SQL is required." .Values.databaseInitSQL.key | quote }}
-{{- end }}
-{{- if .Values.imagePullPolicy }}
+  {{- end }}
+  {{- if .Values.imagePullPolicy }}
   imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
-{{- end }}
-{{- if .Values.imagePullSecrets }}
+  {{- end }}
+  {{- if .Values.imagePullSecrets }}
   imagePullSecrets:
 {{ toYaml .Values.imagePullSecrets | indent 4 }}
-{{- end }}
-{{- if .Values.disableDefaultPodScheduling }}
+  {{- end }}
+  {{- if .Values.disableDefaultPodScheduling }}
   disableDefaultPodScheduling: true
-{{- end }}
-{{- if .Values.metadata }}
+  {{- end }}
+  {{- if .Values.metadata }}
   metadata:
 {{ toYaml .Values.metadata | indent 4 }}
-{{- end }}
-{{- if .Values.monitoring }}
+  {{- end }}
+  {{- if .Values.monitoring }}
   monitoring:
     pgmonitor:
       exporter:
         image: {{ default "" .Values.imageExporter | quote }}
-{{- if .Values.monitoringConfig }}
+        {{- if .Values.monitoringConfig }}
 {{ toYaml .Values.monitoringConfig | indent 8 }}
-{{- end }}
-{{- end }}
-{{- if .Values.shutdown }}
+        {{- end }}
+  {{- end }}
+  {{- if .Values.shutdown }}
   shutdown: true
-{{- end }}
-{{- if .Values.standby }}
+  {{- end }}
+  {{- if .Values.standby }}
   standby:
     enabled: {{ .Values.standby.enabled }}
     repoName: {{ required "repoName must be set when enabling standby mode." .Values.standby.repoName }}
-{{- end }}
-{{- if .Values.supplementalGroups }}
+  {{- end }}
+  {{- if .Values.supplementalGroups }}
   supplementalGroups:
 {{ toYaml .Values.supplementalGroups | indent 4 }}
-{{- end }}
-{{- if .Values.openshift }}
+  {{- end }}
+  {{- if .Values.openshift }}
   openshift: true
-{{- else if eq .Values.openshift false }}
+  {{- else if eq .Values.openshift false }}
   openshift: false
-{{- end }}
-{{- if .Values.customTLSSecret }}
+  {{- end }}
+  {{- if .Values.customTLSSecret }}
   customTLSSecret:
 {{ toYaml .Values.customTLSSecret | indent 4 }}
-{{- end }}
-{{- if .Values.customReplicationTLSSecret }}
+  {{- end }}
+  {{- if .Values.customReplicationTLSSecret }}
   customReplicationTLSSecret:
 {{ toYaml .Values.customReplicationTLSSecret | indent 4 }}
-{{- end }}
+  {{- end }}

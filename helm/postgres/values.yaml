@@ -200,6 +200,17 @@
 #   key: |
 #     {}
 
+# azure allows for Azure Blob Storage to be used for backups. This allows
+# for a quick setup with Azure Blob Storage; if you need a more advanced setup,
+# use "pgBackRestConfig".
+# azure:
+#   # account is the name of the Azure account to be used.
+#   account: ""
+#   # key is the Secret key used associated with the Azure acount.
+#   key: ""
+#   # container is the Azure container that the backups will be stored in.
+#   container: ""
+
 # multiBackupRepos allows for backing up to multiple repositories. This is
 # effectively uses the "quickstarts" for each of the backup types (volume, s3,
 # gcs, azure). You can have any permutation of these types. You can set up to 4.
@@ -224,6 +235,10 @@
 #     bucket: ""
 #     key: |
 #       {}
+# - azure:
+#     account: ""
+#     key: ""
+#     container: ""
 
 # pgBackRestConfig allows for the configuration of every pgBackRest option
 # except for "image", which is set by "pgBackRest".

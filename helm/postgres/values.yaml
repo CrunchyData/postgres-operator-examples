@@ -189,6 +189,17 @@
 #   # built-in encrpytion system.
 #   encryptionPassphrase: ""
 
+# gcs allows for Google Cloud Storage (GCS) to be used for backups. This allows
+# for a quick setup with GCS; if you need a more advanced setup, use
+# "pgBackRestConfig".
+# gcs:
+#   # bucket is the name of the GCS bucket that the backups will be stored in.
+#   bucket: ""
+#   # key is a multi-line string that contains the GCS key, which is a JSON
+#   # structure.
+#   key: |
+#     {}
+
 # multiBackupRepos allows for backing up to multiple repositories. This is
 # effectively uses the "quickstarts" for each of the backup types (volume, s3,
 # gcs, azure). You can have any permutation of these types. You can set up to 4.
@@ -209,6 +220,10 @@
 #     region: ""
 #     key: ""
 #     keySecret: ""
+# - gcs:
+#     bucket: ""
+#     key: |
+#       {}
 
 # pgBackRestConfig allows for the configuration of every pgBackRest option
 # except for "image", which is set by "pgBackRest".

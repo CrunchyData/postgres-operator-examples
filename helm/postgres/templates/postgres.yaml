@@ -46,7 +46,7 @@ spec:
           name: {{ default .Release.Name .Values.name }}-pgbackrest-secret
       global:
         {{- range $index, $repo := .Values.multiBackupRepos }}
-        {{- if or $repo.s3 $repo.gcs }}
+        {{- if or $repo.s3 $repo.gcs $repo.azure }}
         repo{{ add $index 1 }}-path: /pgbackrest/{{ $.Release.Namespace }}/{{ default $.Release.Name $.Values.name }}/repo{{ add $index 1 }}
         {{- end }}
         {{- end }}
@@ -69,6 +69,9 @@ spec:
         {{- else if $repo.gcs }}
         gcs:
           bucket: {{ $repo.gcs.bucket | quote }}
+        {{- else if $repo.azure }}
+        azure:
+          container: {{ $repo.azure.container | quote }}
         {{- end }}
       {{- end }}
 {{- else if .Values.s3 }}
@@ -96,6 +99,16 @@ spec:
       - name: repo1
         gcs:
           bucket: {{ .Values.gcs.bucket | quote }}
+{{- else if .Values.azure }}
+      configuration:
+      - secret:
+          name: {{ default .Release.Name .Values.name }}-pgbackrest-secret
+      global:
+        repo1-path: /pgbackrest/{{ .Release.Namespace }}/{{ default .Release.Name .Values.name }}/repo1
+      repos:
+      - name: repo1
+        azure:
+          container: {{ .Values.azure.container | quote }}
 {{- else }}
       repos:
       - name: repo1

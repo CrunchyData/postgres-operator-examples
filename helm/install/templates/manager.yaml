@@ -29,4 +29,8 @@ spec:
         - name: PGO_TARGET_NAMESPACE
           valueFrom: { fieldRef: { apiVersion: v1, fieldPath: metadata.namespace } }
         {{- end }}
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
       serviceAccount: {{ include "install.serviceAccountName" . }}

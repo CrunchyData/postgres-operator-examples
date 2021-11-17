@@ -47,19 +47,19 @@
 # below value. "postgresVersion" needs to match the version of Postgres that is
 # used here. If using the GIS-enabled Postgres image, you need to ensure
 # "postGISVersion" matches the version of PostGIS used.
-# imagePostgres: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:centos8-13.4-1
+# imagePostgres: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:centos8-13.5-0
 
 # imagePgBackRest is the pgBackRest backup utility image. This defaults to the
 # below value.
-# imagePgBackRest: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:centos8-2.35-0
+# imagePgBackRest: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:centos8-2.36-0
 
 # imagePgBouncer is the image for the PgBouncer connection pooler. This defaults
 # to the below value.
-# imagePgBouncer: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:centos8-1.15-3
+# imagePgBouncer: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:centos8-1.16-0
 
 # imageExporter is the image name for the exporter used as a part of monitoring.
 # This defaults to the value below.
-# imageExporter: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-5.0.3-0
+# imageExporter: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-5.0.4-0
 
 ###########################
 # Basic Postgres Settings #

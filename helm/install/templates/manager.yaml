@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: operator
-        image: "{{ .Values.image.repository }}/postgres-operator:{{ .Values.image.tag }}"
+        image: "{{ .Values.image.image }}"
         env:
         - name: CRUNCHY_DEBUG
           value: "true"

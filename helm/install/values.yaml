@@ -1,4 +1,8 @@
 ---
+## Switch to enable/disable debug on Postgres Operator
+debug:
+  enabled: true
+
 ## Provide image repository and tag
 image:
   image: registry.developers.crunchydata.com/crunchydata/postgres-operator:ubi8-5.0.3-0

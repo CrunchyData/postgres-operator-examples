@@ -19,8 +19,10 @@ spec:
       - name: operator
         image: "{{ .Values.image.image }}"
         env:
+        {{- if .Values.debug.enabled }}
         - name: CRUNCHY_DEBUG
           value: "true"
+        {{- end }}
         {{- range  $image_name, $image_val := .Values.relatedImages }}
         - name: RELATED_IMAGE_{{ $image_name | upper }}
           value: "{{ $image_val.image }}"

@@ -1,4 +1,4 @@
-namespace: postgres-operator
+namespace: pgo-5
 
 commonLabels:
   postgres-operator.crunchydata.com/control-plane: postgres-operator
@@ -10,5 +10,5 @@ bases:
 
 images:
 - name: postgres-operator
-  newName: registry.developers.crunchydata.com/crunchydata/postgres-operator
+  newName: repo.bit.admin.ch:8444/crunchydata/postgres-operator
   newTag: ubi8-5.0.3-0

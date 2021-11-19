@@ -1,24 +1,24 @@
 ---
 ## Provide image repository and tag
 image:
-  repository: registry.developers.crunchydata.com/crunchydata
+  repository: repo.bit.admin.ch:8444/crunchydata
   tag: ubi8-5.0.3-0
 
 relatedImages:
   postgres_14:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:centos8-14.0-0
+    image: repo.bit.admin.ch:8444/crunchydata/crunchy-postgres:centos8-14.0-0
   postgres_14_gis_3.1:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:centos8-14.0-3.1-0
+    image: repo.bit.admin.ch:8444/crunchydata/crunchy-postgres-gis:centos8-14.0-3.1-0
   postgres_13:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:centos8-13.4-1
+    image: repo.bit.admin.ch:8444/crunchydata/crunchy-postgres:centos8-13.4-1
   postgres_13_gis_3.1:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:centos8-13.4-3.1-1
+    image: repo.bit.admin.ch:8444/crunchydata/crunchy-postgres-gis:centos8-13.4-3.1-1
   pgbackrest:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:centos8-2.35-0
+    image: repo.bit.admin.ch:8444/crunchydata/crunchy-pgbackrest:centos8-2.35-0
   pgbouncer:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:centos8-1.15-3
+    image: repo.bit.admin.ch:8444/crunchydata/crunchy-pgbouncer:centos8-1.15-3
   pgexporter:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-5.0.3-0
+    image: repo.bit.admin.ch:8444/crunchydata/crunchy-postgres-exporter:ubi8-5.0.3-0
 
 ## Install in default or single namespace mode
 singleNamespace: false

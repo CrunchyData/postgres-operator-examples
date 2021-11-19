@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: keycloak
-  namespace: postgres-operator
+  namespace: pgo-5
   labels:
     app.kubernetes.io/name: keycloak
 spec:

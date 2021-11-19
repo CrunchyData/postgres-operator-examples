@@ -1,4 +1,4 @@
-namespace: postgres-operator
+namespace: pgo-5
 
 resources:
 - cert.yaml

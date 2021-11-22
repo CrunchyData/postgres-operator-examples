@@ -19,6 +19,10 @@ spec:
       - name: operator
         image: "{{ .Values.image.image }}"
         env:
+        - name: PGO_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
         - name: CRUNCHY_DEBUG
           value: {{ if eq .Values.debug false  }}"false"{{- else }}"true"{{- end }}
         {{- range  $image_name, $image_val := .Values.relatedImages }}

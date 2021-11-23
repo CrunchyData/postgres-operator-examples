@@ -3,8 +3,8 @@ kind: PostgresCluster
 metadata:
   name: postgres-metrics
 spec:
-  image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:centos8-13.4-1
-  postgresVersion: 13
+  image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:centos8-12.9-0
+  postgresVersion: 12
   instances:
     - name: pgha1
       replicas: 2

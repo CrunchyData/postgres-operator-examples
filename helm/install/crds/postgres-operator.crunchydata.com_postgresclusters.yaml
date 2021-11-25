@@ -5,6 +5,9 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.4.1
   creationTimestamp: null
   name: postgresclusters.postgres-operator.crunchydata.com
+  labels:
+    app.kubernetes.io/name: pgo
+    app.kubernetes.io/version: 5.0.4
 spec:
   group: postgres-operator.crunchydata.com
   names:

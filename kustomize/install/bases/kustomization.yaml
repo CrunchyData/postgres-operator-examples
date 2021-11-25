@@ -1,6 +1,8 @@
 namespace: postgres-operator
 
 commonLabels:
+  app.kubernetes.io/name: pgo
+  app.kubernetes.io/version: 5.0.4
   postgres-operator.crunchydata.com/control-plane: postgres-operator
 
 bases:

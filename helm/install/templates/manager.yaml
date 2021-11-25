@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: operator
-        image: "{{ .Values.image.image }}"
+        image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         env:
         - name: CRUNCHY_DEBUG
           value: {{ if eq .Values.debug false  }}"false"{{- else }}"true"{{- end }}

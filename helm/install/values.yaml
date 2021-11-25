@@ -1,7 +1,9 @@
 ---
-## Provide image repository and tag
+## Provide image registry, repository and tag
 image:
-  image: registry.developers.crunchydata.com/crunchydata/postgres-operator:ubi8-5.0.4-0
+  registry: registry.developers.crunchydata.com
+  repository: crunchydata/postgres-operator
+  tag: ubi8-5.0.4-0
 
 relatedImages:
   postgres_14:

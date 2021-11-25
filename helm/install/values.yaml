@@ -22,9 +22,9 @@ relatedImages:
 # singleNamespace determines how to install PGO to watch namesapces. If set to
 # false, PGO will watch for Postgres clusters in all namesapces Setting to
 # "true" will instruct PGO to only watch for Postgres clusters in the namespace
-# that it is installed in.
-# singleNamespace: false
+# that it is installed in. Defaults to the value below.
+singleNamespace: false
 
 # debug allows you to enable or disable the "debug" level of logging.
 # Defaults to the value below.
-# debug: true
+debug: true

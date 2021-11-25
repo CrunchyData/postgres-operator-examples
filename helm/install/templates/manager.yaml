@@ -20,7 +20,7 @@ spec:
         image: "{{ .Values.image.image }}"
         env:
         - name: CRUNCHY_DEBUG
-          value: "true"
+          value: {{ if eq .Values.debug false  }}"false"{{- else }}"true"{{- end }}
         {{- range  $image_name, $image_val := .Values.relatedImages }}
         - name: RELATED_IMAGE_{{ $image_name | upper }}
           value: "{{ $image_val.image }}"

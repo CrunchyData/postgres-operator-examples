@@ -21,3 +21,7 @@ relatedImages:
 
 ## Install in default or single namespace mode
 singleNamespace: false
+
+# debug allows you to enable or disable the "debug" level of logging.
+# Defaults to the value below.
+# debug: true

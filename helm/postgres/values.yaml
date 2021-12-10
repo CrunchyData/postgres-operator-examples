@@ -14,8 +14,8 @@
 # postgresVersion sets the version to deploy. This version number needs to be
 # available as one of the "RELATED_IMAGE_POSTGRES_..." images as part of the PGO
 # installation if you want to deploy the image without setting the "postgres"
-# image variable. This defaults to the below value.
-# postgresVersion: 13
+# image variable. This value is required.
+postgresVersion: 14
 
 # postGISVersion if sets and coupled with a PostGIS enabled container, enables
 # PostGIS. This version number needs to be available as one of the

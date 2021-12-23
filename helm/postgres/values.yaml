@@ -166,7 +166,7 @@
 #################################
 
 # backupsSize sets the storage size of the backups to a volume in Kubernetes.
-# can be overridden by "pgBackRestConfig", if set. Defaults to the value velow.
+# can be overridden by "pgBackRestConfig", if set. Defaults to the value below.
 # backupsSize: 1Gi
 
 # s3 allows for AWS S3 or an S3 compatible storage system to be used for

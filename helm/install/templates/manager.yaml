@@ -15,6 +15,10 @@ spec:
       labels:
         {{- include "install.crunchyLabels" . | nindent 8 }}
     spec:
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+{{ toYaml .Values.imagePullSecrets | indent 8 }}
+      {{- end }}
       containers:
       - name: operator
         image: "{{ .Values.image.image }}"

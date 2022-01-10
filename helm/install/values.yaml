@@ -1,7 +1,7 @@
 ---
 ## Provide image repository and tag
 image:
-  image: registry.developers.crunchydata.com/crunchydata/postgres-operator:ubi8-5.0.4-0
+  image: registry.crunchydata.com/crunchydata/postgres-operator:ubi8-5.0.4-0
 
 relatedImages:
   postgres_14:
@@ -28,3 +28,8 @@ singleNamespace: false
 # debug allows you to enable or disable the "debug" level of logging.
 # Defaults to the value below.
 debug: true
+
+# imagePullSecrets defines any image pull secrets to use
+# **only for installation**. This is an array that uses the  image pull secret
+# format, i.e. "name: value"
+imagePullSecrets: []

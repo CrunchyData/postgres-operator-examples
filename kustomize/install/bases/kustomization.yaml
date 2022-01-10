@@ -21,8 +21,12 @@ patchesJson6902:
       version: v1
       kind: Deployment
       name: pgo
-    patch: |-
-      - op: remove
-        path: /spec/selector/matchLabels/app.kubernetes.io~1name
-      - op: remove
-        path: /spec/selector/matchLabels/app.kubernetes.io~1version
+    path: ./patches/selectors.yaml
+    # path is used for compatibility with version of kubectl prior to v1.21.0.
+    # newer version of kubectl can use the inline patch below, which is the
+    # preferred method going forward.
+    # patch: |-
+    #   - op: remove
+    #     path: /spec/selector/matchLabels/app.kubernetes.io~1name
+    #   - op: remove
+    #     path: /spec/selector/matchLabels/app.kubernetes.io~1version

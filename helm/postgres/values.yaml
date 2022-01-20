@@ -296,4 +296,4 @@
 # that uses a SecurityContextConstraint. This usually does not need to be set,
 # but you may want to explicitly set it to "false" when using a SCC like
 # "anyuid"
-# openshift: false
+openshift: false

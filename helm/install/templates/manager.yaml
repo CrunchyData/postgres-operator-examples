@@ -33,6 +33,14 @@ spec:
         - name: PGO_TARGET_NAMESPACE
           valueFrom: { fieldRef: { apiVersion: v1, fieldPath: metadata.namespace } }
         {{- end }}
+        {{- if .Values.workers }}
+        - name: PGO_WORKERS
+          value: {{ .Values.workers | quote }}
+        {{- end }}
+        {{- if (default false .Values.disable_check_for_upgrades) }}
+        - name: CHECK_FOR_UPGRADES
+          value: "false"
+        {{- end }}
         securityContext:
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: true

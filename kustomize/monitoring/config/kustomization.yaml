@@ -1,0 +1,35 @@
+kind: Kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+
+resources:
+  - grafana/grafana-secret.yaml
+
+configMapGenerator:
+# Generate grafana dashboard configuration
+- name: grafana-dashboards
+  files:
+    - grafana/crunchy_grafana_dashboards.yml
+    - grafana/dashboards/pgbackrest.json
+    - grafana/dashboards/pod_details.json
+    - grafana/dashboards/postgres_overview.json
+    - grafana/dashboards/postgresql_details.json
+    - grafana/dashboards/postgresql_service_health.json
+    - grafana/dashboards/prometheus_alerts.json
+    - grafana/dashboards/query_statistics.json
+- name: grafana-datasources
+  files:
+    - grafana/crunchy_grafana_datasource.yml
+# Generate Prometheus configuration
+- name: crunchy-prometheus
+  files:
+    - prometheus.yml=prometheus/crunchy-prometheus.yml
+# Generate Alert Manager configuration
+- name: alertmanager-config
+  files:
+    - alertmanager.yml=alertmanager/crunchy-alertmanager.yml
+- name: alertmanager-rules-config
+  files:
+    - alertmanager/crunchy-alert-rules-pg.yml
+
+generatorOptions:
+ disableNameSuffixHash: true

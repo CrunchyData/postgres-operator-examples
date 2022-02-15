@@ -3,4 +3,4 @@ name: pgo
 description: Installer for PGO, the open source Postgres Operator from Crunchy Data
 type: application
 version: 0.2.4
-appVersion: 5.0.4
+appVersion: 5.0.5

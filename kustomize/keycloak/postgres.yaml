@@ -3,8 +3,8 @@ kind: PostgresCluster
 metadata:
   name: keycloakdb
 spec:
-  image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:centos8-13.5-0
-  postgresVersion: 13
+  image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:centos8-14.2-0
+  postgresVersion: 14
   instances:
     - replicas: 2
       dataVolumeClaimSpec:
@@ -25,7 +25,7 @@ spec:
                   postgres-operator.crunchydata.com/instance-set: "00"
   backups:
     pgbackrest:
-      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:centos8-2.36-0
+      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:centos8-2.36-1
       repos:
       - name: repo1
         volume:

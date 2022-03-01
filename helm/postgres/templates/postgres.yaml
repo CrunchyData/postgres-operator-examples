@@ -35,6 +35,9 @@ spec:
   {{- end }}
   backups:
     pgbackrest:
+      {{- if .Values.pgBackRestMetadata }}
+      metadata:  {{ toYaml .Values.pgBackRestMetadata | nindent 8 }}
+      {{- end }}
       {{- if .Values.imagePgBackRest }}
       image: {{ .Values.imagePgBackRest | quote }}
       {{- end }}

@@ -3,6 +3,9 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: {{ include "install.roleKind" . }}
 metadata:
   name: {{ include "install.roleName" . }}
+  {{- if eq (include "install.roleKind" .) "Role"  }}
+  namespace: {{ .Release.Namespace }}
+  {{ end }}
   labels:
     {{- include "install.labels" . | nindent 4 }}
     {{- include "install.clusterLabels" . | nindent 4 }}

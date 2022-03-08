@@ -2,7 +2,7 @@
 Create chart name and version as used by the chart label.
 */}}
 {{- define "install.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version .Values.nameOverride | replace "+" "_" | trunc 63 | trimSuffix "-" }}
+{{- default (printf "%s-%s" .Chart.Name .Chart.Version) .Values.nameOverride | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*

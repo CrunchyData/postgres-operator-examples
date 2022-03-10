@@ -39,6 +39,10 @@
 # below.
 # monitoring: false
 
+# alerting enables the deployment of the prometheusrule for postgresql metrics in prometheus.
+# You need to enable monitoring to use alerting.
+# alerting: false
+
 ###################
 # Image Overrides #
 ###################
@@ -260,6 +264,12 @@
 # image. To set the image, which also enables monitoring, you need to set the
 # "monitoring" setting.
 # monitoringConfig: {}
+
+#####################
+# Alerting Settings #
+#####################
+#alertingConfig:
+#  additionalAlertLabels: {}
 
 #######################
 # Kubernetes Settings #

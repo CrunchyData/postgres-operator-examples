@@ -41,6 +41,8 @@ spec:
         - name: CHECK_FOR_UPGRADES
           value: "false"
         {{- end }}
+        resources:
+          {{- toYaml .Values.resources | nindent 12 }}
         securityContext:
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: true

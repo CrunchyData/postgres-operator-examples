@@ -3,7 +3,7 @@ data:
   alertmanager.yml: |
     ###
     #
-    # Copyright 2017-2021 Crunchy Data Solutions, Inc. All Rights Reserved.
+    # Copyright 2017-2022 Crunchy Data Solutions, Inc. All Rights Reserved.
     #
     ###
 
@@ -85,4 +85,3 @@ metadata:
     app.kubernetes.io/name: postgres-operator-monitoring
     vendor: crunchydata
   name: alertmanager-config
-

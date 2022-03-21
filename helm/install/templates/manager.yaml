@@ -15,12 +15,16 @@ spec:
       labels:
         {{- include "install.crunchyLabels" . | nindent 8 }}
     spec:
+      {{- if .Values.imagePullSecrets }}
+      imagePullSecrets:
+{{ toYaml .Values.imagePullSecrets | indent 8 }}
+      {{- end }}
       containers:
       - name: operator
         image: "{{ .Values.image.image }}"
         env:
         - name: CRUNCHY_DEBUG
-          value: "true"
+          value: {{ if eq .Values.debug false  }}"false"{{- else }}"true"{{- end }}
         {{- range  $image_name, $image_val := .Values.relatedImages }}
         - name: RELATED_IMAGE_{{ $image_name | upper }}
           value: "{{ $image_val.image }}"
@@ -28,6 +32,14 @@ spec:
         {{- if .Values.singleNamespace }}
         - name: PGO_TARGET_NAMESPACE
           valueFrom: { fieldRef: { apiVersion: v1, fieldPath: metadata.namespace } }
+        {{- end }}
+        {{- if .Values.workers }}
+        - name: PGO_WORKERS
+          value: {{ .Values.workers | quote }}
+        {{- end }}
+        {{- if (default false .Values.disable_check_for_upgrades) }}
+        - name: CHECK_FOR_UPGRADES
+          value: "false"
         {{- end }}
         securityContext:
           allowPrivilegeEscalation: false

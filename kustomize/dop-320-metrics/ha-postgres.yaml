@@ -1,0 +1,70 @@
+apiVersion: postgres-operator.crunchydata.com/v1beta1
+kind: PostgresCluster
+metadata:
+  name: postgres-metrics
+spec:
+  image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:centos8-12.9-0
+  postgresVersion: 12
+  instances:
+    - name: pgha1
+      replicas: 2
+      dataVolumeClaimSpec:
+        accessModes:
+        - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: 30Gi
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchLabels:
+                  postgres-operator.crunchydata.com/cluster: postgres-metrics
+                  postgres-operator.crunchydata.com/instance-set: pgha1
+  backups:
+    pgbackrest:
+      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:centos8-2.35-0
+      configuration:
+      - secret:
+          name: pgo-s3-creds
+      global:
+        repo1-path: /pgbackrest/postgres-operator/postgres-metrics/repo1
+      repos:
+      - name: repo1
+        s3:
+          bucket: "indico-pgbackup-dop-320"
+          endpoint: "s3.us-west-1.amazonaws.com"
+          region: "us-west-1"
+
+  proxy:
+    pgBouncer:
+      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:centos8-1.15-3
+      replicas: 2
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchLabels:
+                  postgres-operator.crunchydata.com/cluster: postgres-data
+                  postgres-operator.crunchydata.com/role: pgbouncer
+  users:
+   - name: indico
+     options: "SUPERUSER"
+     databases:
+        - meteor
+  patroni:
+    dynamicConfiguration:
+      postgresql:
+        listen: "*"
+        pg_hba:
+          - host all all 0.0.0.0/0 password
+        parameters:
+          max_parallel_workers: 90
+          work_mem: 4MB
+          max_stack_depth: 6144

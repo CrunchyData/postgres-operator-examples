@@ -1,0 +1,55 @@
+kind: pipeline
+type: kubernetes
+name: devops-service
+
+concurrency:
+  limit: 1
+
+trigger:
+  event:
+    exclude:
+    - pull_request
+
+steps:
+
+  - name: push helm charts
+    image: alpine/helm
+    commands:
+      - helm version
+      - helm plugin install https://github.com/chartmuseum/helm-push
+      - helm repo add --username $USERNAME --password $PASSWORD harbor https://harbor.devops.indico.io/chartrepo/indico-charts
+      - sh upload_helm_charts.sh 
+    
+    environment:
+      HELM_EXPERIMENTAL_OCI: 1
+      PASSWORD:
+        from_secret: harbor_password
+      USERNAME:
+        from_secret: harbor_username
+    when:
+      branch:
+        - main
+
+image_pull_secrets:
+  - harbor_pull_secret
+
+---
+kind: secret
+name: harbor_pull_secret
+get:
+  path: tools/drone/devops_harbor_pull_secret
+  name: DOCKER_CONFIG_JSON 
+
+---
+kind: secret
+name: harbor_username
+get:
+  path: tools/drone/harbor-push-token
+  name: username
+
+---
+kind: secret
+name: harbor_password
+get:
+  path: tools/drone/harbor-push-token
+  name: password

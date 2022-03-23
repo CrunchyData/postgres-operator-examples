@@ -2,6 +2,12 @@ kind: pipeline
 type: kubernetes
 name: devops-service
 
+services:
+  docker:
+    image: docker:dind
+    command: [ "--storage-driver=vfs", "--tls=false" ]
+    privileged: true
+    
 concurrency:
   limit: 1
 
@@ -33,6 +39,7 @@ steps:
   - name: push containers
     image: docker:latest
     commands:
+      - docker --tls=false ps
       - apk update && apk add curl python3 py3-pip
       - pip3 install shyaml
       - sh ./push_and_tag.sh
@@ -44,6 +51,7 @@ steps:
         from_secret: harbor_password
       HARBOR_USERNAME:
         from_secret: harbor_username
+      DOCKER_HOST: tcp://docker:2375
     when:
       branch:
         - main

@@ -3,7 +3,7 @@ type: kubernetes
 name: devops-service
 
 services:
-  docker:
+  - name: docker
     image: docker:dind
     command: [ "--storage-driver=vfs", "--tls=false" ]
     privileged: true

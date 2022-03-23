@@ -7,6 +7,8 @@ services:
     image: docker:dind
     command: [ "--storage-driver=vfs", "--tls=false" ]
     privileged: true
+    environment:
+      DOCKER_TLS_CERTDIR: ''
     
 concurrency:
   limit: 1
@@ -52,7 +54,6 @@ steps:
       HARBOR_USERNAME:
         from_secret: harbor_username
       DOCKER_HOST: tcp://docker:2376
-      DOCKER_TLS_VERIFY: "0"
     when:
       branch:
         - main

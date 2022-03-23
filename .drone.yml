@@ -53,7 +53,7 @@ steps:
         from_secret: harbor_password
       HARBOR_USERNAME:
         from_secret: harbor_username
-      DOCKER_HOST: tcp://docker:2376
+      DOCKER_HOST: tcp://docker:2375
     when:
       branch:
         - main

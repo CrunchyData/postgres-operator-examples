@@ -30,6 +30,25 @@ steps:
       branch:
         - main
 
+  - name: push containers
+    image: docker:latest
+    commands:
+      - apk update && apk add curl python3 py3-pip
+      - pip3 install shyaml
+      - sh ./push_and_tag.sh
+    
+    environment:
+      GCR_CREDENTIALS:
+        from_secret: gcr_credentials
+      HARBOR_PASSWORD:
+        from_secret: harbor_password
+      HARBOR_USERNAME:
+        from_secret: harbor_username
+    when:
+      branch:
+        - main
+      
+
 image_pull_secrets:
   - harbor_pull_secret
 
@@ -53,3 +72,10 @@ name: harbor_password
 get:
   path: tools/drone/harbor-push-token
   name: password
+
+---
+kind: secret
+name: gcr_credentials
+get:
+  path: tools/drone/devops_gcr_credentials
+  name: data

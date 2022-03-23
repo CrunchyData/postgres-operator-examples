@@ -9,8 +9,9 @@ for filename in 'helm/install' 'helm/postgres';
 do
   if [ -d $filename ]; then
     VERSION=$(grep appVersion ./$filename/Chart.yaml | awk '{print $2}' | tr -d '\n')
+    CHART=$(basename $filename)
     helm dependency build ./$filename
     helm package $filename --version $VERSION
-    helm cm-push $filename-$VERSION.tgz harbor
+    helm cm-push $CHART-$VERSION.tgz harbor
   fi 
 done

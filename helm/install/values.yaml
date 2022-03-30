@@ -20,8 +20,7 @@ relatedImages:
     image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.16-2
   pgexporter:
     image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-5.1.0-0
-  pgupgrade:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-upgrade:ubi8-5.1.0-0
+    
 
 # singleNamespace determines how to install PGO to watch namesapces. If set to
 # false, PGO will watch for Postgres clusters in all namesapces Setting to

@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: operator
-        image: "{{ .Values.image.image }}"
+        image: {{ required ".Values.controllerImages.cluster is required" .Values.controllerImages.cluster | quote }}
         env:
         - name: PGO_NAMESPACE
           valueFrom:

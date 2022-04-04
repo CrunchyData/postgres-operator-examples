@@ -1,8 +1,9 @@
 ---
-## Provide image repository and tag
-image:
-  image: registry.developers.crunchydata.com/crunchydata/postgres-operator:ubi8-5.1.0-0
+# controllerImages are used to run the PostgresCluster controller.
+controllerImages:
+  cluster: registry.developers.crunchydata.com/crunchydata/postgres-operator:ubi8-5.1.0-0
 
+# relatedImages are used when an image is omitted from the PostgresCluster spec.
 relatedImages:
   postgres_14:
     image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-14.2-1
@@ -20,12 +21,10 @@ relatedImages:
     image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.16-2
   pgexporter:
     image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-5.1.0-0
-    
 
-# singleNamespace determines how to install PGO to watch namesapces. If set to
-# false, PGO will watch for Postgres clusters in all namesapces Setting to
-# "true" will instruct PGO to only watch for Postgres clusters in the namespace
-# that it is installed in. Defaults to the value below.
+# singleNamespace controls where PGO watches for PostgresClusters. When false,
+# PGO watches for and responds to PostgresClusters in all namespaces. When true,
+# PGO watches only the namespace in which it is installed.
 singleNamespace: false
 
 # debug allows you to enable or disable the "debug" level of logging.

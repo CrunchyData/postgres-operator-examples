@@ -1,0 +1,3 @@
+# https://github.com/github/linguist/issues/4905
+# https://github.com/github/linguist/issues/5092#issuecomment-730262298
+/templates/*.tpl linguist-language=handlebars

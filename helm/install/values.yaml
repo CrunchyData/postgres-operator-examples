@@ -1,9 +1,9 @@
----
-# controllerImages are used to run the PostgresCluster controller.
+# controllerImages are used to run the PostgresCluster and PGUpgrade controllers.
 controllerImages:
   cluster: registry.developers.crunchydata.com/crunchydata/postgres-operator:ubi8-5.1.0-0
+  upgrade: registry.developers.crunchydata.com/crunchydata/postgres-operator-upgrade:ubi8-5.1.0-0
 
-# relatedImages are used when an image is omitted from the PostgresCluster spec.
+# relatedImages are used when an image is omitted from PostgresCluster or PGUpgrade specs.
 relatedImages:
   postgres_14:
     image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-14.2-1
@@ -21,6 +21,8 @@ relatedImages:
     image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.16-2
   pgexporter:
     image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-5.1.0-0
+  pgupgrade:
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-upgrade:ubi8-5.1.0-0
 
 # singleNamespace controls where PGO watches for PostgresClusters. When false,
 # PGO watches for and responds to PostgresClusters in all namespaces. When true,
@@ -28,5 +30,8 @@ relatedImages:
 singleNamespace: false
 
 # debug allows you to enable or disable the "debug" level of logging.
-# Defaults to the value below.
 debug: true
+
+# imagePullSecretNames is a list of secret names to use for pulling controller images.
+# More info: https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
+imagePullSecretNames: []

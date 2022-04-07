@@ -188,10 +188,12 @@ spec:
   supplementalGroups:
 {{ toYaml .Values.supplementalGroups | indent 4 }}
   {{- end }}
-  {{- if .Values.openshift }}
+  {{- if hasKey .Values "openshift" }}
+    {{- if .Values.openshift }}
   openshift: true
-  {{- else if eq .Values.openshift false }}
+    {{- else }}
   openshift: false
+    {{- end }}
   {{- end }}
   {{- if .Values.customTLSSecret }}
   customTLSSecret:

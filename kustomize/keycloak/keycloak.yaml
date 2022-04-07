@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: keycloak
-  namespace: postgres-operator
+  namespace: keycloak
   labels:
     app.kubernetes.io/name: keycloak
 spec:
@@ -15,34 +15,34 @@ spec:
         app.kubernetes.io/name: keycloak
     spec:
       containers:
-      - image: quay.io/keycloak/keycloak:latest
-        name: keycloak
-        env:
-        - name: DB_VENDOR
-          value: "postgres"
-        - name: DB_ADDR
-          valueFrom: { secretKeyRef: { name: keycloakdb-pguser-keycloakdb, key: host } }
-        - name: DB_PORT
-          valueFrom: { secretKeyRef: { name: keycloakdb-pguser-keycloakdb, key: port } }
-        - name: DB_DATABASE
-          valueFrom: { secretKeyRef: { name: keycloakdb-pguser-keycloakdb, key: dbname } }
-        - name: DB_USER
-          valueFrom: { secretKeyRef: { name: keycloakdb-pguser-keycloakdb, key: user } }
-        - name: DB_PASSWORD
-          valueFrom: { secretKeyRef: { name: keycloakdb-pguser-keycloakdb, key: password } }
-        - name: KEYCLOAK_USER
-          value: "admin"
-        - name: KEYCLOAK_PASSWORD
-          value: "admin"
-        - name: PROXY_ADDRESS_FORWARDING
-          value: "true"
-        ports:
-        - name: http
-          containerPort: 8080
-        - name: https
-          containerPort: 8443
-        readinessProbe:
-          httpGet:
-            path: /auth/realms/master
-            port: 8080
+        - image: quay.io/keycloak/keycloak:17.0.1
+          name: keycloak
+          args: ["start-dev"]
+          resources: {}
+          env:
+            - name: KC_DB
+              value: "postgres"
+            - name: KC_DB_URL
+              valueFrom: { secretKeyRef: { name: keycloakdb-pguser-keycloakdb, key: jdbc-uri } }
+            - name: KC_DB_USER
+              valueFrom: { secretKeyRef: { name: keycloakdb-pguser-keycloakdb, key: user } }
+            - name: KC_DB_PASSWORD
+              valueFrom: { secretKeyRef: { name: keycloakdb-pguser-keycloakdb, key: password } }
+            - name: KEYCLOAK_USER
+              value: "admin"
+            - name: KEYCLOAK_PASSWORD
+              value: "admin"
+            - name: PROXY_ADDRESS_FORWARDING
+              value: "true"
+            - name: KC_PROXY
+              value: "edge"              
+          ports:
+            - name: http
+              containerPort: 8080
+            - name: https
+              containerPort: 8443
+          readinessProbe:
+            httpGet:
+              path: /realms/master
+              port: 8080
       restartPolicy: Always

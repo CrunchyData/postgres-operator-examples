@@ -1,9 +1,11 @@
+---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: {{ include "install.roleKind" . }}
 metadata:
   name: {{ include "install.roleName" . }}
   labels:
     {{- include "install.labels" . | nindent 4 }}
+    {{- include "install.clusterLabels" . | nindent 4 }}
 rules:
 - apiGroups:
   - ''

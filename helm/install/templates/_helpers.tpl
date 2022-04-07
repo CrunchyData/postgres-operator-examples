@@ -8,8 +8,11 @@ Create chart name and version as used by the chart label.
 {{/*
 Crunchy labels
 */}}
-{{- define "install.crunchyLabels" -}}
+{{- define "install.clusterLabels" -}}
 postgres-operator.crunchydata.com/control-plane: {{ .Chart.Name }}
+{{- end }}
+{{- define "install.upgradeLabels" -}}
+postgres-operator.crunchydata.com/control-plane: {{ .Chart.Name }}-upgrade
 {{- end }}
 
 {{/*
@@ -17,20 +20,12 @@ Common labels
 */}}
 {{- define "install.labels" -}}
 helm.sh/chart: {{ include "install.chart" . }}
-{{ include "install.selectorLabels" . }}
+app.kubernetes.io/name: {{ .Chart.Name }}
+app.kubernetes.io/instance: {{ .Release.Name }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- end }}
-
-{{/*
-Selector labels
-*/}}
-{{- define "install.selectorLabels" -}}
-app.kubernetes.io/name: {{ .Chart.Name }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-{{ include "install.crunchyLabels" .}}
 {{- end }}
 
 {{/*
@@ -75,5 +70,25 @@ namespace mode or ClusterRole by default.
 Role
 {{- else -}}
 ClusterRole
+{{- end }}
+{{- end }}
+
+{{- define "install.imagePullSecrets" -}}
+{{/* Earlier versions required the full structure of PodSpec.ImagePullSecrets */}}
+{{- if .Values.imagePullSecrets }}
+imagePullSecrets:
+{{ toYaml .Values.imagePullSecrets }}
+{{- else if .Values.imagePullSecretNames }}
+imagePullSecrets:
+{{- range .Values.imagePullSecretNames }}
+- name: {{ . | quote }}
+{{- end }}{{/* range */}}
+{{- end }}{{/* if */}}
+{{- end }}{{/* define */}}
+
+{{- define "install.relatedImages" -}}
+{{- range $id, $object := .Values.relatedImages }}
+- name: RELATED_IMAGE_{{ $id | upper }}
+  value: {{ $object.image | quote }}
 {{- end }}
 {{- end }}

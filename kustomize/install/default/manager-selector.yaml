@@ -1,0 +1,10 @@
+# We add the version as a common label and change it with each release -- see
+# kustomize/install/default/kustomization.yaml#commonLabels --
+# but we want to remove those labels from the selector so that we are not
+# adding/changing selector labels through this.
+# See: https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/commonlabels/
+- op: remove
+  path: /spec/selector/matchLabels/app.kubernetes.io~1name
+
+- op: remove
+  path: /spec/selector/matchLabels/app.kubernetes.io~1version

@@ -1,32 +1,35 @@
 ---
-## Provide image registry, repository and tag
+## Provide image repository and tag
 image:
-  registry: registry.developers.crunchydata.com
-  repository: crunchydata/postgres-operator
-  tag: ubi8-5.0.4-0
+  image: registry.developers.crunchydata.com/crunchydata/postgres-operator:ubi8-5.0.5-0
 
 relatedImages:
   postgres_14:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:centos8-14.1-0
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:centos8-14.2-0
   postgres_14_gis_3.1:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:centos8-14.1-3.1-0
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:centos8-14.2-3.1-0
   postgres_13:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:centos8-13.5-0
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:centos8-13.6-0
   postgres_13_gis_3.1:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:centos8-13.5-3.1-0
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:centos8-13.6-3.1-0
   pgbackrest:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:centos8-2.36-0
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:centos8-2.36-1
   pgbouncer:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:centos8-1.16-0
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:centos8-1.16-1
   pgexporter:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-5.0.4-0
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-5.0.5-0
 
 # singleNamespace determines how to install PGO to watch namesapces. If set to
 # false, PGO will watch for Postgres clusters in all namesapces Setting to
 # "true" will instruct PGO to only watch for Postgres clusters in the namespace
-# that it is installed in.
-# singleNamespace: false
+# that it is installed in. Defaults to the value below.
+singleNamespace: false
 
 # debug allows you to enable or disable the "debug" level of logging.
 # Defaults to the value below.
-# debug: true
+debug: true
+
+# imagePullSecrets defines any image pull secrets to use
+# **only for installation**. This is an array that uses the  image pull secret
+# format, i.e. "name: value"
+imagePullSecrets: []

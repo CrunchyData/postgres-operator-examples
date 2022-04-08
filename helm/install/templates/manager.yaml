@@ -21,7 +21,7 @@ spec:
       {{- end }}
       containers:
       - name: operator
-        image: "{{ .Values.image.image }}"
+        image: "{{ .Values.image.registry }}/{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         env:
         - name: CRUNCHY_DEBUG
           value: {{ if eq .Values.debug false  }}"false"{{- else }}"true"{{- end }}
@@ -41,6 +41,8 @@ spec:
         - name: CHECK_FOR_UPGRADES
           value: "false"
         {{- end }}
+        resources:
+          {{- toYaml .Values.resources | nindent 12 }}
         securityContext:
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: true

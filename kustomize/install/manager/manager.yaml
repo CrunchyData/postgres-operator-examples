@@ -3,10 +3,18 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: pgo
+  labels:
+    postgres-operator.crunchydata.com/control-plane: postgres-operator
 spec:
   replicas: 1
   strategy: { type: Recreate }
+  selector:
+    matchLabels:
+      postgres-operator.crunchydata.com/control-plane: postgres-operator
   template:
+    metadata:
+      labels:
+        postgres-operator.crunchydata.com/control-plane: postgres-operator
     spec:
       containers:
       - name: operator

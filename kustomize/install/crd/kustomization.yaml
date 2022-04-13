@@ -1,2 +1,3 @@
 resources:
 - bases/postgres-operator.crunchydata.com_postgresclusters.yaml
+- bases/postgres-operator.crunchydata.com_pgupgrades.yaml

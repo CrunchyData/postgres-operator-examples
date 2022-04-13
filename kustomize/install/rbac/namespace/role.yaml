@@ -3,6 +3,8 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: postgres-operator
+  labels:
+    postgres-operator.crunchydata.com/control-plane: postgres-operator
 rules:
 - apiGroups:
   - ''
@@ -81,6 +83,17 @@ rules:
   resources:
   - cronjobs
   - jobs
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - watch
+- apiGroups:
+  - policy
+  resources:
+  - poddisruptionbudgets
   verbs:
   - create
   - delete

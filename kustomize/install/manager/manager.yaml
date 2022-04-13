@@ -1,0 +1,49 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pgo
+  labels:
+    postgres-operator.crunchydata.com/control-plane: postgres-operator
+spec:
+  replicas: 1
+  strategy: { type: Recreate }
+  selector:
+    matchLabels:
+      postgres-operator.crunchydata.com/control-plane: postgres-operator
+  template:
+    metadata:
+      labels:
+        postgres-operator.crunchydata.com/control-plane: postgres-operator
+    spec:
+      containers:
+      - name: operator
+        image: postgres-operator
+        env:
+        - name: PGO_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: CRUNCHY_DEBUG
+          value: "true"
+        - name: RELATED_IMAGE_POSTGRES_13
+          value: "registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-13.6-1"
+        - name: RELATED_IMAGE_POSTGRES_13_GIS_3.1
+          value: "registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi8-13.6-3.1-1"
+        - name: RELATED_IMAGE_POSTGRES_14
+          value: "registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-14.2-1"
+        - name: RELATED_IMAGE_POSTGRES_14_GIS_3.1
+          value: "registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi8-14.2-3.1-1"
+        - name: RELATED_IMAGE_PGADMIN
+          value: "registry.developers.crunchydata.com/crunchydata/crunchy-pgadmin4:ubi8-4.30-0"
+        - name: RELATED_IMAGE_PGBACKREST
+          value: "registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.38-0"
+        - name: RELATED_IMAGE_PGBOUNCER
+          value: "registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.16-2"
+        - name: RELATED_IMAGE_PGEXPORTER
+          value: "registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-5.1.0-0"
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+      serviceAccountName: pgo

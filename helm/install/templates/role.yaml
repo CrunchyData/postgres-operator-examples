@@ -134,3 +134,13 @@ rules:
   - list
   - patch
   - watch
+- apiGroups:
+  - policy
+  resources:
+  - poddisruptionbudgets
+  verbs:
+  - list
+  - watch
+  - patch
+  - create
+  - get

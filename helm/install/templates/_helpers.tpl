@@ -2,7 +2,7 @@
 Create chart name and version as used by the chart label.
 */}}
 {{- define "install.chart" -}}
-{{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
+{{- printf "%s-%s" .Chart.Name .Chart.Version .Values.nameOverride | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
@@ -26,13 +26,16 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- with .Values.additionalLabels }}
+{{ toYaml . }}
+{{- end }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
 {{- define "install.serviceAccountName" -}}
-{{ .Chart.Name }}
+{{- default .Chart.Name .Values.serviceAccount.name }}
 {{- end }}
 
 {{/*

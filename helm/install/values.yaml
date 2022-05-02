@@ -1,4 +1,35 @@
 ---
+# Override the Chart Name
+nameOverride: ""
+
+# Add Additional Labels to all objects
+additionalLabels: {}
+
+# Add Additional Annotations to all objects
+additionalAnnotations: {}
+
+# Additional labels for the pgo cluster pod.
+managerLabels: {}
+
+# Additional labels for the pgo upgrade pod.
+upgradeLabels: {}
+
+# Additional annotations for the pgo manager pod.
+managerAnnotations: {}
+
+# Additional annotations for the pgo upgrade pod.
+upgradeAnnotations: {}
+
+# Node selectors to schedule the pod to nodes with labels.
+nodeSelector:
+  kubernetes.io/os: linux
+
+# Affinity rules for scheduling the pod.
+affinity: {}
+
+# Tolerations to allow the pod to be scheduled to nodes with taints.
+tolerations: []
+
 # controllerImages are used to run the PostgresCluster and PGUpgrade controllers.
 controllerImages:
   cluster: registry.developers.crunchydata.com/crunchydata/postgres-operator:ubi8-5.1.0-0
@@ -36,3 +67,10 @@ debug: true
 # imagePullSecretNames is a list of secret names to use for pulling controller images.
 # More info: https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
 imagePullSecretNames: []
+
+serviceAccount:
+  # The name of the ServiceAccount to use.
+  # If not set, a name is generated using the fullname template.
+  name: ""
+  # Additional annotations for the ServiceAccount.
+  annotations: {}

@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Chart.Name }}-upgrade
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- include "install.labels" . | nindent 4 }}
     {{- include "install.upgradeLabels" . | nindent 4 }}
@@ -16,6 +17,13 @@ spec:
     metadata:
       labels:
         {{- include "install.upgradeLabels" . | nindent 8 }}
+      {{- with .Values.upgradeLabels }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.upgradeAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
     spec:
       {{- include "install.imagePullSecrets" . | indent 6 }}
       serviceAccountName: {{ include "install.serviceAccountName" . }}-upgrade
@@ -38,3 +46,15 @@ spec:
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: true
           runAsNonRoot: true
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

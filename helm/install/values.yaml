@@ -30,10 +30,6 @@ affinity: {}
 # Tolerations to allow the pod to be scheduled to nodes with taints.
 tolerations: []
 
-## Provide image repository and tag
-image:
-  image: registry.developers.crunchydata.com/crunchydata/postgres-operator:ubi8-5.0.5-0
-
 # controllerImages are used to run the PostgresCluster and PGUpgrade controllers.
 controllerImages:
   cluster: registry.developers.crunchydata.com/crunchydata/postgres-operator:ubi8-5.1.0-0

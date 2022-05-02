@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ .Chart.Name }}-upgrade
+  namespace: {{ .Release.Namespace }}
   labels:
     {{- include "install.labels" . | nindent 4 }}
     {{- include "install.upgradeLabels" . | nindent 4 }}

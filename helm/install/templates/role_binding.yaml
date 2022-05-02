@@ -26,6 +26,9 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: {{ include "install.roleBindingKind" . }}
 metadata:
   name: {{ include "install.roleBindingName" . }}-upgrade
+  {{- if eq (include "install.roleBindingKind" .) "RoleBinding"  }}
+  namespace: {{ .Release.Namespace }}
+  {{ end }}
   labels:
     {{- include "install.labels" . | nindent 4 }}
     {{- include "install.upgradeLabels" . | nindent 4 }}

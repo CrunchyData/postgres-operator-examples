@@ -32,4 +32,6 @@ spec:
           allowPrivilegeEscalation: false
           readOnlyRootFilesystem: true
           runAsNonRoot: true
+          seccompProfile:
+            type: RuntimeDefault
       serviceAccountName: postgres-operator-upgrade

@@ -8,10 +8,14 @@ controllerImages:
 relatedImages:
   postgres_14:
     image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-14.3-0
+  postgres_14_gis_3.1:
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi8-14.3-3.1-0
   postgres_14_gis_3.2:
     image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi8-14.3-3.2-0
   postgres_13:
     image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-13.7-0
+  postgres_13_gis_3.0:
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi8-13.7-3.0-0
   postgres_13_gis_3.1:
     image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi8-13.7-3.1-0
   pgadmin:

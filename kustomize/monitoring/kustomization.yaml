@@ -1,6 +1,6 @@
 kind: Kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
-namespace: postgres-operator
+namespace: gec-industrial-suite-smartmom
 resources:
   - pvcs.yaml
   - ./dashboards

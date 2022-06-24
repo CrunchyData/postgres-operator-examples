@@ -5,3 +5,5 @@ resources:
 - service_account-upgrade.yaml
 - role-upgrade.yaml
 - role_binding-upgrade.yaml
+- clusterrole-aggregate-edit.yaml
+- clusterrole-aggregate-view.yaml

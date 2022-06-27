@@ -73,6 +73,12 @@ postgresVersion: 15
 # to the value below. Settings "instances" overrides this value.
 # instanceSize: 1Gi
 
+# instanceStorageClassName sets the storage class for the volume that contains the data.
+# This defaults to the "default" storage class defined in the cluster.
+# See: 'kubectl get storageclasses.storage.k8s.io | grep default'
+# Settings "instances" overrides this value.
+# instanceStorageClassName: "hostpath"
+
 # instanceMemory sets the memory limit for the Postgres instances. This defaults
 # to no limit being set, but an example value is set below. Settings "instances"
 # overrides this value.

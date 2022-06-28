@@ -145,7 +145,7 @@ spec:
 {{ toYaml .Values.service | indent 4 }}
   {{- end }}
   {{- if .Values.dataSource }}
-  service:
+  dataSource:
 {{ toYaml .Values.dataSource | indent 4 }}
   {{- end }}
   {{- if .Values.databaseInitSQL }}

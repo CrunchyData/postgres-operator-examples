@@ -57,6 +57,7 @@ spec:
         {{- if $repo.volume }}
         volume:
           volumeClaimSpec:
+            {{- if $repo.volume.backupsStorageClassName -}}storageClassName: {{ .Values.backupsStorageClassName | quote }}{{ end }}
             accessModes:
             - "ReadWriteOnce"
             resources:
@@ -115,6 +116,7 @@ spec:
       - name: repo1
         volume:
           volumeClaimSpec:
+            {{- if .Values.backupsStorageClassName -}}storageClassName: {{ .Values.backupsStorageClassName | quote }}{{ end }}
             accessModes:
             - "ReadWriteOnce"
             resources:

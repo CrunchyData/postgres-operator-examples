@@ -1,0 +1,22 @@
+namespace: zoo
+
+nameSuffix: -prod
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+secretGenerator:
+- name: pgo-s3-creds
+  files:
+  - s3.conf
+
+bases:
+  - ../../base/postgres
+
+resources:
+  - over-lb.yaml
+
+patchesStrategicMerge:
+  - postgres.yaml
+
+

@@ -1,0 +1,52 @@
+apiVersion: postgres-operator.crunchydata.com/v1beta1
+kind: PostgresCluster
+metadata:
+  name: over
+spec:
+  instances:
+    - name: 'pgc'
+      replicas: 2
+      dataVolumeClaimSpec:
+        accessModes:
+        - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: 1Gi
+
+  standby:
+    enabled: true
+    repoName: repo2
+
+  backups:
+    pgbackrest:
+      global:
+        repo1-path: /pgbackrest/repo1
+        repo2-path: /pgbackrest/zoo/over/repo2
+      configuration:
+      - secret:
+           name: pgo-s3-creds-standby
+      repos:
+      - name: repo1
+        volume:
+          volumeClaimSpec:
+            accessModes:
+            - "ReadWriteOnce"
+            resources:
+              requests:
+                storage: 1Gi
+      - name: repo2
+        s3:
+          bucket: "<bucket>"
+          endpoint: "s3.amazonaws.com"
+          region: "us-east-2"
+
+  monitoring:
+    pgmonitor:
+      exporter:
+        image: registry.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-5.0.3-0
+
+  patroni:
+    dynamicConfiguration:
+      postgresql:
+        parameters:
+          archive_timeout: 600

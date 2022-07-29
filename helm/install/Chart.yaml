@@ -4,4 +4,5 @@ description: Installer for PGO, the open source Postgres Operator from Crunchy D
 
 type: application
 version: 0.3.2
+# The version below should match the version on the PostgresCluster CRD
 appVersion: 5.1.2

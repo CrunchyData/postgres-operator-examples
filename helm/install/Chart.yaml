@@ -3,6 +3,6 @@ name: pgo
 description: Installer for PGO, the open source Postgres Operator from Crunchy Data
 
 type: application
-version: 0.3.2
+version: 0.3.3
 # The version below should match the version on the PostgresCluster CRD
-appVersion: 5.1.2
+appVersion: 5.1.3

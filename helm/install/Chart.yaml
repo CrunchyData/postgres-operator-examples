@@ -1,6 +1,8 @@
 apiVersion: v2
 name: pgo
 description: Installer for PGO, the open source Postgres Operator from Crunchy Data
+
 type: application
-version: 0.2.5
-appVersion: 5.0.5
+# The version below should match the version on the PostgresCluster CRD
+version: 0.6.0
+appVersion: 5.2.0

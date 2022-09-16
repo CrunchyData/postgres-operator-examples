@@ -2,31 +2,29 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Chart.Name }}
+  name: {{ .Chart.Name }}-upgrade
   labels:
     {{- include "install.labels" . | nindent 4 }}
-    {{- include "install.clusterLabels" . | nindent 4 }}
+    {{- include "install.upgradeLabels" . | nindent 4 }}
 spec:
   replicas: 1
   strategy: { type: Recreate }
   selector:
     matchLabels:
-      {{- include "install.clusterLabels" . | nindent 6 }}
+      {{- include "install.upgradeLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "install.clusterLabels" . | nindent 8 }}
+        {{- include "install.upgradeLabels" . | nindent 8 }}
     spec:
       {{- include "install.imagePullSecrets" . | indent 6 }}
-      serviceAccountName: {{ include "install.serviceAccountName" . }}
+      serviceAccountName: {{ include "install.serviceAccountName" . }}-upgrade
       containers:
       - name: operator
-        image: {{ required ".Values.controllerImages.cluster is required" .Values.controllerImages.cluster | quote }}
+        image: {{ required ".Values.controllerImages.upgrade is required" .Values.controllerImages.upgrade | quote }}
         env:
         - name: CRUNCHY_DEBUG
           value: {{ .Values.debug | ne false | quote }}
-        - name: PGO_NAMESPACE
-          valueFrom: { fieldRef: { apiVersion: v1, fieldPath: metadata.namespace } }
         {{- if .Values.singleNamespace }}
         - name: PGO_TARGET_NAMESPACE
           valueFrom: { fieldRef: { apiVersion: v1, fieldPath: metadata.namespace } }
@@ -36,10 +34,6 @@ spec:
           value: {{ .Values.workers | quote }}
         {{- end }}
         {{- include "install.relatedImages" . | indent 8 }}
-        {{- if .Values.disable_check_for_upgrades }}
-        - name: CHECK_FOR_UPGRADES
-          value: "false"
-        {{- end }}
         securityContext:
           allowPrivilegeEscalation: false
           capabilities: { drop: [ALL] }

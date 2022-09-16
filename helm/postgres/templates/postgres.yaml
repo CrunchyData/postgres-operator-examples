@@ -3,7 +3,7 @@ kind: PostgresCluster
 metadata:
   name: {{ default .Release.Name .Values.name }}
 spec:
-  postgresVersion: {{ default 13 .Values.postgresVersion }}
+  postgresVersion: {{ required "You must set the version of Postgres to deploy." .Values.postgresVersion }}
   {{- if .Values.postGISVersion }}
   postGISVersion: {{ quote .Values.postGISVersion }}
   {{- end }}
@@ -145,7 +145,7 @@ spec:
 {{ toYaml .Values.service | indent 4 }}
   {{- end }}
   {{- if .Values.dataSource }}
-  service:
+  dataSource:
 {{ toYaml .Values.dataSource | indent 4 }}
   {{- end }}
   {{- if .Values.databaseInitSQL }}

@@ -127,7 +127,7 @@ postgresVersion: 14
 # patroni: {}
 
 # users sets any custom Postgres users and databases that they have  access to
-# as well as any permossions assoicated with the user account.
+# as well as any permissions assoicated with the user account.
 # users: {}
 
 # dataSource specifies a data source for bootstrapping a Postgres cluster.

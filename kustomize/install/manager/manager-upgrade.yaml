@@ -27,9 +27,10 @@ spec:
         - name: CRUNCHY_DEBUG
           value: "true"
         - name: RELATED_IMAGE_PGUPGRADE
-          value: "registry.developers.crunchydata.com/crunchydata/crunchy-upgrade:ubi8-5.1.1-0"
+          value: "registry.developers.crunchydata.com/crunchydata/crunchy-upgrade:ubi8-5.2.0-0"
         securityContext:
           allowPrivilegeEscalation: false
+          capabilities: { drop: [ALL] }
           readOnlyRootFilesystem: true
           runAsNonRoot: true
       serviceAccountName: postgres-operator-upgrade

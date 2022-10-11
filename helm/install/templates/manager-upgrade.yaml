@@ -36,5 +36,6 @@ spec:
         {{- include "install.relatedImages" . | indent 8 }}
         securityContext:
           allowPrivilegeEscalation: false
+          capabilities: { drop: [ALL] }
           readOnlyRootFilesystem: true
           runAsNonRoot: true

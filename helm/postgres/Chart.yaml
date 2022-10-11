@@ -2,5 +2,6 @@ apiVersion: v2
 name: postgrescluster
 description: A Helm chart for Kubernetes
 type: application
-version: 0.2.4
-appVersion: 5.1.1
+# The version below should match the version on the PostgresCluster CRD
+version: 0.6.0
+appVersion: 5.2.0

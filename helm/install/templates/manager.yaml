@@ -40,6 +40,9 @@ spec:
         - name: CHECK_FOR_UPGRADES
           value: "false"
         {{- end }}
+        ports:
+        - containerPort: 8080
+          name: metrics
         securityContext:
           allowPrivilegeEscalation: false
           capabilities: { drop: [ALL] }

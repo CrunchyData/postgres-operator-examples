@@ -40,3 +40,8 @@ debug: true
 # imagePullSecretNames is a list of secret names to use for pulling controller images.
 # More info: https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
 imagePullSecretNames: []
+
+# Resource configuration of the PostgresCluster and PGUpgrade controllers.
+resources:
+  controller: {}
+  upgrade: {}

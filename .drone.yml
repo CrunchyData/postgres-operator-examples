@@ -23,6 +23,7 @@ steps:
   - name: push containers
     image: docker:latest
     commands:
+      - sleep 30
       - docker --tls=false ps
       - apk update && apk add curl python3 py3-pip
       - pip3 install shyaml

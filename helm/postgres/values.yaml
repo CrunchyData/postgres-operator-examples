@@ -51,15 +51,15 @@ postgresVersion: 14
 
 # imagePgBackRest is the pgBackRest backup utility image. This defaults to the
 # below value.
-# imagePgBackRest: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.40-1
+# imagePgBackRest: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.41-0
 
 # imagePgBouncer is the image for the PgBouncer connection pooler. This defaults
 # to the below value.
-# imagePgBouncer: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.17-1
+# imagePgBouncer: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.17-3
 
 # imageExporter is the image name for the exporter used as a part of monitoring.
 # This defaults to the value below.
-# imageExporter: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-5.2.0-0
+# imageExporter: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-5.2.1-0
 
 ###########################
 # Basic Postgres Settings #

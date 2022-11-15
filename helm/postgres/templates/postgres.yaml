@@ -21,7 +21,9 @@ spec:
     - name: {{ default "instance1" .Values.instanceName | quote }}
       replicas: {{ default 1 .Values.instanceReplicas }}
       dataVolumeClaimSpec:
-        {{- if .Values.storageClassName -}}storageClassName: {{ .Values.storageClassName | quote }}{{ end }}
+        {{- if .Values.instanceStorageClassName }}
+        storageClassName: {{ .Values.instanceStorageClassName | quote }}
+        {{- end }}
         accessModes:
         - "ReadWriteOnce"
         resources:

@@ -21,6 +21,7 @@ spec:
     - name: {{ default "instance1" .Values.instanceName | quote }}
       replicas: {{ default 1 .Values.instanceReplicas }}
       dataVolumeClaimSpec:
+        storageClassName: {{ default "standard" .Values.instanceStorageClassName | quote }}
         accessModes:
         - "ReadWriteOnce"
         resources:
@@ -56,6 +57,7 @@ spec:
         {{- if $repo.volume }}
         volume:
           volumeClaimSpec:
+            storageClassName: {{ default "standard" $repo.volume.backupStorageClassName | quote }}
             accessModes:
             - "ReadWriteOnce"
             resources:

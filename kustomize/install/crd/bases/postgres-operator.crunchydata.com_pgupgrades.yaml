@@ -857,7 +857,7 @@ spec:
                 type: object
               fromPostgresVersion:
                 description: The major version of PostgreSQL before the upgrade.
-                maximum: 14
+                maximum: 15
                 minimum: 10
                 type: integer
               image:
@@ -880,13 +880,12 @@ spec:
                     let you locate the referenced object inside the same namespace.
                   properties:
                     name:
-                      description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                        TODO: Add other useful fields. apiVersion, kind, uid?'
+                      description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
                       type: string
                   type: object
                 type: array
               metadata:
-                description: Metadata contains metadata for PGUpgrade
+                description: Metadata contains metadata for PostgresCluster resources
                 properties:
                   annotations:
                     additionalProperties:
@@ -938,7 +937,7 @@ spec:
                 type: string
               toPostgresVersion:
                 description: The major version of PostgreSQL to be upgraded to.
-                maximum: 14
+                maximum: 15
                 minimum: 10
                 type: integer
               tolerations:

@@ -17,7 +17,7 @@ relatedImages:
   postgres_14_gis_3.2:
     image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi8-14.6-3.2-2
   postgres_14_gis_3.3:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi8-14.6-3.3-0
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi8-14.6-3.3-2
   postgres_13:
     image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-13.9-2
   postgres_13_gis_3.0:

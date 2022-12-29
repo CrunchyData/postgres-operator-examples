@@ -11,9 +11,6 @@ Crunchy labels
 {{- define "install.clusterLabels" -}}
 postgres-operator.crunchydata.com/control-plane: {{ .Chart.Name }}
 {{- end }}
-{{- define "install.upgradeLabels" -}}
-postgres-operator.crunchydata.com/control-plane: {{ .Chart.Name }}-upgrade
-{{- end }}
 
 {{/*
 Common labels

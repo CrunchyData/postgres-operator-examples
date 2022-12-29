@@ -1,10 +1,9 @@
 ---
-# controllerImages are used to run the PostgresCluster and PGUpgrade controllers.
+# controllerImages are used to run the PostgresCluster controllers.
 controllerImages:
-  cluster: registry.developers.crunchydata.com/crunchydata/postgres-operator:ubi8-5.3.2-0
-  upgrade: registry.developers.crunchydata.com/crunchydata/postgres-operator-upgrade:ubi8-5.3.2-0
+  cluster: registry.developers.crunchydata.com/crunchydata/postgres-operator:5.4.0-0
 
-# relatedImages are used when an image is omitted from PostgresCluster or PGUpgrade specs.
+# relatedImages are used when an image is omitted from PostgresCluster specs or PGUpgrade specs.
 relatedImages:
   postgres_15:
     image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-15.3-0
@@ -41,7 +40,6 @@ debug: true
 # More info: https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
 imagePullSecretNames: []
 
-# Resource configuration of the PostgresCluster and PGUpgrade controllers.
+# Resource configuration of the PostgresCluster controllers.
 resources:
   controller: {}
-  upgrade: {}

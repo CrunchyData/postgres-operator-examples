@@ -16,6 +16,9 @@ spec:
     metadata:
       labels:
         {{- include "install.upgradeLabels" . | nindent 8 }}
+        {{- if .Values.customLabels }}
+{{ toYaml .Values.customLabels | indent 8 }}
+        {{- end }}
     spec:
       {{- include "install.imagePullSecrets" . | indent 6 }}
       serviceAccountName: {{ include "install.serviceAccountName" . }}-upgrade

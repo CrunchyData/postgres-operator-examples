@@ -42,11 +42,11 @@
       }
     ]
   },
-  "editable": true,
+  "editable": false,
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1624647381559,
+  "iteration": 1625069717503,
   "links": [
     {
       "icon": "external link",

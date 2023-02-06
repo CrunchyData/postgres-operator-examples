@@ -51,15 +51,15 @@ postgresVersion: 14
 
 # imagePgBackRest is the pgBackRest backup utility image. This defaults to the
 # below value.
-# imagePgBackRest: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.40-1
+# imagePgBackRest: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.41-2
 
 # imagePgBouncer is the image for the PgBouncer connection pooler. This defaults
 # to the below value.
-# imagePgBouncer: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.17-1
+# imagePgBouncer: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.17-5
 
 # imageExporter is the image name for the exporter used as a part of monitoring.
 # This defaults to the value below.
-# imageExporter: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-5.2.0-0
+# imageExporter: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-5.3.0-0
 
 ###########################
 # Basic Postgres Settings #
@@ -72,6 +72,12 @@ postgresVersion: 14
 # instanceSize sets the size of the volume that contains the data. This defaults
 # to the value below. Settings "instances" overrides this value.
 # instanceSize: 1Gi
+
+# instanceStorageClassName sets the storage class for the volume that contains the data.
+# This defaults to the "default" storage class defined in the cluster.
+# See: 'kubectl get storageclasses.storage.k8s.io | grep default'
+# Settings "instances" overrides this value.
+# instanceStorageClassName: "hostpath"
 
 # instanceMemory sets the memory limit for the Postgres instances. This defaults
 # to no limit being set, but an example value is set below. Settings "instances"
@@ -127,7 +133,7 @@ postgresVersion: 14
 # patroni: {}
 
 # users sets any custom Postgres users and databases that they have  access to
-# as well as any permossions assoicated with the user account.
+# as well as any permissions assoicated with the user account.
 # users: {}
 
 # dataSource specifies a data source for bootstrapping a Postgres cluster.
@@ -168,6 +174,11 @@ postgresVersion: 14
 # backupsSize sets the storage size of the backups to a volume in Kubernetes.
 # can be overridden by "pgBackRestConfig", if set. Defaults to the value below.
 # backupsSize: 1Gi
+
+# backupsStorageClassName sets the storage class to a class existing in Kubernetes.
+# Defaults to the "default" storage class defined in the cluster.
+# Can be overridden by "pgBackRestConfig", if set.
+# backupsStorageClassName: "hostpath"
 
 # s3 allows for AWS S3 or an S3 compatible storage system to be used for
 # backups. This allows for a quick setup with S3; if you need more advanced

@@ -40,6 +40,10 @@ spec:
         - name: CHECK_FOR_UPGRADES
           value: "false"
         {{- end }}
+        {{- if .Values.resources.controller }}
+        resources:
+        {{- toYaml .Values.resources.controller | nindent 10 }}
+        {{- end }}
         securityContext:
           allowPrivilegeEscalation: false
           capabilities: { drop: [ALL] }

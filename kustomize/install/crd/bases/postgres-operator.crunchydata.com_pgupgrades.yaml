@@ -6,7 +6,7 @@ metadata:
   creationTimestamp: null
   labels:
     app.kubernetes.io/name: pgo
-    app.kubernetes.io/version: 5.2.0
+    app.kubernetes.io/version: 5.3.0
   name: pgupgrades.postgres-operator.crunchydata.com
 spec:
   group: postgres-operator.crunchydata.com
@@ -320,10 +320,69 @@ spec:
                                         The requirements are ANDed.
                                       type: object
                                   type: object
+                                namespaceSelector:
+                                  description: A label query over the set of namespaces
+                                    that the term applies to. The term is applied
+                                    to the union of the namespaces selected by this
+                                    field and the ones listed in the namespaces field.
+                                    null selector and null or empty namespaces list
+                                    means "this pod's namespace". An empty selector
+                                    ({}) matches all namespaces.
+                                  properties:
+                                    matchExpressions:
+                                      description: matchExpressions is a list of label
+                                        selector requirements. The requirements are
+                                        ANDed.
+                                      items:
+                                        description: A label selector requirement
+                                          is a selector that contains values, a key,
+                                          and an operator that relates the key and
+                                          values.
+                                        properties:
+                                          key:
+                                            description: key is the label key that
+                                              the selector applies to.
+                                            type: string
+                                          operator:
+                                            description: operator represents a key's
+                                              relationship to a set of values. Valid
+                                              operators are In, NotIn, Exists and
+                                              DoesNotExist.
+                                            type: string
+                                          values:
+                                            description: values is an array of string
+                                              values. If the operator is In or NotIn,
+                                              the values array must be non-empty.
+                                              If the operator is Exists or DoesNotExist,
+                                              the values array must be empty. This
+                                              array is replaced during a strategic
+                                              merge patch.
+                                            items:
+                                              type: string
+                                            type: array
+                                        required:
+                                        - key
+                                        - operator
+                                        type: object
+                                      type: array
+                                    matchLabels:
+                                      additionalProperties:
+                                        type: string
+                                      description: matchLabels is a map of {key,value}
+                                        pairs. A single {key,value} in the matchLabels
+                                        map is equivalent to an element of matchExpressions,
+                                        whose key field is "key", the operator is
+                                        "In", and the values array contains only "value".
+                                        The requirements are ANDed.
+                                      type: object
+                                  type: object
                                 namespaces:
-                                  description: namespaces specifies which namespaces
-                                    the labelSelector applies to (matches against);
-                                    null or empty list means "this pod's namespace"
+                                  description: namespaces specifies a static list
+                                    of namespace names that the term applies to. The
+                                    term is applied to the union of the namespaces
+                                    listed in this field and the ones selected by
+                                    namespaceSelector. null or empty namespaces list
+                                    and null namespaceSelector means "this pod's namespace".
                                   items:
                                     type: string
                                   type: array
@@ -415,10 +474,64 @@ spec:
                                     requirements are ANDed.
                                   type: object
                               type: object
+                            namespaceSelector:
+                              description: A label query over the set of namespaces
+                                that the term applies to. The term is applied to the
+                                union of the namespaces selected by this field and
+                                the ones listed in the namespaces field. null selector
+                                and null or empty namespaces list means "this pod's
+                                namespace". An empty selector ({}) matches all namespaces.
+                              properties:
+                                matchExpressions:
+                                  description: matchExpressions is a list of label
+                                    selector requirements. The requirements are ANDed.
+                                  items:
+                                    description: A label selector requirement is a
+                                      selector that contains values, a key, and an
+                                      operator that relates the key and values.
+                                    properties:
+                                      key:
+                                        description: key is the label key that the
+                                          selector applies to.
+                                        type: string
+                                      operator:
+                                        description: operator represents a key's relationship
+                                          to a set of values. Valid operators are
+                                          In, NotIn, Exists and DoesNotExist.
+                                        type: string
+                                      values:
+                                        description: values is an array of string
+                                          values. If the operator is In or NotIn,
+                                          the values array must be non-empty. If the
+                                          operator is Exists or DoesNotExist, the
+                                          values array must be empty. This array is
+                                          replaced during a strategic merge patch.
+                                        items:
+                                          type: string
+                                        type: array
+                                    required:
+                                    - key
+                                    - operator
+                                    type: object
+                                  type: array
+                                matchLabels:
+                                  additionalProperties:
+                                    type: string
+                                  description: matchLabels is a map of {key,value}
+                                    pairs. A single {key,value} in the matchLabels
+                                    map is equivalent to an element of matchExpressions,
+                                    whose key field is "key", the operator is "In",
+                                    and the values array contains only "value". The
+                                    requirements are ANDed.
+                                  type: object
+                              type: object
                             namespaces:
-                              description: namespaces specifies which namespaces the
-                                labelSelector applies to (matches against); null or
-                                empty list means "this pod's namespace"
+                              description: namespaces specifies a static list of namespace
+                                names that the term applies to. The term is applied
+                                to the union of the namespaces listed in this field
+                                and the ones selected by namespaceSelector. null or
+                                empty namespaces list and null namespaceSelector means
+                                "this pod's namespace".
                               items:
                                 type: string
                               type: array
@@ -512,10 +625,69 @@ spec:
                                         The requirements are ANDed.
                                       type: object
                                   type: object
+                                namespaceSelector:
+                                  description: A label query over the set of namespaces
+                                    that the term applies to. The term is applied
+                                    to the union of the namespaces selected by this
+                                    field and the ones listed in the namespaces field.
+                                    null selector and null or empty namespaces list
+                                    means "this pod's namespace". An empty selector
+                                    ({}) matches all namespaces.
+                                  properties:
+                                    matchExpressions:
+                                      description: matchExpressions is a list of label
+                                        selector requirements. The requirements are
+                                        ANDed.
+                                      items:
+                                        description: A label selector requirement
+                                          is a selector that contains values, a key,
+                                          and an operator that relates the key and
+                                          values.
+                                        properties:
+                                          key:
+                                            description: key is the label key that
+                                              the selector applies to.
+                                            type: string
+                                          operator:
+                                            description: operator represents a key's
+                                              relationship to a set of values. Valid
+                                              operators are In, NotIn, Exists and
+                                              DoesNotExist.
+                                            type: string
+                                          values:
+                                            description: values is an array of string
+                                              values. If the operator is In or NotIn,
+                                              the values array must be non-empty.
+                                              If the operator is Exists or DoesNotExist,
+                                              the values array must be empty. This
+                                              array is replaced during a strategic
+                                              merge patch.
+                                            items:
+                                              type: string
+                                            type: array
+                                        required:
+                                        - key
+                                        - operator
+                                        type: object
+                                      type: array
+                                    matchLabels:
+                                      additionalProperties:
+                                        type: string
+                                      description: matchLabels is a map of {key,value}
+                                        pairs. A single {key,value} in the matchLabels
+                                        map is equivalent to an element of matchExpressions,
+                                        whose key field is "key", the operator is
+                                        "In", and the values array contains only "value".
+                                        The requirements are ANDed.
+                                      type: object
+                                  type: object
                                 namespaces:
-                                  description: namespaces specifies which namespaces
-                                    the labelSelector applies to (matches against);
-                                    null or empty list means "this pod's namespace"
+                                  description: namespaces specifies a static list
+                                    of namespace names that the term applies to. The
+                                    term is applied to the union of the namespaces
+                                    listed in this field and the ones selected by
+                                    namespaceSelector. null or empty namespaces list
+                                    and null namespaceSelector means "this pod's namespace".
                                   items:
                                     type: string
                                   type: array
@@ -607,10 +779,64 @@ spec:
                                     requirements are ANDed.
                                   type: object
                               type: object
+                            namespaceSelector:
+                              description: A label query over the set of namespaces
+                                that the term applies to. The term is applied to the
+                                union of the namespaces selected by this field and
+                                the ones listed in the namespaces field. null selector
+                                and null or empty namespaces list means "this pod's
+                                namespace". An empty selector ({}) matches all namespaces.
+                              properties:
+                                matchExpressions:
+                                  description: matchExpressions is a list of label
+                                    selector requirements. The requirements are ANDed.
+                                  items:
+                                    description: A label selector requirement is a
+                                      selector that contains values, a key, and an
+                                      operator that relates the key and values.
+                                    properties:
+                                      key:
+                                        description: key is the label key that the
+                                          selector applies to.
+                                        type: string
+                                      operator:
+                                        description: operator represents a key's relationship
+                                          to a set of values. Valid operators are
+                                          In, NotIn, Exists and DoesNotExist.
+                                        type: string
+                                      values:
+                                        description: values is an array of string
+                                          values. If the operator is In or NotIn,
+                                          the values array must be non-empty. If the
+                                          operator is Exists or DoesNotExist, the
+                                          values array must be empty. This array is
+                                          replaced during a strategic merge patch.
+                                        items:
+                                          type: string
+                                        type: array
+                                    required:
+                                    - key
+                                    - operator
+                                    type: object
+                                  type: array
+                                matchLabels:
+                                  additionalProperties:
+                                    type: string
+                                  description: matchLabels is a map of {key,value}
+                                    pairs. A single {key,value} in the matchLabels
+                                    map is equivalent to an element of matchExpressions,
+                                    whose key field is "key", the operator is "In",
+                                    and the values array contains only "value". The
+                                    requirements are ANDed.
+                                  type: object
+                              type: object
                             namespaces:
-                              description: namespaces specifies which namespaces the
-                                labelSelector applies to (matches against); null or
-                                empty list means "this pod's namespace"
+                              description: namespaces specifies a static list of namespace
+                                names that the term applies to. The term is applied
+                                to the union of the namespaces listed in this field
+                                and the ones selected by namespaceSelector. null or
+                                empty namespaces list and null namespaceSelector means
+                                "this pod's namespace".
                               items:
                                 type: string
                               type: array
@@ -631,7 +857,7 @@ spec:
                 type: object
               fromPostgresVersion:
                 description: The major version of PostgreSQL before the upgrade.
-                maximum: 14
+                maximum: 15
                 minimum: 10
                 type: integer
               image:
@@ -654,13 +880,12 @@ spec:
                     let you locate the referenced object inside the same namespace.
                   properties:
                     name:
-                      description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                        TODO: Add other useful fields. apiVersion, kind, uid?'
+                      description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
                       type: string
                   type: object
                 type: array
               metadata:
-                description: Metadata contains metadata for PGUpgrade
+                description: Metadata contains metadata for custom resources
                 properties:
                   annotations:
                     additionalProperties:
@@ -690,7 +915,7 @@ spec:
                       pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
                       x-kubernetes-int-or-string: true
                     description: 'Limits describes the maximum amount of compute resources
-                      allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                      allowed. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
                     type: object
                   requests:
                     additionalProperties:
@@ -702,7 +927,7 @@ spec:
                     description: 'Requests describes the minimum amount of compute
                       resources required. If Requests is omitted for a container,
                       it defaults to Limits if that is explicitly specified, otherwise
-                      to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/'
+                      to an implementation-defined value. More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/'
                     type: object
                 type: object
               toPostgresImage:
@@ -712,7 +937,7 @@ spec:
                 type: string
               toPostgresVersion:
                 description: The major version of PostgreSQL to be upgraded to.
-                maximum: 14
+                maximum: 15
                 minimum: 10
                 type: integer
               tolerations:

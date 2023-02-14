@@ -42,11 +42,11 @@
       }
     ]
   },
-  "editable": true,
+  "editable": false,
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1624491530019,
+  "iteration": 1625069909806,
   "links": [
     {
       "asDropdown": false,
@@ -626,7 +626,7 @@
     ]
   },
   "time": {
-    "from": "now-30m",
+    "from": "now-1h",
     "to": "now"
   },
   "timepicker": {

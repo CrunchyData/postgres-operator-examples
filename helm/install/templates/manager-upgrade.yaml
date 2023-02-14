@@ -34,6 +34,10 @@ spec:
           value: {{ .Values.workers | quote }}
         {{- end }}
         {{- include "install.relatedImages" . | indent 8 }}
+        {{- if .Values.resources.upgrade }}
+        resources:
+        {{- toYaml .Values.resources.upgrade | nindent 10 }}
+        {{- end }}
         securityContext:
           allowPrivilegeEscalation: false
           capabilities: { drop: [ALL] }

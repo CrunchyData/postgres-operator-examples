@@ -191,7 +191,9 @@ spec:
   {{- if .Values.standby }}
   standby:
     enabled: {{ .Values.standby.enabled }}
-    repoName: {{ required "repoName must be set when enabling standby mode." .Values.standby.repoName }}
+    repoName: {{ .Values.standby.repoName }}
+    host: {{ .Values.standby.host }}
+    port: {{ .Values.standby.port }}
   {{- end }}
   {{- if .Values.supplementalGroups }}
   supplementalGroups:

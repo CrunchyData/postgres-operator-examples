@@ -16,7 +16,9 @@ spec:
     metadata:
       labels:
         {{- include "install.upgradeLabels" . | nindent 8 }}
-        {{- if .Values.customLabels }}
+        {{- with .Values.customLabels }}
+        {{- toYaml . | indent 8 }}
+        {{- end }}
 {{ toYaml .Values.customLabels | indent 8 }}
         {{- end }}
     spec:

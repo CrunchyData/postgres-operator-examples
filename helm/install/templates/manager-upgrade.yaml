@@ -19,8 +19,6 @@ spec:
         {{- with .Values.customLabels }}
         {{- toYaml . | indent 8 }}
         {{- end }}
-{{ toYaml .Values.customLabels | indent 8 }}
-        {{- end }}
     spec:
       {{- include "install.imagePullSecrets" . | indent 6 }}
       serviceAccountName: {{ include "install.serviceAccountName" . }}-upgrade

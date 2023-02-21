@@ -163,7 +163,7 @@ postgresVersion: 14
 #   enabled: false
 #   repoName: repo1
 #   host: "192.0.2.2"
-#   port: "5432"
+#   port: 5432
 
 # shutdown when set scales the entire workload to zero. By default this is not
 # set.

@@ -155,13 +155,15 @@ postgresVersion: 14
 #   name: bootstrap-sql
 #   key: bootstrap.sql
 
-# standby sets whether or not to run this as a standby cluster. Both of the
-# values below are required to enable a standby cluster. Setting "enabled" to
+# standby sets whether or not to run this as a standby cluster. Setting "enabled" to
 # "true" eunables the standby cluster while "repoName" points to a pgBackRest
-# archive to replay WAL files from.
+# archive to replay WAL files from, and "host" and "port" point to a primary
+# cluster from which to stream data.
 # standby:
 #   enabled: false
 #   repoName: repo1
+#   host: "192.0.2.2"
+#   port: 5432
 
 # shutdown when set scales the entire workload to zero. By default this is not
 # set.

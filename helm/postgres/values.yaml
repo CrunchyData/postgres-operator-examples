@@ -133,7 +133,7 @@ postgresVersion: 14
 # patroni: {}
 
 # users sets any custom Postgres users and databases that they have  access to
-# as well as any permissions assoicated with the user account.
+# as well as any permissions associated with the user account.
 # users: {}
 
 # dataSource specifies a data source for bootstrapping a Postgres cluster.
@@ -149,14 +149,14 @@ postgresVersion: 14
 # provides the information for the replication user.
 # customReplicationTLSSecret: {}
 
-# databaseInitSQL referencs a ConfigMap that contains a SQL file that should be
+# databaseInitSQL references a ConfigMap that contains a SQL file that should be
 # run a cluster bootstrap.
 # databaseInitSQL:
 #   name: bootstrap-sql
 #   key: bootstrap.sql
 
-# standby sets whether or not to run this as a standby cluster. Setting "enabled" to
-# "true" eunables the standby cluster while "repoName" points to a pgBackRest
+# standby sets whether to run this as a standby cluster. Setting "enabled" to
+# "true" enables the standby cluster while "repoName" points to a pgBackRest
 # archive to replay WAL files from, and "host" and "port" point to a primary
 # cluster from which to stream data.
 # standby:
@@ -165,7 +165,7 @@ postgresVersion: 14
 #   host: "192.0.2.2"
 #   port: 5432
 
-# shutdown when set scales the entire workload to zero. By default this is not
+# shutdown when set scales the entire workload to zero. By default, this is not
 # set.
 # shutdown: true
 
@@ -191,15 +191,15 @@ postgresVersion: 14
 #   # endpoint specifies the S3 endpoint to use.
 #   endpoint: ""
 #   # region specifies the S3 region to use. If your S3 storage system does not
-#   # use "region", fill this in with a random vaule.
+#   # use "region", fill this in with a random value.
 #   region: ""
 #   # key is the S3 key. This is stored in a Secret.
 #   key: ""
-#   # keySecret is the S3 key secret. This is tored in a Secret.
+#   # keySecret is the S3 key secret. This is stored in a Secret.
 #   keySecret: ""
 #   # encryptionPassphrase is an optional parameter to enable encrypted backups
 #   # with pgBackRest. This is encrypted by pgBackRest and does not use S3's
-#   # built-in encrpytion system.
+#   # built-in encryption system.
 #   encryptionPassphrase: ""
 
 # gcs allows for Google Cloud Storage (GCS) to be used for backups. This allows
@@ -219,7 +219,7 @@ postgresVersion: 14
 # azure:
 #   # account is the name of the Azure account to be used.
 #   account: ""
-#   # key is the Secret key used associated with the Azure acount.
+#   # key is the Secret key used associated with the Azure account.
 #   key: ""
 #   # container is the Azure container that the backups will be stored in.
 #   container: ""
@@ -232,7 +232,7 @@ postgresVersion: 14
 # You can't set "multiBackupRepos" and any of the individual quickstarts at the
 # same time. "multiBackupRepos" will take precedence.
 #
-# Below is an example that enables one of each backup type. Note all of the
+# Below is an example that enables one of each backup type. Not all
 # available quickstart options are presented below; please see the backup types
 # if you want to see how each option works.
 # multiBackupRepos:
@@ -261,7 +261,7 @@ postgresVersion: 14
 # Pooling / pgBouncer Settings #
 ################################
 
-# pgBouncerConfig sets all of the pgBouncer portion of the spec except for
+# pgBouncerConfig sets all the pgBouncer portion of the spec except for
 # image. To set image, you need to set the "pgBouncer" setting.
 # pgBouncerConfig: {}
 
@@ -269,7 +269,7 @@ postgresVersion: 14
 # Monitoring Settings #
 #######################
 
-# monitoringConfig sets all of the monitoring portion of the spec except for the
+# monitoringConfig sets all the monitoring portion of the spec except for the
 # image. To set the image, which also enables monitoring, you need to set the
 # "monitoring" setting.
 # monitoringConfig: {}
@@ -280,7 +280,7 @@ postgresVersion: 14
 
 # metadata contains any metadata that should be applied to all PGO managed
 # objects in this Postgres cluster. This includes "annotations" and "labels" as
-# subkeys.
+# sub-keys.
 # metadata: {}
 
 # service customizes the Service that exposes the Postgres primary.
@@ -296,7 +296,7 @@ postgresVersion: 14
 # imagePullSecrets: []
 
 # supplementalGroups sets any group IDs that should be assigned to
-# Pods, particularly around file system contraints within a system
+# Pods, particularly around file system constraints within a system
 # supplementalGroups: []
 
 # disableDefaultPodScheduling if set to true, will disable any of the default
@@ -307,6 +307,6 @@ postgresVersion: 14
 
 # openshift can set explicitly if this is an OpenShift cluster, or a cluster
 # that uses a SecurityContextConstraint. This usually does not need to be set,
-# but you may want to explicitly set it to "false" when using a SCC like
+# but you may want to explicitly set it to "false" when using an SCC like
 # "anyuid"
 # openshift: false

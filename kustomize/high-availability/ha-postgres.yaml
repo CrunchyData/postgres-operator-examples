@@ -38,7 +38,7 @@ spec:
                 storage: 1Gi
   proxy:
     pgBouncer:
-      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.17-7
+      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.18-0
       replicas: 2
       affinity:
         podAntiAffinity:

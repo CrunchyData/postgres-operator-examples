@@ -29,7 +29,7 @@ relatedImages:
   pgbackrest:
     image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.41-4
   pgbouncer:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.17-7
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.18-0
   pgexporter:
     image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-5.3.1-0
   pgupgrade:

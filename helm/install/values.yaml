@@ -23,11 +23,7 @@ relatedImages:
   pgbackrest:
     image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.45-2
   pgbouncer:
-<<<<<<< HEAD
     image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.19-2
-=======
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.18-0
->>>>>>> 7242d03 (Bumping pgbouncer version to 1.18.)
   pgexporter:
     image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-5.4.0-0
   pgupgrade:

@@ -184,8 +184,11 @@ postgresVersion: 14
 #   region: ""
 #   # key is the S3 key. This is stored in a Secret.
 #   key: ""
-#   # keySecret is the S3 key secret. This is tored in a Secret.
+#   # keySecret is the S3 key secret. This is stored in a Secret.
 #   keySecret: ""
+#   # keyType can be configured to enable IAM integration via AssumeRole
+#   # For more info, see the documentation at https://access.crunchydata.com/documentation/postgres-operator/v5/tutorial/backups/#using-an-aws-integrated-identity-provider-and-role
+#   keyType: ""
 #   # encryptionPassphrase is an optional parameter to enable encrypted backups
 #   # with pgBackRest. This is encrypted by pgBackRest and does not use S3's
 #   # built-in encrpytion system.
@@ -233,6 +236,7 @@ postgresVersion: 14
 #     region: ""
 #     key: ""
 #     keySecret: ""
+#     keyType: ""
 # - gcs:
 #     bucket: ""
 #     key: |

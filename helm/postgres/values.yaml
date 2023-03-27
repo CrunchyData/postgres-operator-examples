@@ -47,7 +47,7 @@ postgresVersion: 15
 # below value. "postgresVersion" needs to match the version of Postgres that is
 # used here. If using the GIS-enabled Postgres image, you need to ensure
 # "postGISVersion" matches the version of PostGIS used.
-# imagePostgres: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-14.7-0
+# imagePostgres: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-15.2-0
 
 # imagePgBackRest is the pgBackRest backup utility image. This defaults to the
 # below value.

@@ -38,11 +38,7 @@ spec:
                 storage: 1Gi
   proxy:
     pgBouncer:
-<<<<<<< HEAD
       image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.19-2
-=======
-      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.18-0
->>>>>>> 7242d03 (Bumping pgbouncer version to 1.18.)
       replicas: 2
       affinity:
         podAntiAffinity:

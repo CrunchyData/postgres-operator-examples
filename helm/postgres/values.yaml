@@ -61,6 +61,9 @@ postgresVersion: 14
 # This defaults to the value below.
 # imageExporter: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-5.3.1-0
 
+# imagePgAdmin is the image name for the optional pgAdmin instance
+# imagePgAdmin: registry.developers.crunchydata.com/crunchydata/crunchy-pgadmin4:ubi8-4.30-10
+
 ###########################
 # Basic Postgres Settings #
 ###########################
@@ -133,7 +136,7 @@ postgresVersion: 14
 # patroni: {}
 
 # users sets any custom Postgres users and databases that they have  access to
-# as well as any permissions assoicated with the user account.
+# as well as any permissions associated with the user account.
 # users: {}
 
 # dataSource specifies a data source for bootstrapping a Postgres cluster.
@@ -149,14 +152,14 @@ postgresVersion: 14
 # provides the information for the replication user.
 # customReplicationTLSSecret: {}
 
-# databaseInitSQL referencs a ConfigMap that contains a SQL file that should be
+# databaseInitSQL references a ConfigMap that contains a SQL file that should be
 # run a cluster bootstrap.
 # databaseInitSQL:
 #   name: bootstrap-sql
 #   key: bootstrap.sql
 
 # standby sets whether or not to run this as a standby cluster. Setting "enabled" to
-# "true" eunables the standby cluster while "repoName" points to a pgBackRest
+# "true" enables the standby cluster while "repoName" points to a pgBackRest
 # archive to replay WAL files from, and "host" and "port" point to a primary
 # cluster from which to stream data.
 # standby:
@@ -191,7 +194,7 @@ postgresVersion: 14
 #   # endpoint specifies the S3 endpoint to use.
 #   endpoint: ""
 #   # region specifies the S3 region to use. If your S3 storage system does not
-#   # use "region", fill this in with a random vaule.
+#   # use "region", fill this in with a random value.
 #   region: ""
 #   # key is the S3 key. This is stored in a Secret.
 #   key: ""
@@ -201,7 +204,7 @@ postgresVersion: 14
 #   keyType: ""
 #   # encryptionPassphrase is an optional parameter to enable encrypted backups
 #   # with pgBackRest. This is encrypted by pgBackRest and does not use S3's
-#   # built-in encrpytion system.
+#   # built-in encryption system.
 #   encryptionPassphrase: ""
 
 # gcs allows for Google Cloud Storage (GCS) to be used for backups. This allows
@@ -276,6 +279,41 @@ postgresVersion: 14
 # image. To set the image, which also enables monitoring, you need to set the
 # "monitoring" setting.
 # monitoringConfig: {}
+
+# backupsSize sets the storage size of the backups to a volume in Kubernetes.
+# can be overridden by "pgBackRestConfig", if set. Defaults to the value below.
+# backupsSize: 1Gi
+
+# backupsStorageClassName sets the storage class to a class existing in Kubernetes.
+# Defaults to the "default" storage class defined in the cluster.
+# Can be overridden by "pgBackRestConfig", if set.
+# backupsStorageClassName: "hostpath"
+
+############################
+# User Interface, pgAdmin4 #
+############################
+
+# Install optional pgAdmin 4 instance
+pgAdmin: false
+
+# pgAdminReplicas sets the number of pgBouncer instances to deploy. The
+# default is 1. Setting "pgAdminConfig" will override the value of
+# pgAdminReplicas.
+# pgAdminReplicas: 1
+
+# pgAdminSize sets the size of the volume that contains the pgAdmin data.
+# pgAdminSize: 1Gi
+
+# pgAdminStorageClassName sets the storage class for the volume that volume that
+# contains the pgAdmin data. This defaults to the "default" storage class defined
+# in the cluster.
+# See: 'kubectl get storageclasses.storage.k8s.io | grep default'
+# pgAdminStorageClassName: "hostpath"
+
+# pgAdminConfig permits to sets all of the userInterface.pgAdmin entries except
+# for the image.
+# pgAdminConfig: {}
+
 
 #######################
 # Kubernetes Settings #

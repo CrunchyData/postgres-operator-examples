@@ -212,3 +212,22 @@ spec:
   customReplicationTLSSecret:
 {{ toYaml .Values.customReplicationTLSSecret | indent 4 }}
   {{- end }}
+  {{- if .Values.pgAdmin }}
+  userInterface:
+    pgAdmin:
+      image: {{ default "" .Values.imagePgAdmin | quote }}
+      {{- if .Values.pgAdminConfig }}
+      {{ toYaml .Values.pgAdminConfig | nindent 6 }}
+      {{- else }}
+      replicas: {{ default 1 .Values.pgAdminReplicas }}
+      dataVolumeClaimSpec:
+        {{- if .Values.pgAdminStorageClassName }}
+        storageClassName: {{ .Values.pgAdminStorageClassName | quote }}
+        {{- end }}
+        accessModes:
+        - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: {{ default "1Gi" .Values.pgAdminSize | quote }}
+    {{- end }}
+  {{- end }}

@@ -36,6 +36,10 @@ steps:
         from_secret: harbor_password
       HARBOR_USERNAME:
         from_secret: harbor_username
+      CRUNCHY_PASSWORD:
+        from_secret: crunchy_sa_password
+      CRUNCHY_USERNAME:
+        from_secret: crunchy_sa_username
       DOCKER_HOST: tcp://docker:2375
     when:
       branch:
@@ -92,3 +96,17 @@ name: gcr_credentials
 get:
   path: tools/drone/devops_gcr_credentials
   name: data
+
+---
+kind: secret
+name: crunchy_sa_password
+get:
+  path: tools/drone/crunchy_sa
+  name: password
+
+---
+kind: secret
+name: crunchy_sa_username
+get:
+  path: tools/drone/crunchy_sa
+  name: username

@@ -17,7 +17,7 @@
 # image variable. This value is required.
 postgresVersion: 15
 
-# postGISVersion if sets and coupled with a PostGIS enabled container, enables
+# postGISVersion if set and coupled with a PostGIS enabled container, enables
 # PostGIS. This version number needs to be available as one of the
 # "RELATED_IMAGE_POSTGRES_..." images as part of the PGO installation if you
 # want to deploy the image without setting the "postgres" image variable.
@@ -35,7 +35,7 @@ postgresVersion: 15
 # pgBouncerReplicas: 1
 
 # monitoring enables the ability to monitor the Postgres cluster through a
-# metrics exporter than can be scraped by Prometheus. This defaults to the value
+# metrics exporter that can be scraped by Prometheus. This defaults to the value
 # below.
 # monitoring: false
 
@@ -235,8 +235,8 @@ postgresVersion: 15
 # You can't set "multiBackupRepos" and any of the individual quickstarts at the
 # same time. "multiBackupRepos" will take precedence.
 #
-# Below is an example that enables one of each backup type. Not all
-# available quickstart options are presented below; please see the backup types
+# Below is an example that enables one of each backup type.
+# All available quickstart options are presented below; please see the backup types
 # if you want to see how each option works.
 # multiBackupRepos:
 # - volume:
@@ -265,7 +265,7 @@ postgresVersion: 15
 # Pooling / pgBouncer Settings #
 ################################
 
-# pgBouncerConfig sets all the pgBouncer portion of the spec except for
+# pgBouncerConfig sets all of the pgBouncer portions of the spec except for
 # image. To set image, you need to set the "pgBouncer" setting.
 # pgBouncerConfig: {}
 
@@ -273,7 +273,7 @@ postgresVersion: 15
 # Monitoring Settings #
 #######################
 
-# monitoringConfig sets all the monitoring portion of the spec except for the
+# monitoringConfig sets all of the monitoring portions of the spec except for the
 # image. To set the image, which also enables monitoring, you need to set the
 # "monitoring" setting.
 # monitoringConfig: {}
@@ -309,7 +309,7 @@ postgresVersion: 15
 # be used in addition to any customizations that are added in.
 # disableDefaultPodScheduling: false
 
-# openshift can set explicitly if this is an OpenShift cluster, or a cluster
+# openshift can be set explicitly if this is an OpenShift cluster or a cluster
 # that uses a SecurityContextConstraint. This usually does not need to be set,
 # but you may want to explicitly set it to "false" when using an SCC like
 # "anyuid"

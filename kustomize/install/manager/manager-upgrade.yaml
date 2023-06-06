@@ -27,7 +27,7 @@ spec:
         - name: CRUNCHY_DEBUG
           value: "true"
         - name: RELATED_IMAGE_PGUPGRADE
-          value: "registry.developers.crunchydata.com/crunchydata/crunchy-upgrade:ubi8-5.3.1-0"
+          value: "registry.developers.crunchydata.com/crunchydata/crunchy-upgrade:ubi8-5.3.2-0"
         securityContext:
           allowPrivilegeEscalation: false
           capabilities: { drop: [ALL] }

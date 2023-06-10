@@ -10,5 +10,5 @@ roleRef:
   kind: ClusterRole
   name: postgres-operator-upgrade
 subjects:
-- kind: ServiceAccount
-  name: postgres-operator-upgrade
+  - kind: ServiceAccount
+    name: postgres-operator-upgrade

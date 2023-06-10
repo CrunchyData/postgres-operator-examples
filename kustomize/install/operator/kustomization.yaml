@@ -8,7 +8,7 @@ commonLabels:
 
 bases:
   - ../crd
-  - ../rbac/namespace
+  - ../rbac/cluster
   - ../manager
 
 images:
@@ -24,7 +24,3 @@ patchesJson6902:
     path: selectors.yaml
   - target: { group: apps, version: v1, kind: Deployment, name: pgo-upgrade }
     path: selectors.yaml
-
-patchesStrategicMerge:
-  - manager-target.yaml
-  - manager-target-upgrade.yaml

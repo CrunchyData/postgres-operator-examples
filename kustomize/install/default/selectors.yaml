@@ -1,3 +1,4 @@
+---
 # We add the app version as a "commonLabel" and change it with each release.
 # Remove it from selectors until we use "labels" of Kustomize v4.1.
 # See: https://kubectl.docs.kubernetes.io/references/kustomize/kustomization/commonlabels/

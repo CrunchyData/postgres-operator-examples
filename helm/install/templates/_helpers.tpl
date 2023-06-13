@@ -26,6 +26,15 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
 {{/*
+Custom Labels
+*/}}
+{{- define "install.customPodLabels" -}}
+{{- if .Values.customPodLabels -}}
+{{ toYaml .Values.customPodLabels }}
+{{- end}}
+{{- end }}
+
+{{/*
 Create the name of the service account to use
 */}}
 {{- define "install.serviceAccountName" -}}

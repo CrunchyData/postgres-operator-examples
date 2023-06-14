@@ -4,7 +4,7 @@ commonLabels:
   app.kubernetes.io/name: pgo
   # The version below should match the version on the PostgresCluster CRD
   app.kubernetes.io/version: 5.4.0
-  postgres-operator.crunchydata.com/control-plane: pgo
+  postgres-operator.crunchydata.com/control-plane: postgres-operator
 
 bases:
 - ../crd

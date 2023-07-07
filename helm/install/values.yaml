@@ -7,23 +7,23 @@ controllerImages:
 # relatedImages are used when an image is omitted from PostgresCluster or PGUpgrade specs.
 relatedImages:
   postgres_15:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-15.3-0
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-15.3-2
   postgres_15_gis_3.3:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi8-15.3-3.3-0
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi8-15.3-3.3-2
   postgres_14:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-14.8-0
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-14.8-2
   postgres_14_gis_3.1:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi8-14.8-3.1-0
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi8-14.8-3.1-2
   postgres_14_gis_3.2:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi8-14.8-3.2-0
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi8-14.8-3.2-2
   postgres_14_gis_3.3:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi8-14.8-3.3-0
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi8-14.8-3.3-2
   pgadmin:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-pgadmin4:ubi8-4.30-13
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-pgadmin4:ubi8-4.30-15
   pgbackrest:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.45-0
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.45-2
   pgbouncer:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.19-0
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.19-2
   pgexporter:
     image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-5.4.0-0
   pgupgrade:

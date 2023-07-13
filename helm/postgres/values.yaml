@@ -55,11 +55,7 @@ postgresVersion: 15
 
 # imagePgBouncer is the image for the PgBouncer connection pooler. This defaults
 # to the below value.
-<<<<<<< HEAD
 # imagePgBouncer: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.19-2
-=======
-# imagePgBouncer: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.18-0
->>>>>>> 7242d03 (Bumping pgbouncer version to 1.18.)
 
 # imageExporter is the image name for the exporter used as a part of monitoring.
 # This defaults to the value below.

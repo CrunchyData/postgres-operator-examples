@@ -43,11 +43,7 @@ spec:
         - name: RELATED_IMAGE_PGBACKREST
           value: "registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.45-2"
         - name: RELATED_IMAGE_PGBOUNCER
-<<<<<<< HEAD
           value: "registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.19-2"
-=======
-          value: "registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.18-0"
->>>>>>> 7242d03 (Bumping pgbouncer version to 1.18.)
         - name: RELATED_IMAGE_PGEXPORTER
           value: "registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-5.4.0-0"
         - name: RELATED_IMAGE_PGUPGRADE

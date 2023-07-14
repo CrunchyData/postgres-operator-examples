@@ -3,8 +3,12 @@ namespace: postgres-operator
 commonLabels:
   app.kubernetes.io/name: pgo
   # The version below should match the version on the PostgresCluster CRD
+<<<<<<< HEAD
   app.kubernetes.io/version: 5.4.0
   postgres-operator.crunchydata.com/control-plane: postgres-operator
+=======
+  app.kubernetes.io/version: 5.3.2
+>>>>>>> 0bb94ef (Issue [sc-19704])
 
 bases:
 - ../crd
@@ -14,7 +18,14 @@ bases:
 images:
 - name: postgres-operator
   newName: registry.developers.crunchydata.com/crunchydata/postgres-operator
+<<<<<<< HEAD
   newTag: ubi8-5.4.0-0
+=======
+  newTag: ubi8-5.3.2-0
+- name: postgres-operator-upgrade
+  newName: registry.developers.crunchydata.com/crunchydata/postgres-operator-upgrade
+  newTag: ubi8-5.3.2-0
+>>>>>>> 0bb94ef (Issue [sc-19704])
 
 patchesJson6902:
 - target: { group: apps, version: v1, kind: Deployment, name: pgo }

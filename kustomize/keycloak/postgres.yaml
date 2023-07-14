@@ -3,7 +3,11 @@ kind: PostgresCluster
 metadata:
   name: keycloakdb
 spec:
+<<<<<<< HEAD
   image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-15.3-2
+=======
+  image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-15.3-0
+>>>>>>> 0bb94ef (Issue [sc-19704])
   postgresVersion: 15
   instances:
     - replicas: 2
@@ -25,7 +29,11 @@ spec:
                   postgres-operator.crunchydata.com/instance-set: "00"
   backups:
     pgbackrest:
+<<<<<<< HEAD
       image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.45-2
+=======
+      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.45-0
+>>>>>>> 0bb94ef (Issue [sc-19704])
       repos:
       - name: repo1
         volume:

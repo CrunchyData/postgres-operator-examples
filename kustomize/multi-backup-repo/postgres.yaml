@@ -3,7 +3,11 @@ kind: PostgresCluster
 metadata:
   name: hippo-multi-repo
 spec:
+<<<<<<< HEAD
   image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-15.3-2
+=======
+  image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-15.3-0
+>>>>>>> 0bb94ef (Issue [sc-19704])
   postgresVersion: 15
   instances:
     - dataVolumeClaimSpec:
@@ -14,7 +18,11 @@ spec:
             storage: 1Gi
   backups:
     pgbackrest:
+<<<<<<< HEAD
       image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.45-2
+=======
+      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.45-0
+>>>>>>> 0bb94ef (Issue [sc-19704])
       configuration:
       - secret:
           name: pgo-multi-repo-creds

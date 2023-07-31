@@ -1,0 +1,57 @@
+########################
+# ALERTMANAGER SECTION
+########################
+
+# alertmanagerServiceAccountName is the name given for the alertmanager service account
+alertmanagerServiceAccountName: "alertmanager"
+# alertmanagerDeploymentName is the name given to the alertmanager deployment
+alertmanagerDeploymentName: "crunchy-alertmanager"
+# alertmanagerPVCName is the name given to the alertmanager pvc 
+alertmanagerPVCName: "alertmanagerdata"
+# alertmanagerPVCSize is the size for the alertmanager pvc
+#alertmanagerPVCSize: "5Gi"
+# alertmanagerConfigmapName is the name for the alertmanager configmap
+alertmanagerConfigmapName: "alertmanager-config"
+# alertmanagerRuleConfigmapName is the name for the alertmanager rules configmap
+alertmanagerRuleConfigmapName: "alertmanager-rules-config"
+# alertmanagerServiceName is the name of the alertmanager service
+# Changing from default crunchy-alertmanager-svc will require to change the port in /config/prometheus.yml
+alertmanagerServiceName: "crunchy-alertmanager"
+
+########################
+# GRAFANA SECTION
+########################
+
+# grafanaServiceAccountName is the name given for the grafana service account
+grafanaServiceAccountName: "grafana"
+# grafanaDeploymentName is the name given to the grafana deployment
+grafanaDeploymentName: "crunchy-grafana"
+# grafanaPVCName is the name given to the grafana pvc 
+grafanaPVCName: "grafanadata"
+# grafanaPVCSize is the size for the grafana pvc
+#grafanaPVCSize: "5Gi"
+# grafanaDatasourceConfigmapName is the name for the grafana datasources configmap
+grafanaDatasourceConfigmapName: "grafana-datasources"
+# grafanaDashboardConfigmapName is the name for the grafana dashboards configmap
+grafanaDashboardConfigmapName: "grafana-dashboards"
+# grafanaServiceName is the name of the grafana service
+grafanaServiceName: "crunchy-grafana"
+# grafanaSecretName is the name for the secret which hold the login credentials to grafana GUI
+grafanaSecretName: "grafana-admin"
+
+########################
+# PROMETHEUS SECTION
+########################
+
+# prometheusServiceAccountName is the name given for the prometheus service account
+prometheusServiceAccountName: "prometheus" 
+# prometheusDeploymentName is the name given to the prometheus deployment
+prometheusDeploymentName: "crunchy-prometheus"
+# prometheusPVCName is the name given to the prometheus pvc 
+prometheusPVCName: "prometheusdata"
+# prometheusPVCSize is the size for the prometheus pvc
+#prometheusPVCSize: "5Gi"
+# prometheusConfigmapName is the name for the prometheus configmap
+prometheusConfigmapName: "crunchy-prometheus"
+# prometheusServiceName is the name of the prometheus service
+prometheusServiceName: "crunchy-prometheus"

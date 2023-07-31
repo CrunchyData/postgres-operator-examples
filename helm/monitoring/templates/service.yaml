@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    {{- include "monitoring.labels" . | nindent 4 }}
+    name: {{ .Values.alertmanagerServiceName }}
+  name: {{ .Values.alertmanagerServiceName }}
+spec:
+  type: ClusterIP
+  ports:
+  - name: alertmanager
+    port: 9093
+  selector:
+    name: {{ .Values.alertmanagerDeploymentName }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    {{- include "monitoring.labels" . | nindent 4 }}
+    name: {{ .Values.grafanaServiceName }}
+  name: {{ .Values.grafanaServiceName }}
+spec:
+  type: ClusterIP
+  ports:
+  - name: grafana
+    port: 3000
+  selector:
+    name: {{ .Values.grafanaDeploymentName }}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    {{- include "monitoring.labels" . | nindent 4 }}
+    name: {{ .Values.prometheusServiceName }}
+  name: {{ .Values.prometheusServiceName }}
+spec:
+  type: ClusterIP
+  ports:
+  - name: prometheus
+    port: 9090
+  selector:
+    name: {{ .Values.prometheusDeploymentName }}

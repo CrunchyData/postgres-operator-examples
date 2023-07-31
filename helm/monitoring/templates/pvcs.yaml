@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    {{- include "monitoring.labels" . | nindent 4 }}
+  name: {{ .Values.alertmanagerPVCName }}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ default "5Gi" .Values.alertmanagerPVCSize | quote }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    {{- include "monitoring.labels" . | nindent 4 }}
+  name: {{ .Values.grafanaPVCName }}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ default "5Gi" .Values.grafanaPVCSize | quote }}
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    {{- include "monitoring.labels" . | nindent 4 }}
+  name: {{ .Values.prometheusPVCName }}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: {{ default "5Gi" .Values.prometheusPVCSize | quote }}

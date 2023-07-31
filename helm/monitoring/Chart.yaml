@@ -1,0 +1,8 @@
+apiVersion: v2
+name: postgres-operator-monitoring
+description: Installer for PGO monitoring stack, the open source Postgres Operator from Crunchy Data.
+
+type: application
+# The version below should match the version on the PostgresCluster CRD
+version: 5.4.1
+appVersion: 5.4.1

@@ -1,0 +1,15 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    {{- include "monitoring.labels" . | nindent 4 }}
+  name: {{ .Values.prometheusServiceAccountName }}
+rules:
+- resources:
+  - pods
+  apiGroups:
+  - ""
+  verbs:
+  - get
+  - list
+  - watch

@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Values.prometheusServiceAccountName }}
+  labels:
+    {{- include "monitoring.labels" . | nindent 4 }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Values.alertmanagerServiceAccountName }}
+  labels:
+    {{- include "monitoring.labels" . | nindent 4 }}
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: {{ .Values.grafanaServiceAccountName }}
+  labels:
+    {{- include "monitoring.labels" . | nindent 4 }}

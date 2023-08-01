@@ -68,7 +68,7 @@ spec:
         - mountPath: /data
           name: grafanadata
         - mountPath: /conf/admin
-          name: grafana-secret
+          name: grafana-admin
         - mountPath: /etc/grafana/provisioning/datasources
           name: grafana-datasources
         - mountPath: /etc/grafana/provisioning/dashboards
@@ -87,10 +87,10 @@ spec:
       - name: grafanadata
         persistentVolumeClaim:
           claimName: grafanadata
-      - name: grafana-secret
+      - name: grafana-admin
         secret:
           defaultMode: 420
-          secretName: grafana-secret
+          secretName: grafana-admin
       - configMap:
           defaultMode: 420
           name: grafana-datasources

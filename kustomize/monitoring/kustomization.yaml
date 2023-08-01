@@ -25,6 +25,6 @@ configMapGenerator:
 - name: grafana-dashboards
   behavior: merge
   files:
-    - crunchy_grafana_dashboards.yml
+    - crunchy_grafana_dashboards.yaml
 generatorOptions:
  disableNameSuffixHash: true

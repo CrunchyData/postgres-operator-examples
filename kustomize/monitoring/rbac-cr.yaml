@@ -4,7 +4,7 @@ metadata:
   labels:
     app.kubernetes.io/name: postgres-operator-monitoring
     vendor: crunchydata
-  name: prometheus-cr
+  name: prometheus
 rules:
 - resources:
   - pods

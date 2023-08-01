@@ -3,11 +3,11 @@ kind: ClusterRoleBinding
 metadata:
   labels:
     vendor: crunchydata 
-  name: prometheus-crb
+  name: prometheus
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: prometheus-cr
+  name: prometheus
 subjects:
 - kind: ServiceAccount
-  name: prometheus-sa
+  name: prometheus

@@ -64,7 +64,7 @@ data:
         separator: ""
 
     rule_files:
-      - /etc/prometheus/alert-rules.d/*.yml
+      - /etc/prometheus/alert-rules.d/*.yaml
     alerting:
       alertmanagers:
       - scheme: http

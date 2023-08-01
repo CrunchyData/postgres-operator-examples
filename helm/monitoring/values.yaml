@@ -15,7 +15,7 @@ alertmanagerConfigmapName: "alertmanager-config"
 # alertmanagerRuleConfigmapName is the name for the alertmanager rules configmap
 alertmanagerRuleConfigmapName: "alertmanager-rules-config"
 # alertmanagerServiceName is the name of the alertmanager service
-# Changing from default crunchy-alertmanager-svc will require to change the port in /config/prometheus.yml
+# Changing from default crunchy-alertmanager will require to change the port in /config/prometheus.yml
 alertmanagerServiceName: "crunchy-alertmanager"
 
 ########################

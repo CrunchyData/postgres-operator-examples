@@ -3,19 +3,15 @@ kind: ServiceAccount
 metadata:
   labels:
     vendor: crunchydata
-  name: prometheus-sa
-
+  name: prometheus
 ---
-
 apiVersion: v1
 kind: ServiceAccount
 metadata:
   labels:
     vendor: crunchydata
   name: alertmanager
-
 ---
-
 apiVersion: v1
 kind: ServiceAccount
 metadata:

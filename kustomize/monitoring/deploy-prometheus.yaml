@@ -68,8 +68,8 @@ spec:
         # - 65534
       restartPolicy: Always
       schedulerName: default-scheduler
-      serviceAccount: prometheus-sa
-      serviceAccountName: prometheus-sa
+      serviceAccount: prometheus
+      serviceAccountName: prometheus
       terminationGracePeriodSeconds: 30
       volumes:
       - configMap:

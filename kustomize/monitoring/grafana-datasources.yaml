@@ -1,6 +1,6 @@
 apiVersion: v1
 data:
-  crunchy_grafana_datasource.yml: |
+  crunchy_grafana_datasource.yaml: |
     ###
     #
     # Copyright 2017-2023 Crunchy Data Solutions, Inc. All Rights Reserved.

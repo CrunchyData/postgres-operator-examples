@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
       - args:
-        - --config.file=/etc/alertmanager/alertmanager.yml
+        - --config.file=/etc/alertmanager/alertmanager.yaml
         - --storage.path=/alertmanager
         - --log.level=info
         - --cluster.advertise-address=0.0.0.0:9093

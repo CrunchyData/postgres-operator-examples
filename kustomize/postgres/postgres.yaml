@@ -9,10 +9,10 @@ spec:
     - name: instance1
       dataVolumeClaimSpec:
         accessModes:
-        - "ReadWriteOnce"
+        - ReadWriteMany
         resources:
           requests:
-            storage: 1Gi
+            storage: 50Gi
   backups:
     pgbackrest:
       image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.45-3
@@ -21,7 +21,10 @@ spec:
         volume:
           volumeClaimSpec:
             accessModes:
-            - "ReadWriteOnce"
+            - ReadWriteMany
             resources:
               requests:
-                storage: 1Gi
+                storage: 50Gi
+# PG_CLUSTER_PRIMARY_POD=(kubectl get pod -n postgres-operator -o name \
+# -l postgres-operator.crunchydata.com/cluster=hippo,postgres-operator.crunchydata.com/role=master)
+# psql (kubectl -n postgres-operator get secrets hippo-pguser-hippo -o go-template='{{.data.uri | base64decode}}')

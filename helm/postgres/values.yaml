@@ -67,11 +67,11 @@ postgresVersion: 15
 
 # instanceName lets you set the name of your instances. This defaults to
 # the value below. Setting "instances" overrides this value.
-# instanceName: instance1
+instanceName: instance1
 
 # instanceSize sets the size of the volume that contains the data. This defaults
 # to the value below. Settings "instances" overrides this value.
-# instanceSize: 1Gi
+instanceSize: 50Gi
 
 # instanceStorageClassName sets the storage class for the volume that contains the data.
 # This defaults to the "default" storage class defined in the cluster.
@@ -92,7 +92,7 @@ postgresVersion: 15
 # instanceReplicas lets you set the total number of Postgres replicas. This
 # defaults to the value below. More than on replica enables high availability
 # (HA). Settings "instances" overrides this value.
-# instanceReplicas: 1
+instanceReplicas: 2
 
 ##############################
 # Advanced Postgres Settings #
@@ -108,15 +108,15 @@ postgresVersion: 15
 # For example, to set up an instance set with HA (due to the default pod
 # topology spread constraints)
 #
-# instances:
-#   - name: pgha1
-#     replicas: 2
-#     dataVolumeClaimSpec:
-#       accessModes:
-#       - "ReadWriteOnce"
-#       resources:
-#         requests:
-#           storage: 1Gi
+instances:
+  - name: pgha1
+    replicas: 2
+    dataVolumeClaimSpec:
+      accessModes:
+      - "ReadWriteOnce"
+      resources:
+        requests:
+          storage: 20Gi
 # instances: {}
 
 # port sets the port that Postgres listens on. Defaults to 5432.

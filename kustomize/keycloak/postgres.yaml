@@ -9,7 +9,7 @@ spec:
     - replicas: 2
       dataVolumeClaimSpec:
         accessModes:
-        - "ReadWriteOnce"
+        - "ReadWriteMany"
         resources:
           requests:
             storage: 1Gi
@@ -31,7 +31,7 @@ spec:
         volume:
           volumeClaimSpec:
             accessModes:
-            - "ReadWriteOnce"
+            - "ReadWriteMany"
             resources:
               requests:
                 storage: 1Gi

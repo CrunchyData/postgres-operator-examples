@@ -1,4 +1,4 @@
-namespace: dafitc-demo
+namespace: demo-test
 
 resources:
 - postgres.yaml

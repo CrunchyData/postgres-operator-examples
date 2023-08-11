@@ -1,4 +1,4 @@
-namespace: demo-test
+namespace: demo-prod
 
 resources:
 - postgres-prod.yaml

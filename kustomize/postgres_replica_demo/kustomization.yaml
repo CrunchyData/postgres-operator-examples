@@ -1,4 +1,4 @@
-namespace: replica-demo
+namespace: demo-rep
 
 resources:
 - postgres.yaml

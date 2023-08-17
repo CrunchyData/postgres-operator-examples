@@ -63,7 +63,7 @@ spec:
           name: alertmanagerrules
       dnsPolicy: ClusterFirst
       securityContext:
-        fsGroup: 26
+        # fsGroup: 26
         # supplementalGroups:
         # - 65534
       restartPolicy: Always

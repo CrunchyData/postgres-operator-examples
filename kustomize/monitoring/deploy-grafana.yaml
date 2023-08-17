@@ -76,7 +76,7 @@ spec:
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       securityContext:
-        fsGroup: 26
+        # fsGroup: 26
         # supplementalGroups:
         # - 65534
       schedulerName: default-scheduler

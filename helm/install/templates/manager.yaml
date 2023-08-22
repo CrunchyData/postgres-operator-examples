@@ -16,6 +16,7 @@ spec:
     metadata:
       labels:
         {{- include "install.clusterLabels" . | nindent 8 }}
+        {{- include "install.customPodLabels" . | nindent 8 }}
     spec:
       {{- include "install.imagePullSecrets" . | indent 6 }}
       serviceAccountName: {{ include "install.serviceAccountName" . }}
@@ -39,6 +40,10 @@ spec:
         {{- if .Values.disable_check_for_upgrades }}
         - name: CHECK_FOR_UPGRADES
           value: "false"
+        {{- end }}
+        {{- if .Values.resources.controller }}
+        resources:
+        {{- toYaml .Values.resources.controller | nindent 10 }}
         {{- end }}
         securityContext:
           allowPrivilegeEscalation: false

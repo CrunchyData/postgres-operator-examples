@@ -27,7 +27,7 @@ spec:
         name: crunchy-prometheus
     spec:
       containers:
-      - image: prom/prometheus:v2.27.1
+      - image: prom/prometheus:v2.33.5
         imagePullPolicy: IfNotPresent
         livenessProbe:
           failureThreshold: 3

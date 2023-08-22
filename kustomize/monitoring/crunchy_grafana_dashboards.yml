@@ -1,6 +1,6 @@
 ###
 #
-# Copyright 2017-2022 Crunchy Data Solutions, Inc. All Rights Reserved.
+# Copyright © 2017-2023 Crunchy Data Solutions, Inc. All Rights Reserved.
 #
 ###
 apiVersion: 1
@@ -13,4 +13,4 @@ providers:
   disableDeletion: false
   updateIntervalSeconds: 3 #how often Grafana will scan for changed dashboards
   options:
-    path: $GF_PATHS_PROVISIONING/dashboards
+    path: /etc/grafana/provisioning/dashboards

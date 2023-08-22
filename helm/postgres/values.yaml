@@ -15,9 +15,9 @@
 # available as one of the "RELATED_IMAGE_POSTGRES_..." images as part of the PGO
 # installation if you want to deploy the image without setting the "postgres"
 # image variable. This value is required.
-postgresVersion: 14
+postgresVersion: 15
 
-# postGISVersion if sets and coupled with a PostGIS enabled container, enables
+# postGISVersion if set and coupled with a PostGIS enabled container, enables
 # PostGIS. This version number needs to be available as one of the
 # "RELATED_IMAGE_POSTGRES_..." images as part of the PGO installation if you
 # want to deploy the image without setting the "postgres" image variable.
@@ -35,7 +35,7 @@ postgresVersion: 14
 # pgBouncerReplicas: 1
 
 # monitoring enables the ability to monitor the Postgres cluster through a
-# metrics exporter than can be scraped by Prometheus. This defaults to the value
+# metrics exporter that can be scraped by Prometheus. This defaults to the value
 # below.
 # monitoring: false
 
@@ -47,19 +47,19 @@ postgresVersion: 14
 # below value. "postgresVersion" needs to match the version of Postgres that is
 # used here. If using the GIS-enabled Postgres image, you need to ensure
 # "postGISVersion" matches the version of PostGIS used.
-# imagePostgres: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-13.8-1
+# imagePostgres: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-15.3-3
 
 # imagePgBackRest is the pgBackRest backup utility image. This defaults to the
 # below value.
-# imagePgBackRest: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.40-1
+# imagePgBackRest: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.45-3
 
 # imagePgBouncer is the image for the PgBouncer connection pooler. This defaults
 # to the below value.
-# imagePgBouncer: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.17-1
+# imagePgBouncer: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.19-3
 
 # imageExporter is the image name for the exporter used as a part of monitoring.
 # This defaults to the value below.
-# imageExporter: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-5.2.0-0
+# imageExporter: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-5.4.1-0
 
 ###########################
 # Basic Postgres Settings #
@@ -72,6 +72,12 @@ postgresVersion: 14
 # instanceSize sets the size of the volume that contains the data. This defaults
 # to the value below. Settings "instances" overrides this value.
 # instanceSize: 1Gi
+
+# instanceStorageClassName sets the storage class for the volume that contains the data.
+# This defaults to the "default" storage class defined in the cluster.
+# See: 'kubectl get storageclasses.storage.k8s.io | grep default'
+# Settings "instances" overrides this value.
+# instanceStorageClassName: "hostpath"
 
 # instanceMemory sets the memory limit for the Postgres instances. This defaults
 # to no limit being set, but an example value is set below. Settings "instances"
@@ -127,7 +133,7 @@ postgresVersion: 14
 # patroni: {}
 
 # users sets any custom Postgres users and databases that they have  access to
-# as well as any permossions assoicated with the user account.
+# as well as any permissions associated with the user account.
 # users: {}
 
 # dataSource specifies a data source for bootstrapping a Postgres cluster.
@@ -143,21 +149,23 @@ postgresVersion: 14
 # provides the information for the replication user.
 # customReplicationTLSSecret: {}
 
-# databaseInitSQL referencs a ConfigMap that contains a SQL file that should be
+# databaseInitSQL references a ConfigMap that contains a SQL file that should be
 # run a cluster bootstrap.
 # databaseInitSQL:
 #   name: bootstrap-sql
 #   key: bootstrap.sql
 
-# standby sets whether or not to run this as a standby cluster. Both of the
-# values below are required to enable a standby cluster. Setting "enabled" to
-# "true" eunables the standby cluster while "repoName" points to a pgBackRest
-# archive to replay WAL files from.
+# standby sets whether to run this as a standby cluster. Setting "enabled" to
+# "true" enables the standby cluster while "repoName" points to a pgBackRest
+# archive to replay WAL files from, and "host" and "port" point to a primary
+# cluster from which to stream data.
 # standby:
 #   enabled: false
 #   repoName: repo1
+#   host: "192.0.2.2"
+#   port: 5432
 
-# shutdown when set scales the entire workload to zero. By default this is not
+# shutdown when set scales the entire workload to zero. By default, this is not
 # set.
 # shutdown: true
 
@@ -169,6 +177,11 @@ postgresVersion: 14
 # can be overridden by "pgBackRestConfig", if set. Defaults to the value below.
 # backupsSize: 1Gi
 
+# backupsStorageClassName sets the storage class to a class existing in Kubernetes.
+# Defaults to the "default" storage class defined in the cluster.
+# Can be overridden by "pgBackRestConfig", if set.
+# backupsStorageClassName: "hostpath"
+
 # s3 allows for AWS S3 or an S3 compatible storage system to be used for
 # backups. This allows for a quick setup with S3; if you need more advanced
 # setup, use pgBackRestConfig.
@@ -178,15 +191,18 @@ postgresVersion: 14
 #   # endpoint specifies the S3 endpoint to use.
 #   endpoint: ""
 #   # region specifies the S3 region to use. If your S3 storage system does not
-#   # use "region", fill this in with a random vaule.
+#   # use "region", fill this in with a random value.
 #   region: ""
 #   # key is the S3 key. This is stored in a Secret.
 #   key: ""
-#   # keySecret is the S3 key secret. This is tored in a Secret.
+#   # keySecret is the S3 key secret. This is stored in a Secret.
 #   keySecret: ""
+#   # keyType can be configured to enable IAM integration via AssumeRole
+#   # For more info, see the documentation at https://access.crunchydata.com/documentation/postgres-operator/v5/tutorial/backups/#using-an-aws-integrated-identity-provider-and-role
+#   keyType: ""
 #   # encryptionPassphrase is an optional parameter to enable encrypted backups
 #   # with pgBackRest. This is encrypted by pgBackRest and does not use S3's
-#   # built-in encrpytion system.
+#   # built-in encryption system.
 #   encryptionPassphrase: ""
 
 # gcs allows for Google Cloud Storage (GCS) to be used for backups. This allows
@@ -206,7 +222,7 @@ postgresVersion: 14
 # azure:
 #   # account is the name of the Azure account to be used.
 #   account: ""
-#   # key is the Secret key used associated with the Azure acount.
+#   # key is the Secret key used associated with the Azure account.
 #   key: ""
 #   # container is the Azure container that the backups will be stored in.
 #   container: ""
@@ -219,8 +235,8 @@ postgresVersion: 14
 # You can't set "multiBackupRepos" and any of the individual quickstarts at the
 # same time. "multiBackupRepos" will take precedence.
 #
-# Below is an example that enables one of each backup type. Note all of the
-# available quickstart options are presented below; please see the backup types
+# Below is an example that enables one of each backup type.
+# All available quickstart options are presented below; please see the backup types
 # if you want to see how each option works.
 # multiBackupRepos:
 # - volume:
@@ -231,6 +247,7 @@ postgresVersion: 14
 #     region: ""
 #     key: ""
 #     keySecret: ""
+#     keyType: ""
 # - gcs:
 #     bucket: ""
 #     key: |
@@ -248,7 +265,7 @@ postgresVersion: 14
 # Pooling / pgBouncer Settings #
 ################################
 
-# pgBouncerConfig sets all of the pgBouncer portion of the spec except for
+# pgBouncerConfig sets all of the pgBouncer portions of the spec except for
 # image. To set image, you need to set the "pgBouncer" setting.
 # pgBouncerConfig: {}
 
@@ -256,7 +273,7 @@ postgresVersion: 14
 # Monitoring Settings #
 #######################
 
-# monitoringConfig sets all of the monitoring portion of the spec except for the
+# monitoringConfig sets all of the monitoring portions of the spec except for the
 # image. To set the image, which also enables monitoring, you need to set the
 # "monitoring" setting.
 # monitoringConfig: {}
@@ -267,7 +284,7 @@ postgresVersion: 14
 
 # metadata contains any metadata that should be applied to all PGO managed
 # objects in this Postgres cluster. This includes "annotations" and "labels" as
-# subkeys.
+# sub-keys.
 # metadata: {}
 
 # service customizes the Service that exposes the Postgres primary.
@@ -283,7 +300,7 @@ postgresVersion: 14
 # imagePullSecrets: []
 
 # supplementalGroups sets any group IDs that should be assigned to
-# Pods, particularly around file system contraints within a system
+# Pods, particularly around file system constraints within a system
 # supplementalGroups: []
 
 # disableDefaultPodScheduling if set to true, will disable any of the default
@@ -292,8 +309,8 @@ postgresVersion: 14
 # be used in addition to any customizations that are added in.
 # disableDefaultPodScheduling: false
 
-# openshift can set explicitly if this is an OpenShift cluster, or a cluster
+# openshift can be set explicitly if this is an OpenShift cluster or a cluster
 # that uses a SecurityContextConstraint. This usually does not need to be set,
-# but you may want to explicitly set it to "false" when using a SCC like
+# but you may want to explicitly set it to "false" when using an SCC like
 # "anyuid"
 # openshift: false

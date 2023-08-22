@@ -1,0 +1,7 @@
+namespace: argocd
+
+resources:
+- demo-apps-dev.yaml
+- demo-apps-test.yaml
+- demo-apps-prod.yaml
+- demo-apps-monitoring.yaml

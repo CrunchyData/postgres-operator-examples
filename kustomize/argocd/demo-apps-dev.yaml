@@ -3,13 +3,4 @@ kind: Application
 metadata:
   name: demo-dev
   namespace: argocd
-spec:
-  project: default
-  source:
-    repoURL: https://github.com/adamtimm/postgres-operator-examples
-    targetRevision: HEAD
-    path: kustomize/postgres
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: demo
   

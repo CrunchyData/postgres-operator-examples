@@ -9,10 +9,27 @@ Currently, this repo was forked from the Crunchy Data Postgres Examples repo. Th
 * ../kustomize/postgres-prod - deploys a 3 node cluster w/ pg_monitor, pg_exporter, and backups configured to do a full back up every sunday and incremental backups daily.
 * ../kustomize/postgres_replica_demo - work in progress - meant to be used in a multi-cloud demo
 * ../kustomize/argocd - folder for the creation of argocd projects (requires deployment and of argocd)
+
+# ArgoCD
+
+To create/deploy Argo, follow the steps below.
   * kubectl create -n argocd
   * kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
   * kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
   * kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
+
+At this point you should have ArgoCD running in your cluster. You will have to log into the cluster to get the public IP address of the ArgoCD instance.
+
+Once logged in, you will see a blank project space. Then, via command line, run:
+
+* kubectl apply -k postgres-operator-examples/kustomize/argocd
+
+This will create 4 projects in you ArgoCD project space. You can then synce each one to create clusters for the demo. The demo requires the following namespaces:
+* demo
+* demo-test
+* demo-prod
+
+
 
 # [PGO](https://github.com/CrunchyData/postgres-operator), Crunchy [Postgres Operator](https://github.com/CrunchyData/postgres-operator) Examples
 

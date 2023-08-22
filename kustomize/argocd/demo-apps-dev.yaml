@@ -3,4 +3,15 @@ kind: Application
 metadata:
   name: demo-dev
   namespace: argocd
-  
+  # Finalizer that ensures that project is not deleted until it is not referenced by any application
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/adamtimm/postgres-operator-examples
+    targetRevision: HEAD
+    path: kustomize/postgres
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: demo

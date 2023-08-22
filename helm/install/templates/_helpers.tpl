@@ -11,9 +11,6 @@ Crunchy labels
 {{- define "install.clusterLabels" -}}
 postgres-operator.crunchydata.com/control-plane: {{ .Chart.Name }}
 {{- end }}
-{{- define "install.upgradeLabels" -}}
-postgres-operator.crunchydata.com/control-plane: {{ .Chart.Name }}-upgrade
-{{- end }}
 
 {{/*
 Common labels
@@ -26,6 +23,15 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
 app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end }}
+
+{{/*
+Custom Labels
+*/}}
+{{- define "install.customPodLabels" -}}
+{{- if .Values.customPodLabels -}}
+{{ toYaml .Values.customPodLabels }}
+{{- end}}
 {{- end }}
 
 {{/*

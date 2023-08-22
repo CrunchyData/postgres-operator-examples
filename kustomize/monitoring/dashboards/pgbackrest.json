@@ -52,7 +52,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1624546649377,
+  "iteration": 1625069660860,
   "links": [
     {
       "asDropdown": false,
@@ -664,7 +664,7 @@
     ]
   },
   "time": {
-    "from": "now-30m",
+    "from": "now-2w",
     "to": "now"
   },
   "timepicker": {

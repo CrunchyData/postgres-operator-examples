@@ -3,7 +3,7 @@ data:
   prometheus.yml: |+
     ###
     #
-    # Copyright 2017-2022 Crunchy Data Solutions, Inc. All Rights Reserved.
+    # Copyright 2017-2023 Crunchy Data Solutions, Inc. All Rights Reserved.
     #
     ###
 
@@ -62,15 +62,6 @@ data:
         target_label: role
         replacement: '$1'
         separator: ""
-      - source_labels: [dbname]
-        target_label: dbname
-        replacement: '$1'
-      - source_labels: [relname]
-        target_label: relname
-        replacement: '$1'
-      - source_labels: [schemaname]
-        target_label: schemaname
-        replacement: '$1'
 
     rule_files:
       - /etc/prometheus/alert-rules.d/*.yml

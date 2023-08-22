@@ -3,7 +3,7 @@ data:
   alertmanager.yml: |
     ###
     #
-    # Copyright 2017-2022 Crunchy Data Solutions, Inc. All Rights Reserved.
+    # Copyright © 2017-2023 Crunchy Data Solutions, Inc. All Rights Reserved.
     #
     ###
 
@@ -31,7 +31,7 @@ data:
     receivers:
     - name: 'default-receiver'
       email_configs:
-      - to: 'example@yourcompany.com'
+      - to: 'example@crunchydata.com'
         send_resolved: true
 
     ## Examples of alternative alert receivers. See documentation for more info on how to configure these fully

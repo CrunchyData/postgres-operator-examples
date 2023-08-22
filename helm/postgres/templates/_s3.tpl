@@ -8,6 +8,9 @@ repo{{ add .index 1 }}-s3-key={{ .s3.key }}
   {{- if .s3.keySecret }}
 repo{{ add .index 1 }}-s3-key-secret={{ .s3.keySecret }}
   {{- end }}
+  {{- if .s3.keyType }}
+repo{{ add .index 1 }}-s3-key-type={{ .s3.keyType }}
+  {{- end }}
   {{- if .s3.encryptionPassphrase }}
 repo{{ add .index 1 }}-cipher-pass={{ .s3.encryptionPassphrase }}
   {{- end }}

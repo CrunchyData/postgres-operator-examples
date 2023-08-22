@@ -21,6 +21,9 @@ spec:
     - name: {{ default "instance1" .Values.instanceName | quote }}
       replicas: {{ default 1 .Values.instanceReplicas }}
       dataVolumeClaimSpec:
+        {{- if .Values.instanceStorageClassName }}
+        storageClassName: {{ .Values.instanceStorageClassName | quote }}
+        {{- end }}
         accessModes:
         - "ReadWriteOnce"
         resources:
@@ -56,6 +59,9 @@ spec:
         {{- if $repo.volume }}
         volume:
           volumeClaimSpec:
+            {{- if $repo.volume.backupsStorageClassName }}
+            storageClassName: {{ .Values.backupsStorageClassName | quote }}
+            {{- end }}
             accessModes:
             - "ReadWriteOnce"
             resources:
@@ -114,6 +120,9 @@ spec:
       - name: repo1
         volume:
           volumeClaimSpec:
+            {{- if .Values.backupsStorageClassName }}
+            storageClassName: {{ .Values.backupsStorageClassName | quote }}
+            {{- end }}
             accessModes:
             - "ReadWriteOnce"
             resources:
@@ -182,7 +191,9 @@ spec:
   {{- if .Values.standby }}
   standby:
     enabled: {{ .Values.standby.enabled }}
-    repoName: {{ required "repoName must be set when enabling standby mode." .Values.standby.repoName }}
+    repoName: {{ .Values.standby.repoName }}
+    host: {{ .Values.standby.host }}
+    port: {{ .Values.standby.port }}
   {{- end }}
   {{- if .Values.supplementalGroups }}
   supplementalGroups:

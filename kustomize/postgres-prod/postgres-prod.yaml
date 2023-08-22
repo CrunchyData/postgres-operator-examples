@@ -14,7 +14,7 @@ spec:
         - "ReadWriteOnce"
         resources:
           requests:
-            storage: 10Gi
+            storage: 1Gi
   backups:
     pgbackrest:
       image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.40-1
@@ -29,7 +29,7 @@ spec:
             - "ReadWriteOnce"
             resources:
               requests:
-                storage: 10Gi
+                storage: 1Gi
   proxy:
     pgBouncer:
       image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.19-3

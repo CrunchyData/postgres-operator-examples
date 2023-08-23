@@ -15,28 +15,28 @@ spec:
         - "ReadWriteOnce"
         resources:
           requests:
-            storage: 1Gi
+            storage: 10Gi
   backups:
     pgbackrest:
       image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.40-1
       repos:
       - name: repo1
-        #schedules:
-         # full: "0 1 * * 0"
-          #differential: "0 1 * * 1-6"
+        schedules:
+         full: "0 1 * * 0"
+         differential: "0 1 * * 1-6"
         volume:
           volumeClaimSpec:
             accessModes:
             - "ReadWriteOnce"
             resources:
               requests:
-                storage: 1Gi
+                storage: 10Gi
   proxy:
     pgBouncer:
       image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.19-3
-  #monitoring:
-    #pgmonitor:
-      #exporter:
-        #image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-5.4.1-0
+  monitoring:
+    pgmonitor:
+      exporter:
+        image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-5.4.1-0
 
 

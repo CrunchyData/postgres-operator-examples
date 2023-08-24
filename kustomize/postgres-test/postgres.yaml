@@ -26,9 +26,9 @@ spec:
             resources:
               requests:
                 storage: 1Gi
+  proxy:
+    pgBouncer:
+      image: registry.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.18-0
   imagePullSecrets:
    - name: timmregcred
-  pgBouncer:
-      image: registry.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.18-0
-
   

@@ -15,7 +15,7 @@ spec:
             storage: 1Gi
   backups:
     pgbackrest:
-      image: registry.crunchydata.com/crunchydata/crunchy-postgres:ubi8-14.7-0
+      image: registry.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.41-4
       repos:
       - name: repo1
         volume:

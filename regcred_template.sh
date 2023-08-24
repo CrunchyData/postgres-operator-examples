@@ -5,7 +5,7 @@ kubectl create secret docker-registry [SECRET-NAME] -n [DEST_NS] \
   --docker-username=<ACCESS_PORTAL_USERNAME> \
   --docker-email=<ACESS_PORTAL_USERNAME> \
   --docker-password=<YOUR PASSWORD>
-  
+
 # I've started having to run this to get the registry secret to work
 kubectl secrets link default timmregcred --for=pull
 

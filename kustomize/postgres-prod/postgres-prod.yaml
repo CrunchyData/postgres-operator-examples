@@ -18,7 +18,7 @@ spec:
             storage: 10Gi
   backups:
     pgbackrest:
-      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.38-0
+      image: registry.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.41-4
       repos:
       - name: repo1
         schedules:
@@ -33,10 +33,12 @@ spec:
                 storage: 10Gi
   proxy:
     pgBouncer:
-      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.19-3
+      image: registry.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.18-0
+  imagePullSecrets:
+   - name: timmregcred              
   monitoring:
     pgmonitor:
       exporter:
-        image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-5.4.1-0
+        image: registry.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-5.3.1-0
 
 

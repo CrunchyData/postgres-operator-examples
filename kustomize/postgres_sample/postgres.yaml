@@ -5,7 +5,7 @@ metadata:
 spec:
   imagePullSecrets:
    - name: timmregcred
-  image: registry.crunchydata/crunchy-postgres:ubi8-14.7-0
+  image: registry.crunchydata.com/crunchydata/crunchy-postgres:ubi8-14.7-0
   postgresVersion: 14
   instances:
     - name: instance1
@@ -17,7 +17,7 @@ spec:
             storage: 1Gi
   backups:
     pgbackrest:
-      image: registry.crunchydata/crunchy-pgbackrest:ubi8-5.3.1-0
+      image: registry.crunchydata.com/crunchydata/crunchy-postgres:ubi8-14.7-0
       repos:
       - name: repo1
         volume:

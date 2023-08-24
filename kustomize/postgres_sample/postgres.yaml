@@ -3,8 +3,6 @@ kind: PostgresCluster
 metadata:
   name: hippo
 spec:
-  imagePullSecrets:
-   - name: timmregcred
   image: registry.crunchydata.com/crunchydata/crunchy-postgres:ubi8-14.7-0
   postgresVersion: 14
   instances:
@@ -27,3 +25,5 @@ spec:
             resources:
               requests:
                 storage: 1Gi
+  imagePullSecrets:
+   - name: timmregcred

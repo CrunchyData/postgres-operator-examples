@@ -6,3 +6,8 @@
   path: /spec/selector/matchLabels/app.kubernetes.io~1name
 - op: remove
   path: /spec/selector/matchLabels/app.kubernetes.io~1version
+
+- op: add
+  path: /spec/template/spec/imagePullSecrets
+  value:
+    - name: timmregcred

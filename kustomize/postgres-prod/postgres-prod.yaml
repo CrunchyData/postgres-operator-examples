@@ -20,7 +20,7 @@ spec:
     pgbackrest:
       image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.40-1
       repos:
-      - name: repo1
+      - name: repo2
         schedules:
          full: "0 1 * * 0"
          differential: "0 1 * * 1-6"

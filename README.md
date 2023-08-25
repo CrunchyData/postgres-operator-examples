@@ -29,6 +29,37 @@ This will create 4 projects in you ArgoCD project space. You can then synce each
 * demo-test
 * demo-prod
 
+Demo steps
+ 1) deploy PGO: 
+   ````
+      oc apply --server-side -k postgres-operator-examples/kustomize/install/default/
+  ````
+ 2) Create a single cluster via command line in the sample namespace:
+  ````
+    oc apply -k postgres-operator-examples/kustomize/postgres_sample/
+  ````
+ 3) Create the ArgoCD projects:
+  ````
+    oc apply -k postgres-operator-examples/kustomize/argocd/
+  ````
+ 4) To clean up the demo space:
+    1) delete ArgoCD project 
+   ````
+   oc delete -k postgres-operator-examples/kustomize/argocd/
+   ````
+    2) patch ArgoCD toe remove hanging projects
+   ````
+   bash postgres-operator-examples/kustomize/argocd/cleanup.sh
+   ````
+    3) delete sample cluster
+   ````
+   oc delete -k postgres-operator-examples/kustomize/postgres_sample/
+   ````
+    4) delete PGO
+   ````
+   oc delete -k postgres-operator-examples/kustomize/install/default/
+   ````
+
 
 
 # [PGO](https://github.com/CrunchyData/postgres-operator), Crunchy [Postgres Operator](https://github.com/CrunchyData/postgres-operator) Examples

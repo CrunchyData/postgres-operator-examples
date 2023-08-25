@@ -1,4 +1,4 @@
-# [Demo]
+# Demo
 This repo is used for storing code for various demos that I do. 
 
 Currently, this repo was forked from the Crunchy Data Postgres Examples repo. The changes I made are:
@@ -43,6 +43,7 @@ Demo steps
     oc apply -k postgres-operator-examples/kustomize/argocd/
   ````
  4) To clean up the demo space:
+   
     1) delete ArgoCD project 
    ````
    oc delete -k postgres-operator-examples/kustomize/argocd/

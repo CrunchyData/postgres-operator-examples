@@ -39,21 +39,22 @@ Demo steps
   ````
       oc apply --server-side -k postgres-operator-examples/kustomize/install/default/
   ````
- 1) Create a single cluster via command line in the sample namespace:
+ 3) Create a single cluster via command line in the sample namespace:
   ````
     oc apply -k postgres-operator-examples/kustomize/postgres_sample/
   ````
- 1) Create the ArgoCD projects:
+ 4) Create the ArgoCD projects:
   ````
     oc apply -k postgres-operator-examples/kustomize/argocd/
   ````
- 1) To clean up the demo space:
+ To clean up the demo space:
    
     1) delete ArgoCD project 
    
    ````
    oc delete -k postgres-operator-examples/kustomize/argocd/
    ````
+   
     2) patch ArgoCD toe remove hanging projects
    
    ````

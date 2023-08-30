@@ -31,7 +31,8 @@ This will create 4 projects in you ArgoCD project space. You can then synce each
 
 Demo steps
  1) create namespaces
-  ```` oc apply -k postgres-operator-examples/kustomize/namespace
+  ````
+     oc apply -k postgres-operator-examples/kustomize/namespace
   ````
 
  2) deploy PGO: 
@@ -50,21 +51,25 @@ Demo steps
    
     1) delete ArgoCD project 
    
-   ````oc delete -k postgres-operator-examples/kustomize/argocd/
+   ````
+   oc delete -k postgres-operator-examples/kustomize/argocd/
    ````
     2) patch ArgoCD toe remove hanging projects
    
-   ````bash postgres-operator-examples/kustomize/argocd/cleanup.sh
+   ````
+   bash postgres-operator-examples/kustomize/argocd/cleanup.sh
    ````
     3) delete sample cluster
    
-   ```` oc delete -k postgres-operator-examples/kustomize/postgres_sample/
+   ```` 
+   oc delete -k postgres-operator-examples/kustomize/postgres_sample/
    ````
     4) delete PGO
    ````oc delete -k postgres-operator-examples/kustomize/install/default/
    ````
     5) delete namespaces
-   ````oc delete -k postgres-operator-examples/kustomize/install/namespace
+   ````
+   oc delete -k postgres-operator-examples/kustomize/install/namespace
    ````
    
 

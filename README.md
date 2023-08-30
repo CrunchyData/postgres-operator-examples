@@ -51,9 +51,10 @@ Demo steps
    
     1) delete ArgoCD project 
    
-   ````
+```markdown
    oc delete -k postgres-operator-examples/kustomize/argocd/
-   ````
+
+``` 
    
     2) patch ArgoCD toe remove hanging projects
    

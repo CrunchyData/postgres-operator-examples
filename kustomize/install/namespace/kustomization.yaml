@@ -1,2 +1,6 @@
 resources:
-- namespace.yaml
+- operator.yaml
+- demo.yaml
+- demo-test.yaml
+- demo-prod.yaml
+- sample.yaml

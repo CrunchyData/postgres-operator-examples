@@ -24,42 +24,51 @@ Once logged in, you will see a blank project space. Then, via command line, run:
 
 * kubectl apply -k postgres-operator-examples/kustomize/argocd
 
-This will create 4 projects in you ArgoCD project space. You can then synce each one to create clusters for the demo. The demo requires the following namespaces:
+This will create 4 projects in you ArgoCD project space. You can then synce each one to create clusters for the demo. The demo requires the following namespaces which are create in the first step:
 * demo
 * demo-test
 * demo-prod
 
 Demo steps
- 1) deploy PGO: 
-   ````
+ 1) create namespaces
+  ```` oc apply -k postgres-operator-examples/kustomize/namespace
+  ````
+
+ 2) deploy PGO: 
+  ````
       oc apply --server-side -k postgres-operator-examples/kustomize/install/default/
   ````
- 2) Create a single cluster via command line in the sample namespace:
+ 1) Create a single cluster via command line in the sample namespace:
   ````
     oc apply -k postgres-operator-examples/kustomize/postgres_sample/
   ````
- 3) Create the ArgoCD projects:
+ 1) Create the ArgoCD projects:
   ````
     oc apply -k postgres-operator-examples/kustomize/argocd/
   ````
- 4) To clean up the demo space:
+ 1) To clean up the demo space:
    
     1) delete ArgoCD project 
-   ````
-   oc delete -k postgres-operator-examples/kustomize/argocd/
+   
+   ````oc delete -k postgres-operator-examples/kustomize/argocd/
    ````
     2) patch ArgoCD toe remove hanging projects
-   ````
-   bash postgres-operator-examples/kustomize/argocd/cleanup.sh
+   
+   ````bash postgres-operator-examples/kustomize/argocd/cleanup.sh
    ````
     3) delete sample cluster
-   ````
-   oc delete -k postgres-operator-examples/kustomize/postgres_sample/
+   
+   ```` oc delete -k postgres-operator-examples/kustomize/postgres_sample/
    ````
     4) delete PGO
+   ````oc delete -k postgres-operator-examples/kustomize/install/default/
    ````
-   oc delete -k postgres-operator-examples/kustomize/install/default/
+    5) delete namespaces
+   ````oc delete -k postgres-operator-examples/kustomize/install/namespace
    ````
+   
+
+
 
 
 

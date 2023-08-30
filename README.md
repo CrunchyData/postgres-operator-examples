@@ -55,6 +55,8 @@ Demo steps
     oc apply -k postgres-operator-examples/kustomize/argocd/
 
 ```
+
+
  To clean up the demo space:
    
     1) delete ArgoCD project 

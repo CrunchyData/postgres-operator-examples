@@ -29,7 +29,7 @@ This will create 4 projects in you ArgoCD project space. You can then synce each
 * demo-test
 * demo-prod
 
-Demo steps
+# Demo steps
  1) create namespaces
  
 ```markdown
@@ -56,36 +56,36 @@ Demo steps
 
 ```
 
-To clean up the demo space:
+## To clean up the demo space:
    
-    1) delete ArgoCD project 
+ 1) delete ArgoCD project 
    
 ```markdown
    oc delete -k postgres-operator-examples/kustomize/argocd/
 
 ``` 
    
-    2) patch ArgoCD toe remove hanging projects
+ 2) patch ArgoCD toe remove hanging projects
    
   
 ```markdown
    bash postgres-operator-examples/kustomize/argocd/cleanup.sh
 
 ```
-    3) delete sample cluster
+ 3) delete sample cluster
    
    
 ```markdown
    oc delete -k postgres-operator-examples/kustomize/postgres_sample/
 
 ```  
-    4) delete PGO
+ 4) delete PGO
 
 ```markdown
    oc delete -k postgres-operator-examples/kustomize/install/default/
 
 ```
-    5) delete namespaces
+  5) delete namespaces
    
 ```markdown
    oc delete -k postgres-operator-examples/kustomize/install/namespace

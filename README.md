@@ -56,8 +56,7 @@ Demo steps
 
 ```
 
-
- To clean up the demo space:
+To clean up the demo space:
    
     1) delete ArgoCD project 
    

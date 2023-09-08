@@ -43,26 +43,26 @@ This will create 4 projects in you ArgoCD project space. You can then synce each
  1) create namespaces
  
 ```console
-     oc apply -k postgres-operator-examples/kustomize/namespace
+   oc apply -k postgres-operator-examples/kustomize/install/namespace
 
 ```  
 
  2) deploy PGO: 
  
 ```console
-      oc apply --server-side -k postgres-operator-examples/kustomize/install/default/
+   oc apply --server-side -k postgres-operator-examples/kustomize/install/default/
 
 ``` 
  3) Create a single cluster via command line in the sample namespace:
  
 ```console
-    oc apply -k postgres-operator-examples/kustomize/postgres_sample/
+   oc apply -k postgres-operator-examples/kustomize/postgres_sample/
 
 ```
  4) Create the ArgoCD projects:
  
 ```console
-    oc apply -k postgres-operator-examples/kustomize/argocd/
+   oc apply -k postgres-operator-examples/kustomize/argocd/
 
 ```
 

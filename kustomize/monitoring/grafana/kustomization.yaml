@@ -1,0 +1,30 @@
+commonLabels:
+  app.kubernetes.io/component: crunchy-grafana
+
+bases:
+- dashboards
+
+resources:
+- deployment.yaml
+- pvc.yaml
+- service.yaml
+- serviceaccount.yaml
+
+configMapGenerator:
+- name: grafana-datasources
+  files:
+    - "config/crunchy_grafana_datasource.yml"
+- name: grafana-dashboards
+  behavior: merge
+  files:
+    - config/crunchy_grafana_dashboards.yml
+
+secretGenerator:
+- name: grafana-admin
+  literals:
+    - "password=admin"
+    - "username=admin"
+  type: Opaque
+
+generatorOptions:
+  disableNameSuffixHash: true

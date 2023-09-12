@@ -1,0 +1,21 @@
+commonLabels:
+  app.kubernetes.io/component: crunchy-prometheus
+
+resources:
+- deployment.yaml
+- pvc.yaml
+- service.yaml
+- serviceaccount.yaml
+- clusterrole.yaml
+- clusterrolebinding.yaml
+
+configMapGenerator:
+  - name: crunchy-prometheus
+    files:
+      - "config/prometheus.yml"
+  - name: alert-rules-config
+    files:
+      - "config/crunchy-alert-rules-pg.yml"
+
+generatorOptions:
+  disableNameSuffixHash: true

@@ -1,5 +1,10 @@
-commonLabels:
-  app.kubernetes.io/component: crunchy-prometheus
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+labels:
+- includeSelectors: true
+  pairs:
+    app.kubernetes.io/component: crunchy-prometheus
 
 resources:
 - deployment.yaml
@@ -10,12 +15,12 @@ resources:
 - clusterrolebinding.yaml
 
 configMapGenerator:
-  - name: crunchy-prometheus
-    files:
-      - "config/prometheus.yml"
-  - name: alert-rules-config
-    files:
-      - "config/crunchy-alert-rules-pg.yml"
+- files:
+  - config/prometheus.yml
+  name: crunchy-prometheus
+- files:
+  - config/crunchy-alert-rules-pg.yml
+  name: alert-rules-config
 
 generatorOptions:
   disableNameSuffixHash: true

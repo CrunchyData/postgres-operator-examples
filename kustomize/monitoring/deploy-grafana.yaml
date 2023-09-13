@@ -26,57 +26,57 @@ spec:
         name: crunchy-grafana
     spec:
       containers:
-      - env:
-        - name: GF_PATHS_DATA
-          value: /data/grafana/data
-        - name: GF_SECURITY_ADMIN_USER__FILE
-          value: /conf/admin/username
-        - name: GF_SECURITY_ADMIN_PASSWORD__FILE
-          value: /conf/admin/password
-        - name: PROM_HOST
-          value: crunchy-prometheus
-        - name: PROM_PORT
-          value: "9090"
-        image: grafana/grafana:8.5.10
-        imagePullPolicy: IfNotPresent
-        livenessProbe:
-          failureThreshold: 3
-          httpGet:
-            path: /api/health
-            port: 3000
-            scheme: HTTP
-          initialDelaySeconds: 25
-          periodSeconds: 20
-          successThreshold: 1
-          timeoutSeconds: 1
-        name: grafana
-        ports:
-        - containerPort: 3000
-          protocol: TCP
-        readinessProbe:
-          failureThreshold: 3
-          httpGet:
-            path: /api/health
-            port: 3000
-            scheme: HTTP
-          periodSeconds: 10
-          successThreshold: 1
-          timeoutSeconds: 1
-        terminationMessagePath: /dev/termination-log
-        terminationMessagePolicy: File
-        volumeMounts:
-        - mountPath: /data
-          name: grafanadata
-        - mountPath: /conf/admin
-          name: grafana-secret
-        - mountPath: /etc/grafana/provisioning/datasources
-          name: grafana-datasources
-        - mountPath: /etc/grafana/provisioning/dashboards
-          name: grafana-dashboards
+        - env:
+            - name: GF_PATHS_DATA
+              value: /data/grafana/data
+            - name: GF_SECURITY_ADMIN_USER__FILE
+              value: /conf/admin/username
+            - name: GF_SECURITY_ADMIN_PASSWORD__FILE
+              value: /conf/admin/password
+            - name: PROM_HOST
+              value: crunchy-prometheus
+            - name: PROM_PORT
+              value: "9090"
+          image: grafana/grafana:8.5.10
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /api/health
+              port: 3000
+              scheme: HTTP
+            initialDelaySeconds: 25
+            periodSeconds: 20
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: grafana
+          ports:
+            - containerPort: 3000
+              protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /api/health
+              port: 3000
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+            - mountPath: /data
+              name: grafanadata
+            - mountPath: /conf/admin
+              name: grafana-secret
+            - mountPath: /etc/grafana/provisioning/datasources
+              name: grafana-datasources
+            - mountPath: /etc/grafana/provisioning/dashboards
+              name: grafana-dashboards
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       securityContext:
-        fsGroup: 26
+        # fsGroup: 26
         # supplementalGroups:
         # - 65534
       schedulerName: default-scheduler
@@ -84,19 +84,18 @@ spec:
       serviceAccountName: grafana
       terminationGracePeriodSeconds: 30
       volumes:
-      - name: grafanadata
-        persistentVolumeClaim:
-          claimName: grafanadata
-      - name: grafana-secret
-        secret:
-          defaultMode: 420
-          secretName: grafana-secret
-      - configMap:
-          defaultMode: 420
+        - name: grafanadata
+          persistentVolumeClaim:
+            claimName: grafanadata
+        - name: grafana-secret
+          secret:
+            defaultMode: 420
+            secretName: grafana-secret
+        - configMap:
+            defaultMode: 420
+            name: grafana-datasources
           name: grafana-datasources
-        name: grafana-datasources
-      - configMap:
-          defaultMode: 420
+        - configMap:
+            defaultMode: 420
+            name: grafana-dashboards
           name: grafana-dashboards
-        name: grafana-dashboards
-

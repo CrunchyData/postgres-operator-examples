@@ -1,3 +1,5 @@
+# TODO: fix the README.md
+
 To deploy monitoring,
 
 1. verify the namespace is correct in kustomization.yaml 

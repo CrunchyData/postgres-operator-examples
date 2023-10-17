@@ -102,6 +102,7 @@ rules:
 - apiGroups:
   - postgres-operator.crunchydata.com
   resources:
+  - pgadmins
   - pgupgrades
   verbs:
   - get
@@ -110,18 +111,19 @@ rules:
 - apiGroups:
   - postgres-operator.crunchydata.com
   resources:
+  - pgadmins/finalizers
   - pgupgrades/finalizers
+  - postgresclusters/finalizers
   verbs:
-  - patch
   - update
 - apiGroups:
   - postgres-operator.crunchydata.com
   resources:
+  - pgadmins/status
   - pgupgrades/status
+  - postgresclusters/status
   verbs:
-  - get
   - patch
-  - watch
 - apiGroups:
   - postgres-operator.crunchydata.com
   resources:
@@ -131,18 +133,6 @@ rules:
   - list
   - patch
   - watch
-- apiGroups:
-  - postgres-operator.crunchydata.com
-  resources:
-  - postgresclusters/finalizers
-  verbs:
-  - update
-- apiGroups:
-  - postgres-operator.crunchydata.com
-  resources:
-  - postgresclusters/status
-  verbs:
-  - patch
 - apiGroups:
   - rbac.authorization.k8s.io
   resources:

@@ -6,6 +6,12 @@ controllerImages:
 
 # relatedImages are used when an image is omitted from PostgresCluster or PGUpgrade specs.
 relatedImages:
+  postgres_16:
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-16.0-0
+  postgres_16_gis_3.4:
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi8-16.0-3.4-0
+  postgres_16_gis_3.3:
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi8-16.0-3.3-0
   postgres_15:
     image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-15.4-1
   postgres_15_gis_3.3:

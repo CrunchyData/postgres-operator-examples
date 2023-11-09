@@ -5,7 +5,7 @@ namespace: postgres-operator
 labels:
 - includeSelectors: true
   pairs:
-    app.kubernetes.io/name: postgres-operator-monitoring
+    app.kubernetes.io/name: crunchy-monitoring
     vendor: crunchydata
 
 resources:

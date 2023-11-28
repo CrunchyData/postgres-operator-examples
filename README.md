@@ -2,6 +2,8 @@
 
 This repository contains examples for deploying PGO, the Postgres Operator from Crunchy Data, using a variety of examples.
 
+For general questions or community support, we welcome you to join our [community Discord](https://discord.gg/BnsMEeaPBV). If you believe you have discovered a bug, please open an issue in the [PGO project](https://github.com/CrunchyData/postgres-operator).
+
 The examples are grouped by various tools that can be used to deploy them.
 
 The best way to get started is to fork this repository and experiment with the examples.

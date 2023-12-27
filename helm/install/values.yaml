@@ -24,6 +24,12 @@ relatedImages:
     image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi8-14.10-3.2-0
   postgres_14_gis_3.3:
     image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi8-14.10-3.3-0
+  postgres_13:
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-13.13-0
+  postgres_13_gis_3.0:
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi8-13.13-3.0-0
+  postgres_13_gis_3.1:
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi8-13.13-3.1-0
   pgadmin:
     image: registry.developers.crunchydata.com/crunchydata/crunchy-pgadmin4:ubi8-4.30-19
   pgbackrest:

@@ -1,30 +1,14 @@
-kind: Kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
 namespace: postgres-operator
+
+labels:
+- includeSelectors: true
+  pairs:
+    app.kubernetes.io/name: crunchy-monitoring
+    vendor: crunchydata
+
 resources:
-  - pvcs.yaml
-  - ./dashboards
-# configuration files
-  - prometheus-config.yaml
-  - alertmanager-config.yaml
-  - alertmanager-rules-config.yaml
-  - grafana-datasources.yaml
-# secrets
-  - grafana-secret.yaml
-# RBAC
-  - rbac-sa.yaml
-  - rbac-cr.yaml
-  - rbac-crb.yaml
-# Deployments
-  - deploy-alertmanager.yaml
-  - deploy-grafana.yaml
-  - deploy-prometheus.yaml
-# Services
-  - service.yaml
-configMapGenerator:
-- name: grafana-dashboards
-  behavior: merge
-  files:
-    - crunchy_grafana_dashboards.yml
-generatorOptions:
- disableNameSuffixHash: true
+- grafana
+- prometheus
+- alertmanager

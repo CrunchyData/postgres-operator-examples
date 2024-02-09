@@ -16,7 +16,7 @@ The examples as provided are designed for the use of PGO along with Crunchy Data
 * For general questions or community support, we welcome you to join our [community Discord](https://discord.gg/BnsMEeaPBV).
 * If you believe you have discovered a bug, please open an issue in the [PGO project](https://github.com/CrunchyData/postgres-operator).
 * You can find the full Crunchy Postgres for Kubernetes documentation [here](https://access.crunchydata.com/documentation/postgres-operator/v5/).
-* You can find out more information about PGO, the Postgres Operator from [Crunchy Data](https://www.crunchydata.com) at the [project page](https://github.com/CrunchyData/postgres-operator).
+* You can find out more information about PGO, the Postgres Operator from [Crunchy Data](https://www.crunchydata.com), at the [project page](https://github.com/CrunchyData/postgres-operator).
 
 ### FAQs, License and Terms
 

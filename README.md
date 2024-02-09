@@ -22,7 +22,7 @@ The examples as provided are designed for the use of PGO along with Crunchy Data
 
 For more information regarding PGO, the Postgres Operator project from Crunchy Data, and Crunchy Postgres for Kubernetes, please see the [frequently asked questions](https://access.crunchydata.com/documentation/postgres-operator/latest/faq).
 
-For information regarding the software versions of the components included and Kubernetes version compatibility, please see the [components and capabilities section of the Crunchy Postgres for Kubernetes documentation](https://access.crunchydata.com/documentation/postgres-operator/latest/references/components).
+For information regarding the software versions of the components included and Kubernetes version compatibility, please see the [components and compatibility section of the Crunchy Postgres for Kubernetes documentation](https://access.crunchydata.com/documentation/postgres-operator/latest/references/components).
 
 The examples provided in this project repository are available subject to the [Apache 2.0](https://github.com/CrunchyData/postgres-operator-examples/blob/-/LICENSE.md) license with the PGO logo and branding assets covered by our [trademark guidelines](https://github.com/CrunchyData/postgres-operator/blob/-/docs/static/logos/TRADEMARKS.md).
 

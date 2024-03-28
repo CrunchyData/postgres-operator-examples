@@ -39,7 +39,7 @@ spec:
         {{- include "install.relatedImages" . | indent 8 }}
         {{- if .Values.disable_check_for_upgrades }}
         - name: CHECK_FOR_UPGRADES
-          value: "false"
+          value: "true"
         {{- end }}
         {{- if .Values.resources.controller }}
         resources:

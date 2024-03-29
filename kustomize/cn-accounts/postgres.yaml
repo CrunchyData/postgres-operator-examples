@@ -25,7 +25,7 @@ spec:
       labels:
         my-label: value2
     type: NodePort
-    nodePort: 32000
+    nodePort: 32002
   monitoring:
     pgmonitor:
       exporter:

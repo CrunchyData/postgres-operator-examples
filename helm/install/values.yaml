@@ -35,7 +35,7 @@ relatedImages:
 singleNamespace: false
 
 # debug allows you to enable or disable the "debug" level of logging.
-debug: true
+debug: false
 
 # imagePullSecretNames is a list of secret names to use for pulling controller images.
 # More info: https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
@@ -44,6 +44,8 @@ imagePullSecretNames: []
 # Resource configuration of the PostgresCluster and PGUpgrade controllers.
 resources:
   controller: {}
+
+disable_check_for_upgrades: true
 
 # Define custom labels for PGO pods
 # Note: Defining labels that overlap with any Crunchy Data label, for example,

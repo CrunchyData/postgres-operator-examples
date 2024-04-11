@@ -47,7 +47,7 @@ postgresVersion: 16
 # below value. "postgresVersion" needs to match the version of Postgres that is
 # used here. If using the GIS-enabled Postgres image, you need to ensure
 # "postGISVersion" matches the version of PostGIS used.
-imagePostgres: pgvector/pgvector:0.6.2-pg16
+# imagePostgres: pgvector/pgvector:0.6.2-pg16
 
 # imagePgBackRest is the pgBackRest backup utility image. This defaults to the
 # below value.
@@ -136,7 +136,6 @@ imagePostgres: pgvector/pgvector:0.6.2-pg16
 # as well as any permissions associated with the user account.
 users:
   - name: apolo
-
 # dataSource specifies a data source for bootstrapping a Postgres cluster.
 # dataSource: {}
 

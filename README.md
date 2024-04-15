@@ -2,7 +2,6 @@ This is a customized fork of [CrunchyData's Postgres Operator](https://github.co
 
 Userdocs could be found [here](https://access.crunchydata.com/documentation/postgres-operator/latest/quickstart).
 
-Note: current installation does not expose posgtes outside the cluster (no ingress configuration for now).
 
 # Kubernetes deployment:
 ## Install Postgres Operator (PRGO) and corresponding CRDs for k8s:
@@ -24,8 +23,7 @@ When `--set singleNamespace=true`, PGO watches for and responds to PostgresClust
 - 3 postgres replicas (high availability config, 1 master and 2 slaves controlled by Patroni). Resources: 2Gb RAM, 1vCPU, 20Gb storage (default StorageClass)
 - 2 pgBouncer replicas
 - Enabled Prometheus metrics exporter
-- 1 user is created with name `apolo`
-- 1 database is created with name `apolo`
+- 1 default `postgres` user with SUPERUSER privileges is created. Note: the user can not be "SUPERUSER" to connect using pgbouncer, so you will need to create a dedicated unprivileged user.
 
 Install dependencies with `make setup`.
 
@@ -62,10 +60,10 @@ Remove postgrescluster release from the corresponding namespace:
 <summary> TODOs </summary>
 - pgBackRest
   - If pgBackRest stores backups in platform managed S3 bucket, we need to adjust [--repo-s3-uri-style](https://pgbackrest.org/configuration.html#section-repository/option-repo-s3-uri-style) (https://access.crunchydata.com/documentation/postgres-operator/latest/tutorials/backups-disaster-recovery/backups#using-s3)
-  - need to add default schedule
+  - need to add default schedule for pgBackRest
+  - current installation does not expose posgtes outside the cluster (no ingress configuration for now).
 
 
-  
 
 </details>
 

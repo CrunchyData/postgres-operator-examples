@@ -2,7 +2,4 @@ instanceReplicas: 3
 pgBouncerReplicas: 2
 monitoring: true
 users:
-  - name: apolo
-    options: SUPERUSER
-    databases:
-      - apolo
+  - name: postgres

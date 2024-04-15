@@ -23,7 +23,7 @@ When `--set singleNamespace=true`, PGO watches for and responds to PostgresClust
 - 3 postgres replicas (high availability config, 1 master and 2 slaves controlled by Patroni). Resources: 2Gb RAM, 1vCPU, 20Gb storage (default StorageClass)
 - 2 pgBouncer replicas
 - Enabled Prometheus metrics exporter
-- 1 default `postgres` user with SUPERUSER privileges is created. Note: the user can not be "SUPERUSER" to connect using pgbouncer, so you will need to create a dedicated unprivileged user.
+- 1 default `postgres` user with SUPERUSER privileges is created.
 
 Install dependencies with `make setup`.
 
@@ -39,6 +39,18 @@ To get them, hit:
 `kubectl -n pgvector get secret -l postgres-operator.crunchydata.com/role=pguser -o json | jq '.items[].data | map_values(@base64d)'`
 
 Now you could use these credentials from within other apps in this cluster or platform jobs to access postgres.
+
+Note: the user can not be "SUPERUSER" to connect using pgbouncer, so you will need to create a dedicated unprivileged user.
+To add a dedicated user and databases, adjust the values-default.yaml file with additional entries, for instance:
+
+```yaml
+users:
+  - name: postgres
+  - name: apolo
+    databases:
+      - apolo
+```
+More information regarding user management could be found [here](https://access.crunchydata.com/documentation/postgres-operator/latest/tutorials/basic-setup/user-management#managing-the-postgres-user).
 
 #### Endpoint
 Optionally, perform port-fowarding of PGBouncer service from cluster to your local machine with:

@@ -1,20 +1,78 @@
-# Installation from this, customized repo:
-1. Install operator:
+This is a customized fork of [CrunchyData's Postgres Operator](https://github.com/CrunchyData/postgres-operator-examples/).
 
-`helm upgrade --install postgres-operator -n postgres-operator helm/install --create-namespace`
+Userdocs could be found [here](https://access.crunchydata.com/documentation/postgres-operator/latest/quickstart).
 
-2. Install PGO cluster with PGVector extension:
-Custom configurations:
+Note: current installation does not expose posgtes outside the cluster (no ingress configuration for now).
+
+# Kubernetes deployment:
+## Install Postgres Operator (PRGO) and corresponding CRDs for k8s:
+
+`helm upgrade --install postgres-operator -n postgres-operator --create-namespace helm/install`
+
+When `--set singleNamespace=true`, PGO watches for and responds to PostgresClusters only in namespace, where it is installed. In this case, change namespace name in the following commands from `pgvector` to `postgres-operator` or other name you used to install operator itself.
+
+## Deploy Postgres (includes PGVector extension).
+### Minimal config:
 - 1 instance (no HA) with 2Gb RAM, 1vCPU, 2Gb storage (default StorageClass)
-- no pgBouncer, no Patroni, no TLS, no monitoring
+- no pgBouncer, no TLS, no monitoring
 - pgBackRest stores backups in local PVCs
+- no default users or databases created
 
-`helm upgrade --install pgvector helm/pgvector -n pgvector --create-namespace`
+`helm upgrade --install pgvector -n pgvector --create-namespace helm/postgres`
+
+### Default Apolo config:
+- 3 postgres replicas (high availability config, 1 master and 2 slaves controlled by Patroni). Resources: 2Gb RAM, 1vCPU, 20Gb storage (default StorageClass)
+- 2 pgBouncer replicas
+- Enabled Prometheus metrics exporter
+- 1 user is created with name `apolo`
+- 1 database is created with name `apolo`
+
+Install dependencies with `make setup`.
+
+`python gen_config.py pgvector helm/postgres/values-default-template.yaml helm/postgres/values-default.yaml` -- creates default config with backup information at `helm/postgres/values-default.yaml` values file.
+
+`helm upgrade --install pgvector -n pgvector --create-namespace helm/postgres -f helm/postgres/values.yaml -f helm/postgres/values-default.yaml`
+
+### Usage
+When deployed, PostgresCluster CRD creates corresponding pods, PVCs, enables replication, backups and high availability.
+
+It also creates secrets within the same namespace with access credentials that will enable users to gain access to this Postgres cluster.
+To get them, hit:
+`kubectl -n pgvector get secret -l postgres-operator.crunchydata.com/role=pguser -o json | jq '.items[].data | map_values(@base64d)'`
+
+Now you could use these credentials from within other apps in this cluster or platform jobs to access postgres.
+
+#### Endpoint
+Optionally, perform port-fowarding of PGBouncer service from cluster to your local machine with:
+`kubectl -n pgvector port-forward svc/pgvector-pgbouncer 5432`
+
+Or use `pgvector-pgbouncer.pgvector.svc.cluster.local` domain name if you are connecting from within the job.
+
+#### PGVector extension
+
+Enable extension in your database using command:
+`CREATE EXTENSION vector;`
+
+
+## Removal
+Remove postgrescluster release from the corresponding namespace:
+`helm uninstall pgvector -n pgvector`
+
+<details>
+<summary> TODOs </summary>
+- pgBackRest
+  - If pgBackRest stores backups in platform managed S3 bucket, we need to adjust [--repo-s3-uri-style](https://pgbackrest.org/configuration.html#section-repository/option-repo-s3-uri-style) (https://access.crunchydata.com/documentation/postgres-operator/latest/tutorials/backups-disaster-recovery/backups#using-s3)
+  - need to add default schedule
+
+
+  
+
+</details>
 
 
 <details>
 
-<summary> Hints from original repo </summary>
+<summary> Readme from original repo </summary>
 ## Examples for Using [PGO](https://github.com/CrunchyData/postgres-operator), the Postgres Operator from Crunchy Data
 
 This repository contains a collection of installers and examples for deploying, operating and maintaining Postgres clusters using PGO, the Postgres Operator from Crunchy Data as part of [Crunchy Postgres for Kubernetes](https://www.crunchydata.com/products/crunchy-postgresql-for-kubernetes).

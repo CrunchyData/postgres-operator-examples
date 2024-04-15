@@ -89,6 +89,7 @@ spec:
         {{- if .Values.s3.encryptionPassphrase }}
         repo1-cipher-type: aes-256-cbc
         {{- end }}
+        repo1-s3-uri-style: path
       repos:
       - name: repo1
         s3:

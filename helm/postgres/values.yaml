@@ -182,6 +182,22 @@ postgresVersion: 16
 # Can be overridden by "pgBackRestConfig", if set.
 # backupsStorageClassName: "hostpath"
 
+# Crunchy Data schedules are used for automating and managing routine tasks associated with PostgreSQL clusters 
+# deployed on Kubernetes using the Crunchy Data PostgreSQL Operator.
+# These schedules are typically defined using cron-like expressions.
+# schedules:
+#   full: "0 1 * * 0"
+#   differential: "0 1 * * 1-6"
+#   incremental: "0 1 * * 1-6"
+
+# PGO backup retention is an important feature of the Crunchy Data PostgreSQL Operator that helps users effectively manage the storage of their database backups in Kubernetes environments, 
+# by specifying and automatically maintaining the desired number of backups to retain.
+# retention:
+#   # There are two different types of backup retention you can set: 'count' and 'time'
+#   type: "time"
+#   # Set number of days ot backups
+#   count: "7"
+
 # s3 allows for AWS S3 or an S3 compatible storage system to be used for
 # backups. This allows for a quick setup with S3; if you need more advanced
 # setup, use pgBackRestConfig.

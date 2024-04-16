@@ -4,7 +4,18 @@ Userdocs could be found [here](https://access.crunchydata.com/documentation/post
 
 
 # Kubernetes deployment:
-## Install Postgres Operator (PRGO) and corresponding CRDs for k8s:
+## All-in-one deployment
+[Optionally]
+Generate backup configuration with
+
+`python gen_config.py pgvector helm/app/values.yaml helm/app/values-default.yaml --subapp=postgrescluster`
+
+Install app with
+
+`helm upgrade --install pgvector -n pgvector --create-namespace helm/app/  -f helm/app/values-postgres-default.yaml --dependency-update`
+
+## Deploy components separately
+### Install Postgres Operator (PRGO) and corresponding CRDs for k8s:
 
 `helm upgrade --install postgres-operator -n postgres-operator --create-namespace helm/install`
 

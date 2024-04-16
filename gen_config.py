@@ -45,6 +45,7 @@ BackupConfig = t.Union[S3, GCS, Azure]
 @click.option("--cluster_name", type=str, default=None)
 @click.option("--project_name", type=str, default=None)
 @click.option("--org_name")
+@click.option("--subapp", type=str, default=None)
 def generate(
     helm_release_name: str,
     base_config_path: Path,
@@ -52,6 +53,7 @@ def generate(
     cluster_name: str | None,
     project_name: str | None,
     org_name: str | None,
+    subapp: str | None,
 ) -> None:
 
     assert base_config_path.exists()
@@ -61,6 +63,11 @@ def generate(
     config = asyncio.run(
         gen_backup_config(helm_release_name, cluster_name, project_name, org_name)
     )
+    if subapp:
+        # case, when chart is a subapp, so values are nested
+        subapp_config = base_config.pop(subapp, {})
+        subapp_config.update(config)
+        config = {subapp: subapp_config}
     updated_config = {**base_config, **config}
     with output_config_path.open("w") as f:
         yaml.dump(updated_config, f)

@@ -49,6 +49,8 @@ spec:
         - name: RELATED_IMAGE_STANDALONE_PGADMIN
           value: "registry.developers.crunchydata.com/crunchydata/crunchy-pgadmin4:ubi8-7.8-3"
         securityContext:
+          seccompProfile:
+            type: RuntimeDefault
           allowPrivilegeEscalation: false
           capabilities: { drop: [ALL] }
           readOnlyRootFilesystem: true

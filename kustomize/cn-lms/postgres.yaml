@@ -36,6 +36,9 @@ spec:
       image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.49-0
       repos:
       - name: repo1
+        schedules:
+            full: "0 1 * * 0"
+            differential: "0 1 * * 1-6"
         volume:
           volumeClaimSpec:
             accessModes:
@@ -43,3 +46,6 @@ spec:
             resources:
               requests:
                 storage: 20Gi
+  proxy:
+    pgBouncer:
+      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.21-3

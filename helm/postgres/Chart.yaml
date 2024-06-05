@@ -3,5 +3,5 @@ name: postgrescluster
 description: A Helm chart for Kubernetes
 type: application
 # The version below should match the version on the PostgresCluster CRD
-version: 5.5.1
-appVersion: 5.5.1
+version: 5.6.0
+appVersion: 5.6.0

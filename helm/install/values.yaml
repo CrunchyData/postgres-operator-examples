@@ -50,3 +50,29 @@ resources:
 # postgres-operator.crunchydata.com, will cause an error
 # customPodLabels:
 #  example.com: custom-label
+
+# Enable feature gates for PGO, by explicitly seting the value for the flags
+# features:
+#   AutoGrowVolumes: true
+#   Feature2: false
+#   Feature3: somevalue
+
+# Define extra environment variables for the chart, which will get added to the container's env
+# extraEnv:
+#   - name: MY_VAR
+#     value: "myvalue"
+#   - name: MY_CONFIGMAP_VAR
+#     valueFrom:
+#       configMapKeyRef:
+#         name: s3-settings
+#         key: bucket
+#   - name: MY_SECRET_VAR
+#     valueFrom:
+#       secretKeyRef:
+#         name: s3-secret
+#         key: key
+
+# Override environment variables entirely !!DANGEROUS!!
+# envOverride:
+#   - name: PG_DEBUG
+#     value: "true"

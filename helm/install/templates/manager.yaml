@@ -46,6 +46,8 @@ spec:
         {{- toYaml .Values.resources.controller | nindent 10 }}
         {{- end }}
         securityContext:
+          seccompProfile:
+            type: RuntimeDefault
           allowPrivilegeEscalation: false
           capabilities: { drop: [ALL] }
           readOnlyRootFilesystem: true

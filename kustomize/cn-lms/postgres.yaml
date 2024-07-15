@@ -27,6 +27,12 @@ spec:
         my-label: value2
     type: NodePort
     nodePort: 32001
+  patroni:
+    dynamicConfiguration:
+      postgresql:
+        parameters:
+          pg_hba:
+            - "hostnossl all all all md5"
   monitoring:
     pgmonitor:
       exporter:

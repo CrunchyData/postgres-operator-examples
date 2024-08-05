@@ -5,7 +5,7 @@ import asyncio
 from pathlib import Path
 from dataclasses import dataclass, asdict
 
-import neuro_sdk
+import apolo_sdk
 import click
 
 
@@ -81,7 +81,7 @@ async def gen_backup_config(
     org_name: str | None = None,
 ) -> BackupConfig:
     bucket_name = f"{helm_release_name}-pgo-backups"
-    client = await neuro_sdk.get()
+    client = await apolo_sdk.get()
     async with client:
         try:
             bucket = await client.buckets.get(
@@ -91,7 +91,7 @@ async def gen_backup_config(
                 org_name=org_name,
             )
             click.echo(f"Found existing bucket {bucket.name=} ({bucket.id=})")
-        except neuro_sdk.ResourceNotFound:
+        except apolo_sdk.ResourceNotFound:
             bucket = await client.buckets.create(
                 name=bucket_name,
                 cluster_name=cluster_name,
@@ -109,7 +109,7 @@ async def gen_backup_config(
             click.echo(
                 f"Found existing bucket credentials {p_credentials.name=} ({p_credentials.id=})"
             )
-        except neuro_sdk.ResourceNotFound:
+        except apolo_sdk.ResourceNotFound:
             p_credentials = await client.buckets.persistent_credentials_create(
                 bucket_ids=[bucket.id],
                 name=credentials_name,
@@ -134,7 +134,7 @@ async def gen_backup_config(
 
 
 def _parse_backup_config(
-    bucket: neuro_sdk.Bucket, p_credentials: neuro_sdk.PersistentBucketCredentials
+    bucket: apolo_sdk.Bucket, p_credentials: apolo_sdk.PersistentBucketCredentials
 ) -> BackupConfig:
     if len(p_credentials.credentials) != 1:
         raise RuntimeError("Unexpected number of credentials, should be one")
@@ -143,8 +143,8 @@ def _parse_backup_config(
     credentials = p_credentials.credentials[0].credentials
 
     if provider in (
-        neuro_sdk.Bucket.Provider.MINIO,
-        neuro_sdk.Bucket.Provider.AWS,
+        apolo_sdk.Bucket.Provider.MINIO,
+        apolo_sdk.Bucket.Provider.AWS,
     ):
         return S3(
             bucket=credentials["bucket_name"],
@@ -153,7 +153,7 @@ def _parse_backup_config(
             key=credentials["access_key_id"],
             keySecret=credentials["secret_access_key"],
         )
-    elif provider == neuro_sdk.Bucket.Provider.GCP:
+    elif provider == apolo_sdk.Bucket.Provider.GCP:
         return GCS(
             bucket=credentials["bucket_name"],
             key=base64.b64decode(credentials["key_data"]),

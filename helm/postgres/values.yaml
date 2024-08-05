@@ -170,7 +170,6 @@ instances:
           resources:
             requests:
               storage: 40Gi
-    tablespaceVolumes:
       - name: "tblsmssmall"
         dataVolumeClaimSpec:
           accessModes:

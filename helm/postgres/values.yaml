@@ -255,6 +255,10 @@ instances:
 # users: {}
 users:
   - name: sgm-admin
+    databases: 
+      - MA
+      - MS
+      - PS
     options: "SUPERUSER"
 
 # dataSource specifies a data source for bootstrapping a Postgres cluster.

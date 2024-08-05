@@ -159,7 +159,7 @@ instances:
               storage: 20Gi
     resources:
       limits:
-        cpu: "1500m"
+        cpu: "1000m"
         memory: "3072Mi"
   - name: pgms
     dataVolumeClaimSpec:
@@ -188,8 +188,8 @@ instances:
               storage: 15Gi
     resources:
       limits:
-        cpu: "3500m"
-        memory: "14000Mi"
+        cpu: "1000m"
+        memory: "8000Mi"
 # port sets the port that Postgres listens on. Defaults to 5432.
 # port: 5432
 

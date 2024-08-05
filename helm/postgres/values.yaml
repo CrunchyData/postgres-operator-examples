@@ -71,28 +71,28 @@ postgresVersion: 16
 
 # instanceSize sets the size of the volume that contains the data. This defaults
 # to the value below. Settings "instances" overrides this value.
-# instanceSize: 1Gi
+# instanceSize: 10Gi
 
 # instanceStorageClassName sets the storage class for the volume that contains the data.
 # This defaults to the "default" storage class defined in the cluster.
 # See: 'kubectl get storageclasses.storage.k8s.io | grep default'
 # Settings "instances" overrides this value.
-# instanceStorageClassName: "hostpath"
+# instanceStorageClassName: "local-path"
 
 # instanceMemory sets the memory limit for the Postgres instances. This defaults
 # to no limit being set, but an example value is set below. Settings "instances"
 # overrides this value.
-# instanceMemory: 2Gi
+instanceMemory: 8Gi
 
 # instanceCPU sets the CPU limit for the Postgres instances. This defaults to
 # no limit being set, but an example value is set below. Setting "instances"
 # overrides this value.
-# instanceCPU: 1000m
+instanceCPU: 1000m
 
 # instanceReplicas lets you set the total number of Postgres replicas. This
 # defaults to the value below. More than on replica enables high availability
 # (HA). Settings "instances" overrides this value.
-# instanceReplicas: 1
+instanceReplicas: 1
 
 ##############################
 # Advanced Postgres Settings #
@@ -118,7 +118,37 @@ postgresVersion: 16
 #         requests:
 #           storage: 1Gi
 # instances: {}
-
+instances:
+  - name: instance1
+    dataVolumeClaimSpec:
+      accessModes:
+        - 'ReadWriteOnce'
+      storageClassName: "local-path"
+      resources:
+        requests:
+          storage: 10Gi
+    tablespaceVolumes:
+      - name: "tblsma"
+        dataVolumeClaimSpec:
+          accessModes:
+            - 'ReadWriteOnce'
+          resources:
+            requests:
+              storage: 10Gi
+      - name: "tblsps"
+        dataVolumeClaimSpec:
+          accessModes:
+            - 'ReadWriteOnce'
+          resources:
+            requests:
+              storage: 20Gi
+      - name: "tblsmslarge"
+        dataVolumeClaimSpec:
+          accessModes:
+            - 'ReadWriteOnce'
+          resources:
+            requests:
+              storage: 40Gi
 # port sets the port that Postgres listens on. Defaults to 5432.
 # port: 5432
 
@@ -135,6 +165,11 @@ postgresVersion: 16
 # users sets any custom Postgres users and databases that they have  access to
 # as well as any permissions associated with the user account.
 # users: {}
+users:
+  - name: sgm-admin
+    databases: 
+      - MA
+    options: "SUPERUSER"
 
 # dataSource specifies a data source for bootstrapping a Postgres cluster.
 # dataSource: {}

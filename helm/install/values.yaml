@@ -32,7 +32,7 @@ relatedImages:
 # singleNamespace controls where PGO watches for PostgresClusters. When false,
 # PGO watches for and responds to PostgresClusters in all namespaces. When true,
 # PGO watches only the namespace in which it is installed.
-singleNamespace: false
+singleNamespace: true
 
 # debug allows you to enable or disable the "debug" level of logging.
 debug: true

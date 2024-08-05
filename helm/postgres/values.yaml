@@ -137,9 +137,9 @@ instances:
             requests:
               storage: 10Gi
     resources:
-        limits:
-          cpu: "1000m"
-          memory: "1512Mi"
+      limits:
+        cpu: "1000m"
+        memory: "1512Mi"
   - name: pgps
     dataVolumeClaimSpec:
       accessModes:
@@ -157,6 +157,10 @@ instances:
           resources:
             requests:
               storage: 20Gi
+    resources:
+      limits:
+        cpu: "1500m"
+        memory: "3072Mi"
   - name: pgms
     dataVolumeClaimSpec:
       accessModes:
@@ -182,6 +186,10 @@ instances:
           resources:
             requests:
               storage: 15Gi
+    resources:
+      limits:
+        cpu: "3500m"
+        memory: "14000Mi"
 # port sets the port that Postgres listens on. Defaults to 5432.
 # port: 5432
 

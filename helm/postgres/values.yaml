@@ -82,7 +82,7 @@ postgresVersion: 16
 # instanceMemory sets the memory limit for the Postgres instances. This defaults
 # to no limit being set, but an example value is set below. Settings "instances"
 # overrides this value.
-instanceMemory: 8Gi
+# instanceMemory: 8Gi
 
 # instanceCPU sets the CPU limit for the Postgres instances. This defaults to
 # no limit being set, but an example value is set below. Setting "instances"
@@ -92,7 +92,7 @@ instanceMemory: 8Gi
 # instanceReplicas lets you set the total number of Postgres replicas. This
 # defaults to the value below. More than on replica enables high availability
 # (HA). Settings "instances" overrides this value.
-instanceReplicas: 1
+# instanceReplicas: 1
 
 ##############################
 # Advanced Postgres Settings #
@@ -208,8 +208,6 @@ instances:
 # users: {}
 users:
   - name: sgm-admin
-    databases: 
-      - MA
     options: "SUPERUSER"
 
 # dataSource specifies a data source for bootstrapping a Postgres cluster.
@@ -365,6 +363,45 @@ users:
 
 # service customizes the Service that exposes the Postgres primary.
 # service: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-pgma
+spec:
+  type: LoadBalancer
+  selector:
+    name: pgma
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-pgps
+spec:
+  type: LoadBalancer
+  selector:
+    name: pgps
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-pgms
+spec:
+  type: LoadBalancer
+  selector:
+    name: pgms
+  ports:
+    - protocol: TCP
+      port: 5432
+      targetPort: 5432
 
 # imagePullPolicy sets the pull policy for all the images. This defaults to
 # the Kubernetes heuristic:

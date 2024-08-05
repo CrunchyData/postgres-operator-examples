@@ -87,7 +87,7 @@ instanceMemory: 8Gi
 # instanceCPU sets the CPU limit for the Postgres instances. This defaults to
 # no limit being set, but an example value is set below. Setting "instances"
 # overrides this value.
-instanceCPU: 1000m
+# instanceCPU: 1000m
 
 # instanceReplicas lets you set the total number of Postgres replicas. This
 # defaults to the value below. More than on replica enables high availability
@@ -136,6 +136,10 @@ instances:
           resources:
             requests:
               storage: 10Gi
+    resources:
+        limits:
+          cpu: "1000m"
+          memory: "1512Mi"
   - name: pgps
     dataVolumeClaimSpec:
       accessModes:

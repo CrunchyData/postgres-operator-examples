@@ -126,12 +126,13 @@ instances:
       storageClassName: "local-path"
       resources:
         requests:
-          storage: 10Gi
+          storage: 15Gi
     tablespaceVolumes:
       - name: "tblsma"
         dataVolumeClaimSpec:
           accessModes:
             - 'ReadWriteOnce'
+          storageClassName: "local-path"
           resources:
             requests:
               storage: 10Gi
@@ -139,6 +140,7 @@ instances:
         dataVolumeClaimSpec:
           accessModes:
             - 'ReadWriteOnce'
+          storageClassName: "local-path"
           resources:
             requests:
               storage: 20Gi
@@ -146,9 +148,18 @@ instances:
         dataVolumeClaimSpec:
           accessModes:
             - 'ReadWriteOnce'
+          storageClassName: "local-path"
           resources:
             requests:
               storage: 40Gi
+      - name: "tblsmssmall"
+        dataVolumeClaimSpec:
+          accessModes:
+            - 'ReadWriteOnce'
+          storageClassName: "local-path"
+          resources:
+            requests:
+              storage: 15Gi
 # port sets the port that Postgres listens on. Defaults to 5432.
 # port: 5432
 

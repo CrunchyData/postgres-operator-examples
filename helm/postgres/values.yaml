@@ -119,14 +119,14 @@ instanceReplicas: 1
 #           storage: 1Gi
 # instances: {}
 instances:
-  - name: instance1
+  - name: PGMA
     dataVolumeClaimSpec:
       accessModes:
         - 'ReadWriteOnce'
       storageClassName: "local-path"
       resources:
         requests:
-          storage: 15Gi
+          storage: 5Gi
     tablespaceVolumes:
       - name: "tblsma"
         dataVolumeClaimSpec:
@@ -136,6 +136,15 @@ instances:
           resources:
             requests:
               storage: 10Gi
+  - name: PGPS
+    dataVolumeClaimSpec:
+      accessModes:
+        - 'ReadWriteOnce'
+      storageClassName: "local-path"
+      resources:
+        requests:
+          storage: 5Gi
+    tablespaceVolumes:        
       - name: "tblsps"
         dataVolumeClaimSpec:
           accessModes:
@@ -144,6 +153,15 @@ instances:
           resources:
             requests:
               storage: 20Gi
+  - name: PGMS
+    dataVolumeClaimSpec:
+      accessModes:
+        - 'ReadWriteOnce'
+      storageClassName: "local-path"
+      resources:
+        requests:
+          storage: 5Gi
+    tablespaceVolumes:  
       - name: "tblsmslarge"
         dataVolumeClaimSpec:
           accessModes:
@@ -152,6 +170,7 @@ instances:
           resources:
             requests:
               storage: 40Gi
+    tablespaceVolumes:
       - name: "tblsmssmall"
         dataVolumeClaimSpec:
           accessModes:

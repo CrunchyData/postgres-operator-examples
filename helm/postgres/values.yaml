@@ -82,12 +82,12 @@ postgresVersion: 16
 # instanceMemory sets the memory limit for the Postgres instances. This defaults
 # to no limit being set, but an example value is set below. Settings "instances"
 # overrides this value.
-instanceMemory: 8Gi
+# instanceMemory: 8Gi
 
 # instanceCPU sets the CPU limit for the Postgres instances. This defaults to
 # no limit being set, but an example value is set below. Setting "instances"
 # overrides this value.
-# instanceCPU: 1000m
+# instanceCPU: 2000m
 
 # instanceReplicas lets you set the total number of Postgres replicas. This
 # defaults to the value below. More than on replica enables high availability
@@ -119,14 +119,14 @@ instanceReplicas: 1
 #           storage: 1Gi
 # instances: {}
 instances:
-  - name: pgma
+  - name: instance1
     dataVolumeClaimSpec:
       accessModes:
         - 'ReadWriteOnce'
       storageClassName: "local-path"
       resources:
         requests:
-          storage: 5Gi
+          storage: 15Gi
     tablespaceVolumes:
       - name: "tblsma"
         dataVolumeClaimSpec:
@@ -136,19 +136,6 @@ instances:
           resources:
             requests:
               storage: 10Gi
-    resources:
-      limits:
-        cpu: "1000m"
-        memory: "1512Mi"
-  - name: pgps
-    dataVolumeClaimSpec:
-      accessModes:
-        - 'ReadWriteOnce'
-      storageClassName: "local-path"
-      resources:
-        requests:
-          storage: 5Gi
-    tablespaceVolumes:        
       - name: "tblsps"
         dataVolumeClaimSpec:
           accessModes:
@@ -165,19 +152,6 @@ instances:
           resources:
             requests:
               storage: 10Gi
-    resources:
-      limits:
-        cpu: "1000m"
-        memory: "3072Mi"
-  - name: pgms
-    dataVolumeClaimSpec:
-      accessModes:
-        - 'ReadWriteOnce'
-      storageClassName: "local-path"
-      resources:
-        requests:
-          storage: 5Gi
-    tablespaceVolumes:  
       - name: "tblsmslarge"
         dataVolumeClaimSpec:
           accessModes:
@@ -211,9 +185,82 @@ instances:
             requests:
               storage: 15Gi
     resources:
-      limits:
-        cpu: "1000m"
-        memory: "8000Mi"
+        limits:
+          cpu: "2000m"
+          memory: "8Gi"
+# TODO MULTIPLE INSTANCES
+# instances:
+#   - name: pgma
+#     dataVolumeClaimSpec:
+#       accessModes:
+#         - 'ReadWriteOnce'
+#       storageClassName: "local-path"
+#       resources:
+#         requests:
+#           storage: 5Gi
+#     tablespaceVolumes:
+#       - name: "tblsma"
+#         dataVolumeClaimSpec:
+#           accessModes:
+#             - 'ReadWriteOnce'
+#           storageClassName: "local-path"
+#           resources:
+#             requests:
+#               storage: 10Gi
+#     resources:
+#       limits:
+#         cpu: "500m"
+#         memory: "1512Mi"
+#   - name: pgps
+#     dataVolumeClaimSpec:
+#       accessModes:
+#         - 'ReadWriteOnce'
+#       storageClassName: "local-path"
+#       resources:
+#         requests:
+#           storage: 5Gi
+#     tablespaceVolumes:        
+#       - name: "tblsps"
+#         dataVolumeClaimSpec:
+#           accessModes:
+#             - 'ReadWriteOnce'
+#           storageClassName: "local-path"
+#           resources:
+#             requests:
+#               storage: 20Gi
+#     resources:
+#       limits:
+#         cpu: "1000m"
+#         memory: "3072Mi"
+#   - name: pgms
+#     dataVolumeClaimSpec:
+#       accessModes:
+#         - 'ReadWriteOnce'
+#       storageClassName: "local-path"
+#       resources:
+#         requests:
+#           storage: 5Gi
+#     tablespaceVolumes:  
+#       - name: "tblsmslarge"
+#         dataVolumeClaimSpec:
+#           accessModes:
+#             - 'ReadWriteOnce'
+#           storageClassName: "local-path"
+#           resources:
+#             requests:
+#               storage: 40Gi
+#       - name: "tblsmssmall"
+#         dataVolumeClaimSpec:
+#           accessModes:
+#             - 'ReadWriteOnce'
+#           storageClassName: "local-path"
+#           resources:
+#             requests:
+#               storage: 15Gi
+#     resources:
+#       limits:
+#         cpu: "1500m"
+#         memory: "8000Mi"
 # port sets the port that Postgres listens on. Defaults to 5432.
 # port: 5432
 
@@ -234,6 +281,8 @@ users:
   - name: sgm-admin
     databases: 
       - MA
+      - MS
+      - PS
     options: "SUPERUSER"
 
 # dataSource specifies a data source for bootstrapping a Postgres cluster.
@@ -389,6 +438,9 @@ users:
 
 # service customizes the Service that exposes the Postgres primary.
 # service: {}
+
+service:
+  type: LoadBalancer
 
 # imagePullPolicy sets the pull policy for all the images. This defaults to
 # the Kubernetes heuristic:

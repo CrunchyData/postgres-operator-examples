@@ -157,6 +157,14 @@ instances:
           resources:
             requests:
               storage: 20Gi
+      - name: "tblspsaudit"
+        dataVolumeClaimSpec:
+          accessModes:
+            - 'ReadWriteOnce'
+          storageClassName: "local-path"
+          resources:
+            requests:
+              storage: 10Gi
     resources:
       limits:
         cpu: "1000m"
@@ -179,6 +187,22 @@ instances:
             requests:
               storage: 40Gi
       - name: "tblsmssmall"
+        dataVolumeClaimSpec:
+          accessModes:
+            - 'ReadWriteOnce'
+          storageClassName: "local-path"
+          resources:
+            requests:
+              storage: 15Gi
+      - name: "tblsmssc"
+        dataVolumeClaimSpec:
+          accessModes:
+            - 'ReadWriteOnce'
+          storageClassName: "local-path"
+          resources:
+            requests:
+              storage: 15Gi
+      - name: "tblsmsaudit"
         dataVolumeClaimSpec:
           accessModes:
             - 'ReadWriteOnce'

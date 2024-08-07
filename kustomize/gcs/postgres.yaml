@@ -3,8 +3,8 @@ kind: PostgresCluster
 metadata:
   name: hippo-gcs
 spec:
-  image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-15.5-0
-  postgresVersion: 15
+  image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-16.3-1
+  postgresVersion: 16
   instances:
     - dataVolumeClaimSpec:
         accessModes:
@@ -14,7 +14,7 @@ spec:
             storage: 1Gi
   backups:
     pgbackrest:
-      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.47-2
+      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.51-1
       configuration:
       - secret:
           name: pgo-gcs-creds

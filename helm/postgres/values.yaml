@@ -188,79 +188,7 @@ instances:
         limits:
           cpu: "2000m"
           memory: "8Gi"
-# TODO MULTIPLE INSTANCES
-# instances:
-#   - name: pgma
-#     dataVolumeClaimSpec:
-#       accessModes:
-#         - 'ReadWriteOnce'
-#       storageClassName: "local-path"
-#       resources:
-#         requests:
-#           storage: 5Gi
-#     tablespaceVolumes:
-#       - name: "tblsma"
-#         dataVolumeClaimSpec:
-#           accessModes:
-#             - 'ReadWriteOnce'
-#           storageClassName: "local-path"
-#           resources:
-#             requests:
-#               storage: 10Gi
-#     resources:
-#       limits:
-#         cpu: "500m"
-#         memory: "1512Mi"
-#   - name: pgps
-#     dataVolumeClaimSpec:
-#       accessModes:
-#         - 'ReadWriteOnce'
-#       storageClassName: "local-path"
-#       resources:
-#         requests:
-#           storage: 5Gi
-#     tablespaceVolumes:        
-#       - name: "tblsps"
-#         dataVolumeClaimSpec:
-#           accessModes:
-#             - 'ReadWriteOnce'
-#           storageClassName: "local-path"
-#           resources:
-#             requests:
-#               storage: 20Gi
-#     resources:
-#       limits:
-#         cpu: "1000m"
-#         memory: "3072Mi"
-#   - name: pgms
-#     dataVolumeClaimSpec:
-#       accessModes:
-#         - 'ReadWriteOnce'
-#       storageClassName: "local-path"
-#       resources:
-#         requests:
-#           storage: 5Gi
-#     tablespaceVolumes:  
-#       - name: "tblsmslarge"
-#         dataVolumeClaimSpec:
-#           accessModes:
-#             - 'ReadWriteOnce'
-#           storageClassName: "local-path"
-#           resources:
-#             requests:
-#               storage: 40Gi
-#       - name: "tblsmssmall"
-#         dataVolumeClaimSpec:
-#           accessModes:
-#             - 'ReadWriteOnce'
-#           storageClassName: "local-path"
-#           resources:
-#             requests:
-#               storage: 15Gi
-#     resources:
-#       limits:
-#         cpu: "1500m"
-#         memory: "8000Mi"
+
 # port sets the port that Postgres listens on. Defaults to 5432.
 # port: 5432
 
@@ -274,6 +202,12 @@ instances:
 #         synchronous_commit: "on"
 # patroni: {}
 
+patroni:
+  dynamicConfiguration:
+    synchronous_mode: true
+    postgresql:
+      parameters:
+        max_connections: 200
 # users sets any custom Postgres users and databases that they have  access to
 # as well as any permissions associated with the user account.
 # users: {}

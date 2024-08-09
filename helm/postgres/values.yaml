@@ -119,14 +119,14 @@ instanceReplicas: 1
 #           storage: 1Gi
 # instances: {}
 instances:
-  - name: instance1
+  - name: instancema
     dataVolumeClaimSpec:
       accessModes:
         - 'ReadWriteOnce'
       storageClassName: "local-path"
       resources:
         requests:
-          storage: 15Gi
+          storage: 5Gi
     tablespaceVolumes:
       - name: "tblsma"
         dataVolumeClaimSpec:
@@ -136,58 +136,10 @@ instances:
           resources:
             requests:
               storage: 10Gi
-      - name: "tblsps"
-        dataVolumeClaimSpec:
-          accessModes:
-            - 'ReadWriteOnce'
-          storageClassName: "local-path"
-          resources:
-            requests:
-              storage: 20Gi
-      - name: "tblspsaudit"
-        dataVolumeClaimSpec:
-          accessModes:
-            - 'ReadWriteOnce'
-          storageClassName: "local-path"
-          resources:
-            requests:
-              storage: 10Gi
-      - name: "tblsmslarge"
-        dataVolumeClaimSpec:
-          accessModes:
-            - 'ReadWriteOnce'
-          storageClassName: "local-path"
-          resources:
-            requests:
-              storage: 40Gi
-      - name: "tblsmssmall"
-        dataVolumeClaimSpec:
-          accessModes:
-            - 'ReadWriteOnce'
-          storageClassName: "local-path"
-          resources:
-            requests:
-              storage: 15Gi
-      - name: "tblsmssc"
-        dataVolumeClaimSpec:
-          accessModes:
-            - 'ReadWriteOnce'
-          storageClassName: "local-path"
-          resources:
-            requests:
-              storage: 15Gi
-      - name: "tblsmsaudit"
-        dataVolumeClaimSpec:
-          accessModes:
-            - 'ReadWriteOnce'
-          storageClassName: "local-path"
-          resources:
-            requests:
-              storage: 15Gi
     resources:
         limits:
-          cpu: "2000m"
-          memory: "8Gi"
+          cpu: "500m"
+          memory: "2Gi"
 
 # port sets the port that Postgres listens on. Defaults to 5432.
 # port: 5432
@@ -216,8 +168,6 @@ users:
   - name: sgm-admin
     databases: 
       - MA
-      - MS
-      - PS
     options: "SUPERUSER"
 
 # dataSource specifies a data source for bootstrapping a Postgres cluster.

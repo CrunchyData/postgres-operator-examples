@@ -208,6 +208,7 @@ patroni:
     postgresql:
       parameters:
         max_connections: 200
+        listen_addresses: "*"
 # users sets any custom Postgres users and databases that they have  access to
 # as well as any permissions associated with the user account.
 # users: {}

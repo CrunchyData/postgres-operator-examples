@@ -3,6 +3,14 @@ This is a customized fork of [CrunchyData's Postgres Operator](https://github.co
 Userdocs could be found [here](https://access.crunchydata.com/documentation/postgres-operator/latest/quickstart).
 
 
+# Apolo deployment example:
+```bash
+apolo run \
+  --pass-config \
+  --entrypoint "./entrypoints/pgo.sh install postgresql pgv --set 'instanceReplicas=2' --set 'pgBouncerReplicas=2' --set 'preset_name=cpu-medium' --set 'bouncer_preset_name=cpu-small' --set 'users[0].name=myuser' --set 'users[0].databases[0]=mydb'" \
+  ghcr.io/neuro-inc/app-deployment
+```
+
 # Kubernetes deployment:
 ## All-in-one deployment
 [Optionally]

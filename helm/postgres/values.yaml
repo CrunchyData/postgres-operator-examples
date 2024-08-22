@@ -138,8 +138,8 @@ instances:
               storage: 10Gi
     resources:
         limits:
-          cpu: "500m"
-          memory: "2Gi"
+          cpu: "1000m"
+          memory: "4Gi"
 
 # port sets the port that Postgres listens on. Defaults to 5432.
 # port: 5432
@@ -168,6 +168,7 @@ users:
   - name: sgm-admin
     databases: 
       - MA
+      - KEYCLOAK
     options: "SUPERUSER"
 
 # dataSource specifies a data source for bootstrapping a Postgres cluster.
@@ -325,7 +326,7 @@ users:
 # service: {}
 
 service:
-  type: LoadBalancer
+  type: ClusterIP
 
 # imagePullPolicy sets the pull policy for all the images. This defaults to
 # the Kubernetes heuristic:

@@ -8,7 +8,7 @@ spec:
     spec:
       containers:
       - name: grafana
-        image: grafana/grafana:9.2.20
+        image: grafana/grafana:11.1.5
         ports:
         - containerPort: 3000
         env:

@@ -24,6 +24,8 @@ spec:
       - name: operator
         image: {{ required ".Values.controllerImages.cluster is required" .Values.controllerImages.cluster | quote }}
         env:
+        - name: PGO_INSTALLER_CHANNEL
+          value: helm
         - name: CRUNCHY_DEBUG
           value: {{ .Values.debug | ne false | quote }}
         - name: PGO_NAMESPACE

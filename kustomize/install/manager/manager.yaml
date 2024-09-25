@@ -20,6 +20,8 @@ spec:
       - name: operator
         image: postgres-operator
         env:
+        - name: PGO_INSTALLER_CHANNEL
+          value: kustomize
         - name: PGO_NAMESPACE
           valueFrom:
             fieldRef:

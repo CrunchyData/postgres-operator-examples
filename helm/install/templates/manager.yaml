@@ -20,6 +20,10 @@ spec:
     spec:
       {{- include "install.imagePullSecrets" . | indent 6 }}
       serviceAccountName: {{ include "install.serviceAccountName" . }}
+      {{- if .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml .Values.nodeSelector | nindent 8 }}
+      {{- end }}
       containers:
       - name: operator
         image: {{ required ".Values.controllerImages.cluster is required" .Values.controllerImages.cluster | quote }}

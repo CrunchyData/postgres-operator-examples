@@ -49,3 +49,6 @@ resources:
 # postgres-operator.crunchydata.com, will cause an error
 # customPodLabels:
 #  example.com: custom-label
+
+# Node labels for pod assignment
+nodeSelector: {}

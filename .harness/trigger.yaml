@@ -1,0 +1,14 @@
+inputSet:
+  name: trigger
+  identifier: trigger
+  orgIdentifier: default
+  projectIdentifier: Devops
+  pipeline:
+    identifier: postgresoperatorexamples
+    properties:
+      ci:
+        codebase:
+          build:
+            type: branch
+            spec:
+              branch: <+trigger.branch>

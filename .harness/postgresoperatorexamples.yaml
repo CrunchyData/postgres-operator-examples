@@ -1,0 +1,95 @@
+pipeline:
+  name: postgres-operator-examples
+  identifier: postgresoperatorexamples
+  projectIdentifier: Devops
+  orgIdentifier: default
+  tags: {}
+  properties:
+    ci:
+      codebase:
+        connectorRef: account.Indico
+        repoName: postgres-operator-examples
+        build: <+input>
+  stages:
+    - stage:
+        name: devops-service
+        identifier: devops_service
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          infrastructure:
+            type: KubernetesDirect
+            spec:
+              connectorRef: account.cicdharness
+              namespace: harness
+              automountServiceAccountToken: true
+              nodeSelector: {}
+              os: Linux
+          execution:
+            steps:
+              - step:
+                  type: Background
+                  name: dind
+                  identifier: dind
+                  spec:
+                    connectorRef: account.dockerhubproxy
+                    image: library/docker:dind
+                    shell: Sh
+                    privileged: true
+                    resources:
+                      limits:
+                        memory: 2G
+                        cpu: "2"
+              - step:
+                  type: Run
+                  name: push containers
+                  identifier: push_containers
+                  spec:
+                    connectorRef: account.harbor
+                    image: harbor.devops.indico.io/dockerhub-proxy/library/docker:latest
+                    shell: Sh
+                    command: |-
+                      while ! docker ps ;do
+                            echo "Docker not available yet"
+                      done
+                      echo "Docker Service Ready"
+                      docker ps
+                      apk update && apk add curl python3 py3-pip
+                      pip3 install shyaml --break-system-packages
+                      sh ./push_and_tag.sh
+                    privileged: true
+                    envVariables:
+                      GCR_CREDENTIALS: <+secrets.getValue("account.hashicorpvault://vaulttoolsdrone/devops_gcr_credentials#data")>
+                      CRUNCHY_PASSWORD: <+secrets.getValue("account.hashicorpvault://vaulttoolsdrone/crunchy_sa#password")>
+                      CRUNCHY_USERNAME: <+secrets.getValue("account.hashicorpvault://vaulttoolsdrone/crunchy_sa#username")>
+                      HARBOR_PASSWORD: <+secrets.getValue("account.hashicorpvault://vaulttoolsdrone/harbor-push-token#password")>
+                      HARBOR_USERNAME: <+secrets.getValue("account.hashicorpvault://vaulttoolsdrone/harbor-push-token#username")>
+              - step:
+                  type: Run
+                  name: push helm charts
+                  identifier: push_helm_charts
+                  spec:
+                    connectorRef: account.dockerhubproxy
+                    image: alpine/helm
+                    shell: Sh
+                    command: |-
+                      helm version
+                      helm plugin install https://github.com/chartmuseum/helm-push
+                      helm repo add --username $USERNAME --password $PASSWORD harbor https://harbor.devops.indico.io/chartrepo/indico-charts
+                      sh upload_helm_charts.sh
+                    privileged: true
+                    envVariables:
+                      HELM_EXPERIMENTAL_OCI: "1"
+                      PASSWORD: <+secrets.getValue("account.hashicorpvault://vaulttoolsdrone/harbor-push-token#password")>
+                      USERNAME: <+secrets.getValue("account.hashicorpvault://vaulttoolsdrone/harbor-push-token#username")>
+                    resources:
+                      limits:
+                        memory: 6G
+                        cpu: "1"
+          caching:
+            enabled: false
+            paths: []
+          sharedPaths:
+            - /var/run
+            - /var/lib/docker

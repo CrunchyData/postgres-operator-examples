@@ -3,8 +3,8 @@ kind: PostgresCluster
 metadata:
   name: hippo
 spec:
-  image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-16.3-1
   postgresVersion: 16
+  # image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:$POSTGRES_16_TAG
   users:
     - name: rhino
       databases:
@@ -19,7 +19,7 @@ spec:
             storage: 1Gi
   backups:
     pgbackrest:
-      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.51-1
+      # image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:$PGBACKREST_TAG
       repos:
       - name: repo1
         volume:

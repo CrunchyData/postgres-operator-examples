@@ -1,51 +1,12 @@
 {
-  "__inputs": [
-    {
-      "name": "DS_PROMETHEUS",
-      "label": "PROMETHEUS",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "prometheus",
-      "pluginName": "Prometheus"
-    }
-  ],
-  "__requires": [
-    {
-      "type": "grafana",
-      "id": "grafana",
-      "name": "Grafana",
-      "version": "7.4.5"
-    },
-    {
-      "type": "panel",
-      "id": "graph",
-      "name": "Graph",
-      "version": ""
-    },
-    {
-      "type": "datasource",
-      "id": "prometheus",
-      "name": "Prometheus",
-      "version": "1.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "stat",
-      "name": "Stat",
-      "version": ""
-    },
-    {
-      "type": "panel",
-      "id": "table",
-      "name": "Table",
-      "version": ""
-    }
-  ],
   "annotations": {
     "list": [
       {
         "builtIn": 1,
-        "datasource": "-- Grafana --",
+        "datasource": {
+          "type": "datasource",
+          "uid": "grafana"
+        },
         "enable": true,
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
@@ -55,11 +16,10 @@
     ]
   },
   "description": "",
-  "editable": false,
-  "gnetId": null,
+  "editable": true,
+  "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": null,
-  "iteration": 1625070004605,
+  "id": 119,
   "links": [
     {
       "icon": "external link",
@@ -71,10 +31,8 @@
   ],
   "panels": [
     {
-      "datasource": "PROMETHEUS",
       "fieldConfig": {
         "defaults": {
-          "custom": {},
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -101,34 +59,33 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [],
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "text": {},
-        "textMode": "value"
+        "textMode": "value",
+        "wideLayout": true
       },
-      "pluginVersion": "7.4.5",
+      "pluginVersion": "11.2.1",
       "targets": [
         {
-          "expr": "sum(sum_over_time(ccp_pg_stat_statements_total_calls_count{pg_cluster=\"[[cluster]]\", role=\"[[role]]\",dbname=~\"[[dbname]]\",exported_role=~\"[[dbuser]]\"}[$__range])) without(instance, ip, deployment,pod,dbname,exported_role)",
+          "expr": "sum(sum_over_time(ccp_pg_stat_statements_total_calls_count{pg_cluster=\"$cluster\", role=\"$role\",dbname=~\"$dbname\",exported_role=~\"$dbuser\"}[$__range])) without(instance, ip, deployment,pod,dbname,exported_role)",
           "instant": false,
           "interval": "",
           "legendFormat": "",
           "refId": "A"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "Queries Executed",
       "type": "stat"
     },
     {
-      "datasource": "PROMETHEUS",
       "fieldConfig": {
         "defaults": {
-          "custom": {},
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -155,18 +112,21 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [],
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "text": {},
-        "textMode": "value"
+        "textMode": "value",
+        "wideLayout": true
       },
-      "pluginVersion": "7.4.5",
+      "pluginVersion": "11.2.1",
       "targets": [
         {
-          "expr": "sum(sum_over_time(ccp_pg_stat_statements_total_exec_time_ms{pg_cluster=\"[[cluster]]\", role=\"[[role]]\",dbname=~\"[[dbname]]\",exported_role=~\"[[dbuser]]\"}[$__range])) without(instance, ip, deployment,pod,dbname,exported_role)",
+          "expr": "sum(sum_over_time(ccp_pg_stat_statements_total_exec_time_ms{pg_cluster=\"$cluster\", role=\"$role\",dbname=~\"$dbname\",exported_role=~\"$dbuser\"}[$__range])) without(instance, ip, deployment,pod,dbname,exported_role)",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -174,16 +134,12 @@
           "refId": "A"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "Query Runtime ",
       "type": "stat"
     },
     {
-      "datasource": "PROMETHEUS",
       "fieldConfig": {
         "defaults": {
-          "custom": {},
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -210,6 +166,7 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "mean"
@@ -217,13 +174,15 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "text": {},
-        "textMode": "value"
+        "textMode": "value",
+        "wideLayout": true
       },
-      "pluginVersion": "7.4.5",
+      "pluginVersion": "11.2.1",
       "targets": [
         {
-          "expr": "avg(sum_over_time(ccp_pg_stat_statements_total_mean_exec_time_ms{pg_cluster=\"[[cluster]]\", role=\"[[role]]\",dbname=~\"[[dbname]]\",exported_role=~\"[[dbuser]]\"}[$__range])) without(instance, ip, deployment,pod,dbname,exported_role)",
+          "expr": "avg(sum_over_time(ccp_pg_stat_statements_total_mean_exec_time_ms{pg_cluster=\"$cluster\", role=\"$role\",dbname=~\"$dbname\",exported_role=~\"$dbuser\"}[$__range])) without(instance, ip, deployment,pod,dbname,exported_role)",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -231,16 +190,12 @@
           "refId": "A"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "Query Mean Runtime",
       "type": "stat"
     },
     {
-      "datasource": "PROMETHEUS",
       "fieldConfig": {
         "defaults": {
-          "custom": {},
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -267,6 +222,7 @@
         "graphMode": "area",
         "justifyMode": "auto",
         "orientation": "auto",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "mean"
@@ -274,13 +230,15 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "text": {},
-        "textMode": "value"
+        "textMode": "value",
+        "wideLayout": true
       },
-      "pluginVersion": "7.4.5",
+      "pluginVersion": "11.2.1",
       "targets": [
         {
-          "expr": "sum(sum_over_time(ccp_pg_stat_statements_total_row_count{pg_cluster=\"[[cluster]]\", role=\"[[role]]\",dbname=~\"[[dbname]]\",exported_role=~\"[[dbuser]]\"}[$__range])) without(instance, ip, deployment, pod,dbname,exported_role)",
+          "expr": "sum(sum_over_time(ccp_pg_stat_statements_total_row_count{pg_cluster=\"$cluster\", role=\"$role\",dbname=~\"$dbname\",exported_role=~\"$dbuser\"}[$__range])) without(instance, ip, deployment, pod,dbname,exported_role)",
           "format": "time_series",
           "instant": false,
           "interval": "",
@@ -288,118 +246,108 @@
           "refId": "A"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "Rows Retrieved or Affected",
       "type": "stat"
     },
     {
-      "aliasColors": {},
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "PROMETHEUS",
       "fieldConfig": {
         "defaults": {
-          "custom": {}
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
         },
         "overrides": []
       },
-      "fill": 1,
-      "fillGradient": 0,
       "gridPos": {
         "h": 7,
         "w": 23,
         "x": 0,
         "y": 3
       },
-      "hiddenSeries": false,
       "id": 2,
-      "legend": {
-        "alignAsTable": true,
-        "avg": false,
-        "current": false,
-        "max": false,
-        "min": false,
-        "rightSide": true,
-        "show": true,
-        "sideWidth": null,
-        "total": false,
-        "values": false
-      },
-      "lines": true,
-      "linewidth": 1,
-      "nullPointMode": "null",
       "options": {
-        "alertThreshold": true
+        "legend": {
+          "calcs": [],
+          "displayMode": "table",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
       },
-      "percentage": false,
       "pluginVersion": "7.4.5",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(irate(ccp_pg_stat_statements_total_calls_count{pg_cluster=\"[[cluster]]\", role=\"[[role]]\",dbname=~\"[[dbname]]\",exported_role=~\"[[dbuser]]\"}[$__range])) without(instance, ip, deployment, pod)",
+          "expr": "sum(irate(ccp_pg_stat_statements_total_calls_count{pg_cluster=\"$cluster\", role=\"$role\",dbname=~\"$dbname\",exported_role=~\"$dbuser\"}[$__range])) without(instance, ip, deployment, pod)",
           "instant": false,
           "interval": "",
           "legendFormat": "db: {{dbname}}, user: {{exported_role}}",
           "refId": "A"
         }
       ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
       "title": "Query Executions",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
+      "type": "timeseries"
     },
     {
-      "datasource": "PROMETHEUS",
       "fieldConfig": {
         "defaults": {
           "custom": {
-            "align": null,
-            "displayMode": "auto",
-            "filterable": false
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": false,
+            "inspect": false
           },
           "mappings": [],
           "thresholds": {
@@ -428,8 +376,11 @@
                 "value": "ms"
               },
               {
-                "id": "custom.displayMode",
-                "value": "color-background"
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "color-background"
+                }
               },
               {
                 "id": "thresholds",
@@ -511,6 +462,15 @@
       },
       "id": 4,
       "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
         "showHeader": true,
         "sortBy": [
           {
@@ -519,10 +479,10 @@
           }
         ]
       },
-      "pluginVersion": "7.4.5",
+      "pluginVersion": "11.2.1",
       "targets": [
         {
-          "expr": "avg(avg_over_time(ccp_pg_stat_statements_top_mean_exec_time_ms{pg_cluster=\"[[cluster]]\", role=\"[[role]]\",dbname=~\"[[dbname]]\",exported_role=~\"[[dbuser]]\"}[$__range])) without(instance, ip, deployment,pod)",
+          "expr": "avg(avg_over_time(ccp_pg_stat_statements_top_mean_exec_time_ms{pg_cluster=\"$cluster\", role=\"$role\",dbname=~\"$dbname\",exported_role=~\"$dbuser\"}[$__range])) without(instance, ip, deployment,pod)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -531,8 +491,6 @@
           "refId": "B"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "Query Mean Runtime (Top N)",
       "transformations": [
         {
@@ -569,13 +527,15 @@
       "type": "table"
     },
     {
-      "datasource": "PROMETHEUS",
       "fieldConfig": {
         "defaults": {
           "custom": {
-            "align": null,
-            "displayMode": "auto",
-            "filterable": false
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": false,
+            "inspect": false
           },
           "mappings": [],
           "thresholds": {
@@ -604,8 +564,11 @@
                 "value": "ms"
               },
               {
-                "id": "custom.displayMode",
-                "value": "color-background"
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "color-background"
+                }
               },
               {
                 "id": "thresholds",
@@ -687,6 +650,15 @@
       },
       "id": 6,
       "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
         "showHeader": true,
         "sortBy": [
           {
@@ -695,10 +667,10 @@
           }
         ]
       },
-      "pluginVersion": "7.4.5",
+      "pluginVersion": "11.2.1",
       "targets": [
         {
-          "expr": "max(max_over_time(ccp_pg_stat_statements_top_max_exec_time_ms{pg_cluster=\"[[cluster]]\", role=\"[[role]]\",dbname=~\"[[dbname]]\",exported_role=~\"[[dbuser]]\"}[$__range])) without(instance, ip, deployment,pod)",
+          "expr": "max(max_over_time(ccp_pg_stat_statements_top_max_exec_time_ms{pg_cluster=\"$cluster\", role=\"$role\",dbname=~\"$dbname\",exported_role=~\"$dbuser\"}[$__range])) without(instance, ip, deployment,pod)",
           "format": "table",
           "hide": false,
           "instant": true,
@@ -707,8 +679,6 @@
           "refId": "B"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "Query Max Runtime (Top N)",
       "transformations": [
         {
@@ -745,12 +715,15 @@
       "type": "table"
     },
     {
-      "datasource": "PROMETHEUS",
       "fieldConfig": {
         "defaults": {
           "custom": {
-            "align": null,
-            "filterable": false
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": false,
+            "inspect": false
           },
           "mappings": [],
           "thresholds": {
@@ -779,8 +752,11 @@
                 "value": "ms"
               },
               {
-                "id": "custom.displayMode",
-                "value": "color-background"
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "color-background"
+                }
               },
               {
                 "id": "thresholds",
@@ -862,6 +838,15 @@
       },
       "id": 5,
       "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
         "showHeader": true,
         "sortBy": [
           {
@@ -870,10 +855,10 @@
           }
         ]
       },
-      "pluginVersion": "7.4.5",
+      "pluginVersion": "11.2.1",
       "targets": [
         {
-          "expr": "sum(irate(ccp_pg_stat_statements_top_total_exec_time_ms{pg_cluster=\"[[cluster]]\", role=\"[[role]]\",dbname=~\"[[dbname]]\",exported_role=~\"[[dbuser]]\"}[$__range])) without(instance, ip, deployment,pod)",
+          "expr": "sum(irate(ccp_pg_stat_statements_top_total_exec_time_ms{pg_cluster=\"$cluster\", role=\"$role\",dbname=~\"$dbname\",exported_role=~\"$dbuser\"}[$__range])) without(instance, ip, deployment,pod)",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -881,8 +866,6 @@
           "refId": "A"
         }
       ],
-      "timeFrom": null,
-      "timeShift": null,
       "title": "Query Total Runtime (Top N)",
       "transformations": [
         {
@@ -919,11 +902,13 @@
       "type": "table"
     },
     {
-      "datasource": "PROMETHEUS",
       "fieldConfig": {
         "defaults": {
           "custom": {
-            "displayMode": "auto",
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            },
             "filterable": false,
             "inspect": false
           },
@@ -954,8 +939,10 @@
                 "value": "bytes"
               },
               {
-                "id": "custom.displayMode",
-                "value": "auto"
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "auto"
+                }
               }
             ]
           }
@@ -969,7 +956,9 @@
       },
       "id": 12,
       "options": {
+        "cellHeight": "sm",
         "footer": {
+          "countRows": false,
           "fields": "",
           "reducer": [
             "sum"
@@ -984,11 +973,10 @@
           }
         ]
       },
-      "pluginVersion": "8.5.15",
+      "pluginVersion": "11.2.1",
       "targets": [
         {
-          "datasource": "PROMETHEUS",
-          "expr": "ccp_pg_stat_statements_top_wal_bytes{pg_cluster=\"[[cluster]]\", dbname=~\"[[dbname]]\", role=\"[[role]]\"}",
+          "expr": "ccp_pg_stat_statements_top_wal_bytes{pg_cluster=\"$cluster\", dbname=~\"$dbname\", role=\"$role\"}",
           "format": "table",
           "instant": true,
           "interval": "",
@@ -1030,20 +1018,18 @@
     }
   ],
   "refresh": "15m",
-  "schemaVersion": 27,
-  "style": "dark",
+  "schemaVersion": 39,
   "tags": [
     "vendor=crunchydata"
   ],
   "templating": {
     "list": [
       {
-        "allValue": null,
-        "current": {},
-        "datasource": "PROMETHEUS",
-        "definition": "label_values(pg_cluster)",
-        "description": null,
-        "error": null,
+        "datasource": {
+          "type": "prometheus",
+          "uid": "prometheus"
+        },
+        "definition": "label_values(pg_static,pg_cluster)",
         "hide": 0,
         "includeAll": false,
         "label": "cluster",
@@ -1051,26 +1037,27 @@
         "name": "cluster",
         "options": [],
         "query": {
-          "query": "label_values(pg_cluster)",
-          "refId": "StandardVariableQuery"
+          "qryType": 1,
+          "query": "label_values(pg_static,pg_cluster)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 1,
         "regex": "",
         "skipUrlSync": false,
-        "sort": 1,
-        "tagValuesQuery": "",
-        "tags": [],
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
+        "sort": 0,
+        "type": "query"
       },
       {
-        "allValue": null,
-        "current": {},
-        "datasource": "PROMETHEUS",
-        "definition": "label_values({pg_cluster=\"[[cluster]]\"},role)",
-        "description": null,
-        "error": null,
+        "current": {
+          "selected": false,
+          "text": "master",
+          "value": "master"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "prometheus"
+        },
+        "definition": "label_values(ccp_pg_stat_statements_total_calls_count{pg_cluster=\"$cluster\"},role)",
         "hide": 0,
         "includeAll": false,
         "label": "service",
@@ -1078,72 +1065,71 @@
         "name": "role",
         "options": [],
         "query": {
-          "query": "label_values({pg_cluster=\"[[cluster]]\"},role)",
-          "refId": "StandardVariableQuery"
+          "qryType": 1,
+          "query": "label_values(ccp_pg_stat_statements_total_calls_count{pg_cluster=\"$cluster\"},role)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
-        "sort": 1,
-        "tagValuesQuery": "",
-        "tags": [],
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
+        "sort": 0,
+        "type": "query"
       },
       {
-        "allValue": null,
-        "current": {},
-        "datasource": "PROMETHEUS",
-        "definition": "label_values(ccp_database_size_bytes{pg_cluster=\"[[cluster]]\"},dbname)",
-        "description": null,
-        "error": null,
+        "current": {
+          "selected": false,
+          "text": "postgres",
+          "value": "postgres"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "prometheus"
+        },
+        "definition": "label_values(ccp_pg_stat_statements_total_calls_count{pg_cluster=\"$cluster\", role=\"$role\"},dbname)",
         "hide": 0,
-        "includeAll": true,
+        "includeAll": false,
         "label": "dbname",
         "multi": false,
         "name": "dbname",
         "options": [],
         "query": {
-          "query": "label_values(ccp_database_size_bytes{pg_cluster=\"[[cluster]]\"},dbname)",
-          "refId": "StandardVariableQuery"
+          "qryType": 1,
+          "query": "label_values(ccp_pg_stat_statements_total_calls_count{pg_cluster=\"$cluster\", role=\"$role\"},dbname)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
-        "refresh": 1,
+        "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
         "sort": 0,
-        "tagValuesQuery": "",
-        "tags": [],
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
+        "type": "query"
       },
       {
-        "allValue": null,
-        "current": {},
-        "datasource": "PROMETHEUS",
-        "definition": "label_values(ccp_pg_stat_statements_total_calls_count{pg_cluster=\"[[cluster]]\", dbname=~\"[[dbname]]\"},exported_role)",
-        "description": null,
-        "error": null,
+        "current": {
+          "selected": false,
+          "text": "ccp_monitoring",
+          "value": "ccp_monitoring"
+        },
+        "datasource": {
+          "type": "prometheus",
+          "uid": "prometheus"
+        },
+        "definition": "label_values(ccp_pg_stat_statements_total_calls_count{role=\"$role\", pg_cluster=\"$cluster\", dbname=\"$dbname\"},exported_role)",
         "hide": 0,
-        "includeAll": true,
+        "includeAll": false,
         "label": "dbuser",
         "multi": false,
         "name": "dbuser",
         "options": [],
         "query": {
-          "query": "label_values(ccp_pg_stat_statements_total_calls_count{pg_cluster=\"[[cluster]]\", dbname=~\"[[dbname]]\"},exported_role)",
-          "refId": "StandardVariableQuery"
+          "qryType": 1,
+          "query": "label_values(ccp_pg_stat_statements_total_calls_count{role=\"$role\", pg_cluster=\"$cluster\", dbname=\"$dbname\"},exported_role)",
+          "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
-        "refresh": 1,
+        "refresh": 2,
         "regex": "",
         "skipUrlSync": false,
         "sort": 0,
-        "tagValuesQuery": "",
-        "tags": [],
-        "tagsQuery": "",
-        "type": "query",
-        "useTags": false
+        "type": "query"
       }
     ]
   },
@@ -1167,5 +1153,6 @@
   "timezone": "browser",
   "title": "Query Statistics",
   "uid": "ZKoTOHDGk",
-  "version": 1
+  "version": 3,
+  "weekStart": ""
 }

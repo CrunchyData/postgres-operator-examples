@@ -7,7 +7,7 @@ metadata:
     {{- include "install.labels" . | nindent 4 }}
     {{- include "install.clusterLabels" . | nindent 4 }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicas }}
   strategy: { type: Recreate }
   selector:
     matchLabels:
@@ -24,6 +24,12 @@ spec:
       - name: operator
         image: {{ required ".Values.controllerImages.cluster is required" .Values.controllerImages.cluster | quote }}
         env:
+          - name: PGO_INSTALLER
+            value: helm
+          - name: PGO_INSTALLER_ORIGIN
+            value: examples-repo
+          - name: PGO_CONTROLLER_LEASE_NAME
+            value: {{ .Values.pgoControllerLeaseName }}
         {{- if .Values.envOverride }}
         {{- toYaml .Values.envOverride | nindent 10 }}
         {{- else -}}
@@ -43,3 +49,15 @@ spec:
           capabilities: { drop: [ALL] }
           readOnlyRootFilesystem: true
           runAsNonRoot: true
+        livenessProbe:
+          httpGet:
+            path: /readyz
+            port: 8081
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 8081
+          initialDelaySeconds: 5
+          periodSeconds: 10

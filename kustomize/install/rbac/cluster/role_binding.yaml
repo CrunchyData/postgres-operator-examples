@@ -8,5 +8,5 @@ roleRef:
   kind: ClusterRole
   name: postgres-operator
 subjects:
-  - kind: ServiceAccount
-    name: pgo
+- kind: ServiceAccount
+  name: pgo

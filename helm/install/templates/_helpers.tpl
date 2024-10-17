@@ -131,4 +131,3 @@ imagePullSecrets:
 {{- end }}
 {{- end }}{{/* define */}}
 
-

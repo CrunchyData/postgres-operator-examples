@@ -13,6 +13,12 @@ spec:
       - name: operator
         image: postgres-operator
         env:
+        - name: PGO_INSTALLER
+          value: kustomize
+        - name: PGO_INSTALLER_ORIGIN
+          value: examples-repo
+        - name: PGO_CONTROLLER_LEASE_NAME
+          value: cpk-leader-election-lease
         - name: PGO_NAMESPACE
           valueFrom: { fieldRef: { fieldPath: metadata.namespace } }
         - name: CRUNCHY_DEBUG
@@ -27,6 +33,10 @@ spec:
           value: image-crunchy-postgres-16-gis-3.3
         - name: RELATED_IMAGE_POSTGRES_16_GIS_3.4
           value: image-crunchy-postgres-16-gis-3.4
+        - name: RELATED_IMAGE_POSTGRES_17
+          value: image-crunchy-postgres-17
+        - name: RELATED_IMAGE_POSTGRES_17_GIS_3.4
+          value: image-crunchy-postgres-17-gis-3.4
         - name: RELATED_IMAGE_PGADMIN
           value: image-pgadmin-v4
         - name: RELATED_IMAGE_PGBACKREST
@@ -46,3 +56,15 @@ spec:
           capabilities: { drop: [ALL] }
           readOnlyRootFilesystem: true
           runAsNonRoot: true
+        livenessProbe:
+          httpGet:
+            path: /readyz
+            port: 8081
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 8081
+          initialDelaySeconds: 5
+          periodSeconds: 10

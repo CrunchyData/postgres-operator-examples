@@ -198,7 +198,7 @@ postgresVersion: 16
 #   # keySecret is the S3 key secret. This is stored in a Secret.
 #   keySecret: ""
 #   # keyType can be configured to enable IAM integration via AssumeRole
-#   # For more info, see the documentation at https://access.crunchydata.com/documentation/postgres-operator/v5/tutorial/backups/#using-an-aws-integrated-identity-provider-and-role
+#   # For more info, see the documentation at https://access.crunchydata.com/documentation/postgres-operator/latest/tutorials/backups-disaster-recovery/backups#using-an-aws-integrated-identity-provider-and-role
 #   keyType: ""
 #   # encryptionPassphrase is an optional parameter to enable encrypted backups
 #   # with pgBackRest. This is encrypted by pgBackRest and does not use S3's

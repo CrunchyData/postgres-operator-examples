@@ -1,0 +1,9 @@
+{{- if .Values.databaseInitSQL.name }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+    name: {{ .Values.databaseInitSQL.name }}
+data:
+    {{ .Values.databaseInitSQL.key }}: |
+        {{- include "init_sql" . | indent 8 }}
+{{- end }}

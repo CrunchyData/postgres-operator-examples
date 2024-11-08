@@ -10,6 +10,7 @@ rules:
   - configmaps
   - persistentvolumeclaims
   - secrets
+  - serviceaccounts
   - services
   verbs:
   - create
@@ -55,16 +56,6 @@ rules:
   - patch
   - watch
 - apiGroups:
-  - ''
-  resources:
-  - serviceaccounts
-  verbs:
-  - create
-  - get
-  - list
-  - patch
-  - watch
-- apiGroups:
   - apps
   resources:
   - deployments
@@ -87,6 +78,15 @@ rules:
   - get
   - list
   - patch
+  - watch
+- apiGroups:
+  - coordination.k8s.io
+  resources:
+  - leases
+  verbs:
+  - create
+  - get
+  - update
   - watch
 - apiGroups:
   - policy
@@ -158,6 +158,18 @@ rules:
   - roles
   verbs:
   - create
+  - delete
+  - get
+  - list
+  - patch
+  - watch
+- apiGroups:
+  - snapshot.storage.k8s.io
+  resources:
+  - volumesnapshots
+  verbs:
+  - create
+  - delete
   - get
   - list
   - patch

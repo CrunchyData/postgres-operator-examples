@@ -12,6 +12,6 @@ do
     CHART=$(grep ^name ./$filename/Chart.yaml | awk '{print $2}' | tr -d '\n')
     helm dependency build ./$filename
     helm package $filename --version $VERSION
-    helm cm-push $CHART-$VERSION.tgz harbor
+    helm cm-push $CHART-$VERSION.tgz harbor --force
   fi 
 done

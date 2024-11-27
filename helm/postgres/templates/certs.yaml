@@ -1,0 +1,70 @@
+{{- if .Values.certmanager }}
+{{- $prefix := (include "certmanager.prefix" .) -}}
+{{ $organisation := printf "%s-org" $prefix -}}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ $prefix -}}-certmanager
+spec:
+  # Secret names are always required.
+  secretName: "{{- $prefix -}}-tls"
+  duration: 2160h # 90d
+  renewBefore: 360h # 15d
+  subject:
+    organizations:
+    - "{{ .Values.certmanager.org | default $organisation -}}"
+  # The use of the common name field has been deprecated since 2000 and is
+  # discouraged from being used.
+  commonName: {{ $prefix }}-primary
+  isCA: false
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  usages:
+    - digital signature
+    - key encipherment
+  # At least one of a DNS Name, URI, or IP address is required.
+  dnsNames:
+  - {{ $prefix }}-primary
+  - {{ $prefix }}-primary.postgres-operator
+  - {{ $prefix }}-primary.postgres-operator.svc
+  - {{ $prefix }}-primary.postgres-operator.svc.cluster.local
+  issuerRef:
+    name: {{ required ".certmanager.issuerName reqired" .Values.certmanager.issuerName }}
+    {{ if .Values.certmanager.issuerKind -}} kind: {{ .Values.certmanager.issuerKind }}
+    {{ end -}}
+    {{ if .Values.certmanager.issuerGroup -}} group: {{ .Values.certmanager.issuerGroup }}
+    {{- end }}
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ $prefix }}-repl-certmanager
+spec:
+  # Secret names are always required.
+  secretName: {{ $prefix }}-repl-tls
+  duration: 2160h # 90d
+  renewBefore: 360h # 15d
+  subject:
+    organizations:
+    - "{{ .Values.certmanager.org | default $organisation -}}"
+  # The use of the common name field has been deprecated since 2000 and is
+  # discouraged from being used.
+  commonName: _crunchyrepl
+  isCA: false
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  usages:
+    - digital signature
+    - key encipherment
+  # At least one of a DNS Name, URI, or IP address is required.
+  dnsNames:
+  - _crunchyrepl
+  issuerRef:
+    name: {{ required ".certmanager.issuerName reqired" .Values.certmanager.issuerName }}
+    {{ if .Values.certmanager.issuerKind -}} kind: {{ .Values.certmanager.issuerKind }}
+    {{ end -}}
+    {{ if .Values.certmanager.issuerGroup -}} group: {{ .Values.certmanager.issuerGroup }}
+    {{- end }}
+{{- end }}

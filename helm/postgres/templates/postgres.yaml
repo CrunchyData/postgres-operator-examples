@@ -3,7 +3,7 @@ kind: PostgresCluster
 metadata:
   name: {{ default .Release.Name .Values.name }}
   annotations:
-    postgres-operator.crunchydata.com/autoCreateUserSchema: true
+    postgres-operator.crunchydata.com/autoCreateUserSchema: "true"
 spec:
   postgresVersion: {{ required "You must set the version of Postgres to deploy." .Values.postgresVersion }}
   {{- if .Values.postGISVersion }}

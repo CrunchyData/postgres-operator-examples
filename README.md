@@ -27,3 +27,25 @@ For information regarding the software versions of the components included and K
 The examples provided in this project repository are available subject to the [Apache 2.0](https://github.com/CrunchyData/postgres-operator-examples/blob/-/LICENSE.md) license with the PGO logo and branding assets covered by our [trademark guidelines](https://github.com/CrunchyData/postgres-operator/blob/-/docs/static/logos/TRADEMARKS.md).
 
 The examples as provided in this repo are designed for the use of PGO along with Crunchy Data's Postgres distribution, Crunchy Postgres, as Crunchy Postgres for Kubernetes. The unmodified use of these examples will result in downloading container images from Crunchy Data repositories - specifically the Crunchy Data Developer Portal. The use of container images downloaded from the Crunchy Data Developer Portal are subject to the [Crunchy Data Developer Program terms](https://www.crunchydata.com/developers/terms-of-use).
+
+
+$RHINO_USER_PASSWORD='wq/etO{sk9ulgIqBGz/29.lD'
+
+kubectl create secret generic pgadmin-password-secret -n postgres-operator --from-literal=rhino-password=wq/etO{sk9ulgIqBGz/29.lD
+
+
+kubectl get crd --selector postgres-operator.crunchydata.com/control-plane=postgres-operator
+
+NAME                                                 CREATED AT
+pgadmins.postgres-operator.crunchydata.com           ...
+
+
+PG_CLUSTER_USER_SECRET_NAME=hippo-pguser-rhino
+
+PGPASSWORD=$(kubectl get secrets -n postgres-operator "${PG_CLUSTER_USER_SECRET_NAME}" -o go-template='{{.data.password | base64decode}}') \ e=)
+PGUSER=$(kubectl get secrets -n postgres-operator "${PG_CLUSTER_USER_SECRET_NAME}" -o go-template='{{.data.user | base64decode}}') \ rhino
+PGDATABASE=$(kubectl get secrets -n postgres-operator "${PG_CLUSTER_USER_SECRET_NAME}" -o go-template='{{.data.dbname | base64decode}}') \
+psql -h localhost
+
+kubectl create secret generic pgadmin-password-secret -n postgres-operator --from-literal=rhino-password='e=)w@qst83|l7X}
+

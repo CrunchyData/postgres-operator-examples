@@ -4,7 +4,7 @@ metadata:
   name: rhino
 spec:
   users:
-    - username: rhino@example.com
+    - username: rhino@prostarsentertainment.com
       role: Administrator
       passwordRef:
         name: pgadmin-password-secret
@@ -14,7 +14,7 @@ spec:
     - "ReadWriteOnce"
     resources:
       requests:
-        storage: 1Gi
+        storage: 2Gi
   serverGroups:
     - name: supply
       # An empty selector selects all postgresclusters in the Namespace

@@ -22,15 +22,15 @@ spec:
         - name: DB_VENDOR
           value: "postgres"
         - name: DB_ADDR
-          valueFrom: { secretKeyRef: { name: keycloakdb-pguser-keycloakdb, key: host } }
+          valueFrom: { secretKeyRef: { name: hippo-pguser-rhino, key: pgbouncer-host } }
         - name: DB_PORT
-          valueFrom: { secretKeyRef: { name: keycloakdb-pguser-keycloakdb, key: port } }
+          valueFrom: { secretKeyRef: { name: hippo-pguser-rhino, key: pgbouncer-port } }
         - name: DB_DATABASE
-          valueFrom: { secretKeyRef: { name: keycloakdb-pguser-keycloakdb, key: dbname } }
+          valueFrom: { secretKeyRef: { name: hippo-pguser-rhino, key: dbname } }
         - name: DB_USER
-          valueFrom: { secretKeyRef: { name: keycloakdb-pguser-keycloakdb, key: user } }
+          valueFrom: { secretKeyRef: { name: hippo-pguser-rhino, key: user } }
         - name: DB_PASSWORD
-          valueFrom: { secretKeyRef: { name: keycloakdb-pguser-keycloakdb, key: password } }
+          valueFrom: { secretKeyRef: { name: hippo-pguser-rhino, key: password } }
         - name: KEYCLOAK_ADMIN
           value: "admin"
         - name: KEYCLOAK_ADMIN_PASSWORD
@@ -47,3 +47,5 @@ spec:
             path: /realms/master
             port: 8080
       restartPolicy: Always
+
+      Solution:

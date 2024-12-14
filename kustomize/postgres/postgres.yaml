@@ -4,22 +4,80 @@ metadata:
   name: hippo
 spec:
   postgresVersion: 16
+  customReplicationTLSSecret:
+    name: hippo-repl-tls
+  customTLSSecret:
+    name: hippo-tls
   users:
     - name: rhino
       databases:
         - zoo
+      options: 'SUPERUSER'
+    - name: llama
+      databases:
+        - zoo
+  patroni:
+    dynamicConfiguration:
+      failsafe_mode: true
+      synchronous_mode: true
+      postgresql:
+        parameters:
+          synchronous_commit: 'on'
+          max_parallel_workers: 2
+          max_worker_processes: 2
+          shared_buffers: 1GB
+          work_mem: 2MB
+        pg_hba:
+          - "hostssl all all all scram-sha-256"
   instances:
     - name: instance1
+      replicas: 3
       dataVolumeClaimSpec:
         accessModes:
         - "ReadWriteOnce"
         resources:
           requests:
-            storage: 1Gi
+            storage: 10Gi
+      walVolumeClaimSpec:
+        accessModes:
+        - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: 10Gi
+          limits:
+            storage: 25Gi
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              topologyKey: kubernetes.io/hostname
+              labelSelector:
+                matchLabels:
+                  postgres-operator.crunchydata.com/cluster: hippo
+                  postgres-operator.crunchydata.com/instance-set: instance1
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: kubernetes.io/hostname
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              postgres-operator.crunchydata.com/instance-set: instance
   backups:
     pgbackrest:
+      repoHost:
+        topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: topology.csi.vmware.com/k8s-zone
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              postgres-operator.crunchydata.com/pgbackrest: ""
       repos:
       - name: repo1
+        schedules:
+          full: "0 1 * * 0"
+          differential: "0 1 * * 1-6"
         volume:
           volumeClaimSpec:
             accessModes:
@@ -27,3 +85,47 @@ spec:
             resources:
               requests:
                 storage: 1Gi
+              limits:
+                storage: 25Gi
+      global:
+        repo1-retention-full: "14"
+        repo1-retention-full-type: time
+      # manual:
+      #   repoName: repo1
+      #   options:
+      #    - --type=full
+      # This does not trigger the one-off backup -- you have to do that by adding the postgres-operator.crunchydata.com/pgbackrest-backup annotation to your custom resource. The best way to set this annotation is with a timestamp, so you know when you initialized the backup.
+      # For example, for our hippo cluster, we can run the following command to trigger the one-off backup:
+      # kubectl annotate -n postgres-operator postgrescluster hippo postgres-operator.crunchydata.com/pgbackrest-backup="$(date)"
+      # PGO will detect this annotation and create a new, one-off backup Job!
+      # If you intend to take one-off backups with similar settings in the future, you can leave those in the spec; just update the annotation to a different value the next time you are taking a backup.
+      # To re-run the command above, you will need to add the --overwrite flag so the annotation's value can be updated, i.e.
+      # kubectl annotate -n postgres-operator postgrescluster hippo --overwrite postgres-operator.crunchydata.com/pgbackrest-backup="$(date)"
+
+  proxy:
+    pgBouncer:
+      # customTLSSecret:
+      #     name: hippo-tls
+      # config:
+      #   databases:
+      #     '*': host=hippo-primary port=5432 #change this port if you're not using default 
+      #   global:
+      #     pool_mode: transaction
+      #     query_wait_timeout: "240" 
+      #     default_pool_size: "100"
+      #     max_client_conn: "1000" #change depending on your app requirement
+      #     # server_tls_sslmode: verify-ca 
+      replicas: 3
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 1
+            podAffinityTerm:
+              topologyKey: topology.csi.vmware.com/k8s-zone
+              labelSelector:
+                matchLabels:
+                  postgres-operator.crunchydata.com/cluster: hippo
+                  postgres-operator.crunchydata.com/role: pgbouncer
+  monitoring:
+    pgmonitor:
+      exporter: {}

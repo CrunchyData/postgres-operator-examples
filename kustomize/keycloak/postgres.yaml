@@ -3,6 +3,8 @@ kind: PostgresCluster
 metadata:
   name: keycloakdb
 spec:
+  proxy:
+    pgBouncer: {}
   postgresVersion: 16
   instances:
     - replicas: 2

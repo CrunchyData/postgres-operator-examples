@@ -7,7 +7,7 @@ labels:
   includeTemplates: true
   pairs:
     app.kubernetes.io/name: pgo
-    app.kubernetes.io/version: 5.7.0
+    app.kubernetes.io/version: 5.7.1
 - includeSelectors: true
   includeTemplates: true
   pairs:
@@ -20,3 +20,18 @@ resources:
 
 components:
 - ../components/images-by-tag
+
+patches:
+- patch: |-
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: pgo
+    spec:
+      template:
+        spec:
+          containers:
+          - name: operator
+            env:
+            - name: PGO_FEATURE_GATES
+              value: "AutoGrowVolumes=true"

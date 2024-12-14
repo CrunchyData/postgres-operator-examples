@@ -9,7 +9,7 @@ resources:
 secretGenerator:
 - name: pgadmin-password-secret
   literals:
-  - rhino-password=pgadmin
+  - rhino-password="x|9[iMoBy8[^<FWyQ]*|tUH,"
   type: Opaque
 
 generatorOptions:

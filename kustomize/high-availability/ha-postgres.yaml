@@ -5,14 +5,16 @@ metadata:
 spec:
   postgresVersion: 16
   instances:
-    - name: pgha1
-      replicas: 2
+    - name: instance1
+      replicas: 3
       dataVolumeClaimSpec:
         accessModes:
         - "ReadWriteOnce"
         resources:
           requests:
             storage: 1Gi
+          limits:
+            storage: 25Gi
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -22,7 +24,7 @@ spec:
               labelSelector:
                 matchLabels:
                   postgres-operator.crunchydata.com/cluster: hippo-ha
-                  postgres-operator.crunchydata.com/instance-set: pgha1
+                  postgres-operator.crunchydata.com/instance-set: instance1
   backups:
     pgbackrest:
       repos:
@@ -36,7 +38,7 @@ spec:
                 storage: 1Gi
   proxy:
     pgBouncer:
-      replicas: 2
+      replicas: 3
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:

@@ -15,13 +15,13 @@
 # available as one of the "RELATED_IMAGE_POSTGRES_..." images as part of the PGO
 # installation if you want to deploy the image without setting the "postgres"
 # image variable. This value is required.
-postgresVersion: 16
+postgresVersion: 17
 
 # postGISVersion if set and coupled with a PostGIS enabled container, enables
 # PostGIS. This version number needs to be available as one of the
 # "RELATED_IMAGE_POSTGRES_..." images as part of the PGO installation if you
 # want to deploy the image without setting the "postgres" image variable.
-# postGISVersion: 3.1
+# postGISVersion: 3.4
 
 # NOTE: pgBackRest is enabled by default. It must be set in
 # "RELATED_IMAGE_PGBACKREST" on the PGO deployment, otherwise you will need to
@@ -47,19 +47,19 @@ postgresVersion: 16
 # below value. "postgresVersion" needs to match the version of Postgres that is
 # used here. If using the GIS-enabled Postgres image, you need to ensure
 # "postGISVersion" matches the version of PostGIS used.
-# imagePostgres: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-16.3-1
+# imagePostgres: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-17.2-1
 
 # imagePgBackRest is the pgBackRest backup utility image. This defaults to the
 # below value.
-# imagePgBackRest: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.51-1
+# imagePgBackRest: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.54-0
 
 # imagePgBouncer is the image for the PgBouncer connection pooler. This defaults
 # to the below value.
-# imagePgBouncer: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.22-1
+# imagePgBouncer: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.23-2
 
 # imageExporter is the image name for the exporter used as a part of monitoring.
 # This defaults to the value below.
-# imageExporter: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-0.15.0-7
+# imageExporter: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-0.15.0-14
 
 ###########################
 # Basic Postgres Settings #

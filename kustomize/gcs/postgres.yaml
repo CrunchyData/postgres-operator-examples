@@ -3,7 +3,7 @@ kind: PostgresCluster
 metadata:
   name: hippo-gcs
 spec:
-  postgresVersion: 16
+  postgresVersion: 17
   instances:
     - dataVolumeClaimSpec:
         accessModes:

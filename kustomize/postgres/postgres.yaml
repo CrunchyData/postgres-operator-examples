@@ -3,7 +3,7 @@ kind: PostgresCluster
 metadata:
   name: hippo
 spec:
-  postgresVersion: 16
+  postgresVersion: 17
   users:
     - name: rhino
       databases:

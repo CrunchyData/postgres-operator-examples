@@ -1,1 +1,1 @@
-apolo-cli==24.7.1
+apolo-cli==24.12.3

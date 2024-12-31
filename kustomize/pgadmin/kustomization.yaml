@@ -6,3 +6,11 @@ namespace: postgres-operator
 resources:
 - pgadmin.yaml
 
+secretGenerator:
+- name: pgadmin-password-secret
+  literals:
+  - rhino-password=pgadmin
+  type: Opaque
+
+generatorOptions:
+  disableNameSuffixHash: true

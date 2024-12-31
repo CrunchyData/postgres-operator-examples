@@ -42,3 +42,10 @@ spec:
             resources:
               requests:
                 storage: 20Gi
+  patroni:
+    dynamicConfiguration:
+      postgresql:
+        pg_hba:
+          - host cn-mattermost cn-mattermost 10.1.77.105/32 md5
+          - local all all peer
+          - host all all 0.0.0.0/0 md5

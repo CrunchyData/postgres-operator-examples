@@ -2,8 +2,13 @@ apiVersion: postgres-operator.crunchydata.com/v1beta1
 kind: PGAdmin
 metadata:
   name: rhino
-  namespace: postgres-operator
 spec:
+  users:
+    - username: rhino@example.com
+      role: Administrator
+      passwordRef:
+        name: pgadmin-password-secret
+        key: rhino-password
   dataVolumeClaimSpec:
     accessModes:
     - "ReadWriteOnce"
@@ -16,20 +21,22 @@ spec:
       postgresClusterSelector: {}
   config:
     settings:
-      AUTHENTICATION_SOURCES: ['oauth2', 'internal']
-      OAUTH2_CONFIG:
-        - OAUTH2_NAME: "google"
-          OAUTH2_DISPLAY_NAME: "Google"
-          OAUTH2_CLIENT_ID: "XXXXXXX"
-          OAUTH2_CLIENT_SECRET: "XXXXXXX"
-          OAUTH2_TOKEN_URL: "https://oauth2.googleapis.com/token"
-          OAUTH2_AUTHORIZATION_URL: "https://accounts.google.com/o/oauth2/auth"
-          OAUTH2_API_BASE_URL: "https://openidconnect.googleapis.com/v1/"
-          OAUTH2_SERVER_METADATA_URL: "https://accounts.google.com/.well-known/openid-configuration"
-          OAUTH2_SCOPE: "openid email profile"
-          OAUTH2_USERINFO_ENDPOINT: "userinfo"
-          OAUTH2_SSL_CERT_VERIFICATION: "False" # for testing purposes
-          OAUTH2_BUTTON_COLOR: "red"   
-      OAUTH2_AUTO_CREATE_USER : "True"
-      DEBUG: "True" # for testing purposes
-      SERVER_MODE: "True"
+      AUTHENTICATION_SOURCES: ['internal']
+      # Uncomment DEBUG to enable debug logging in pgAdmin
+      # DEBUG: "True"
+      # Configure OAUTH by setting the following *AND* adding
+      # `oauth` to AUTHENTICATION_SOURCES
+      #OAUTH2_CONFIG:
+      #  - OAUTH2_NAME: "google"
+      #    OAUTH2_DISPLAY_NAME: "Google"
+      #    OAUTH2_CLIENT_ID: "XXXXXXX"
+      #    OAUTH2_CLIENT_SECRET: "XXXXXXX"
+      #    OAUTH2_TOKEN_URL: "https://oauth2.googleapis.com/token"
+      #    OAUTH2_AUTHORIZATION_URL: "https://accounts.google.com/o/oauth2/auth"
+      #    OAUTH2_API_BASE_URL: "https://openidconnect.googleapis.com/v1/"
+      #    OAUTH2_SERVER_METADATA_URL: "https://accounts.google.com/.well-known/openid-configuration"
+      #    OAUTH2_SCOPE: "openid email profile"
+      #    OAUTH2_USERINFO_ENDPOINT: "userinfo"
+      #    OAUTH2_SSL_CERT_VERIFICATION: "False" # for testing purposes
+      #    OAUTH2_BUTTON_COLOR: "red"   
+      #OAUTH2_AUTO_CREATE_USER : "True"

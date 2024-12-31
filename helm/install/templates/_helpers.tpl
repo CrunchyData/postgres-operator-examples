@@ -98,3 +98,36 @@ imagePullSecrets:
   value: {{ $object.image | quote }}
 {{- end }}
 {{- end }}
+
+
+{{- define "install.defaultEnv" -}}
+- name: CRUNCHY_DEBUG
+  value: {{ .Values.debug | ne false | quote }}
+- name: PGO_NAMESPACE
+  valueFrom: { fieldRef: { apiVersion: v1, fieldPath: metadata.namespace } }
+{{- if .Values.singleNamespace }}
+- name: PGO_TARGET_NAMESPACE
+  valueFrom: { fieldRef: { apiVersion: v1, fieldPath: metadata.namespace } }
+{{- end }}
+{{- if .Values.workers }}
+- name: PGO_WORKERS
+  value: {{ .Values.workers | quote }}
+{{- end }}
+{{- include "install.relatedImages" . }}
+{{- if .Values.disable_check_for_upgrades }}
+- name: CHECK_FOR_UPGRADES
+  value: "false"
+{{- end }}
+{{- if .Values.features }}
+{{- $value := .Values.features }}
+- name: PGO_FEATURE_GATES
+{{- $out := "" -}}
+{{- if eq (kindOf $value) "map" -}}
+{{- range $key, $val := $value -}}
+  {{- $out = (print $out $key "=" $val ",") -}}
+{{- end }}
+{{- end }}
+  value: "{{ trimSuffix "," $out }}"
+{{- end }}
+{{- end }}{{/* define */}}
+

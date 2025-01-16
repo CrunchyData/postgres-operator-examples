@@ -13,11 +13,6 @@ apolo run \
 
 # Kubernetes deployment:
 ## All-in-one deployment
-[Optionally]
-Generate backup configuration with
-
-`python gen_config.py pgvector helm/app/values.yaml helm/app/values-default.yaml --subapp=postgrescluster`
-
 Install app with
 
 `helm upgrade --install pgvector -n pgvector --create-namespace helm/app/  -f helm/app/values-postgres-default.yaml --dependency-update`
@@ -45,8 +40,6 @@ When `--set singleNamespace=true`, PGO watches for and responds to PostgresClust
 - 1 default `postgres` user with SUPERUSER privileges is created.
 
 Install dependencies with `make setup`.
-
-`python gen_config.py pgvector helm/postgres/values-default-template.yaml helm/postgres/values-default.yaml` -- creates default config with backup information at `helm/postgres/values-default.yaml` values file.
 
 `helm upgrade --install pgvector -n pgvector --create-namespace helm/postgres -f helm/postgres/values.yaml -f helm/postgres/values-default.yaml`
 

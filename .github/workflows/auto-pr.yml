@@ -12,5 +12,6 @@ jobs:
     with:
       upstream_repository: https://github.com/CrunchyData/postgres-operator-examples
       upstream_branch: 'main'
+      team_reviewers: 'mlops'
     secrets:
       personal_access_token: ${{ secrets.GH_AUTO_PR }}

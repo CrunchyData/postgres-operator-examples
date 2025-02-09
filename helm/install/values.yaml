@@ -2,36 +2,36 @@
 # controllerImages are used to run the operator's controllers.
 # The cluster image defined below runs the PostgresCluster and PGUpgrade controllers.
 controllerImages:
-  cluster: registry.developers.crunchydata.com/crunchydata/postgres-operator:ubi8-5.7.2-0
+  cluster: registry.developers.crunchydata.com/crunchydata/postgres-operator:ubi8-5.7.3-0
 
 # relatedImages are used when an image is omitted from PostgresCluster, PGAdmin or PGUpgrade specs.
 relatedImages:
   postgres_17:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-17.2-1
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-17.2-2
   postgres_17_gis_3.4:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi8-17.2-3.4-1
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi8-17.2-3.4-2
   postgres_16:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-16.6-1
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-16.6-2
   postgres_16_gis_3.4:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi8-16.6-3.4-1
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi8-16.6-3.4-2
   postgres_16_gis_3.3:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi8-16.6-3.3-1
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi8-16.6-3.3-2
   postgres_15:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-15.10-1
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-15.10-2
   postgres_15_gis_3.3:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi8-15.10-3.3-1
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi8-15.10-3.3-2
   pgadmin:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-pgadmin4:ubi8-4.30-33
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-pgadmin4:ubi8-4.30-34
   pgbackrest:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.54.0-0
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.54.1-0
   pgbouncer:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.23-2
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.23-3
   pgexporter:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-0.15.0-14
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-0.16.0-0
   pgupgrade:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-upgrade:ubi8-5.7.2-0
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-upgrade:ubi8-5.7.3-0
   standalone_pgadmin:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-pgadmin4:ubi8-8.14-0
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-pgadmin4:ubi8-8.14-1
 
 # singleNamespace controls where PGO watches for PostgresClusters. When false,
 # PGO watches for and responds to PostgresClusters in all namespaces. When true,

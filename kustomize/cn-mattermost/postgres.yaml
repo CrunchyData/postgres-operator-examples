@@ -1,0 +1,51 @@
+apiVersion: postgres-operator.crunchydata.com/v1beta1
+kind: PostgresCluster
+metadata:
+  name: cn-mattermost
+spec:
+  image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-16.3-1
+  postgresVersion: 16
+  instances:
+    - name: instance1
+      dataVolumeClaimSpec:
+        accessModes:
+        - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: 10Gi
+  users:
+    - name: cn-mattermost
+      databases:
+        - cn-mattermost
+      options: 'SUPERUSER'
+  service:
+    metadata:
+      annotations:
+        my-annotation: mattermost
+      labels:
+        my-label: mattermost
+    type: NodePort
+    nodePort: 31002
+  monitoring:
+    pgmonitor:
+      exporter:
+        image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-5.6.0-0
+  backups:
+    pgbackrest:
+      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.51-1
+      repos:
+      - name: repo1
+        volume:
+          volumeClaimSpec:
+            accessModes:
+            - "ReadWriteOnce"
+            resources:
+              requests:
+                storage: 20Gi
+  patroni:
+    dynamicConfiguration:
+      postgresql:
+        pg_hba:
+          - host cn-mattermost cn-mattermost 10.1.77.105/32 md5
+          - local all all peer
+          - host all all 0.0.0.0/0 md5

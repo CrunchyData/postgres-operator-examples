@@ -20,7 +20,7 @@ images:
   newTag: ubi8-5.7.4-0
 - name: image-postgres-operator-5.6
   newName: registry.developers.crunchydata.com/crunchydata/postgres-operator
-  newTag: ubi8-5.6.5-0
+  newTag: ubi8-5.6.6-0
 - name: image-crunchy-postgres-15
   newName: registry.developers.crunchydata.com/crunchydata/crunchy-postgres
   newTag: ubi8-15.12-0

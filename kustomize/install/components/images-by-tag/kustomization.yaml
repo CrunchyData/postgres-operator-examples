@@ -45,3 +45,6 @@ images:
 - name: image-crunchy-postgres-17-gis-3.4
   newName: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis
   newTag: ubi8-17.4-3.4-2
+- name: image-crunchy-postgres-17-gis-3.5
+  newName: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis
+  newTag: ubi8-17.4-3.5-0

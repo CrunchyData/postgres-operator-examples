@@ -113,3 +113,4 @@ pip-wheel-metadata/
 .coverage-*
 
 temp_deploy/
+.idea

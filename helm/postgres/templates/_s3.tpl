@@ -3,10 +3,12 @@
 [global]
 {{- if .s3 }}
   {{- if .s3.key }}
-repo{{ add .index 1 }}-s3-key={{ .s3.key }}
+{{- $resolvedKey := include "mychart.resolveAwsS3Key" }}
+repo{{ add .index 1 }}-s3-key={{ $$resolvedKey | b64dec}}
   {{- end }}
-  {{- if .s3.keySecret }}
-repo{{ add .index 1 }}-s3-key-secret={{ .s3.keySecret }}
+  {{- /* Use the helper for resolving keySecret */}}
+  {{- $resolvedKeySecret := include "mychart.resolveAwsS3KeySecret" }}
+repo{{ add .index 1 }}-s3-key-secret={{ $resolvedKeySecret | b64dec }}
   {{- end }}
   {{- if .s3.keyType }}
 repo{{ add .index 1 }}-s3-key-type={{ .s3.keyType }}

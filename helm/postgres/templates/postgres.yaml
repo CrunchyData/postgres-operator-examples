@@ -191,7 +191,7 @@ spec:
     {{- if .Values.instrumentationConfig }}
 {{ toYaml .Values.instrumentationConfig | indent 6 }}
     {{- end }}
-    image: {{ default "" .Values.imageExporter | quote }}
+    image: {{ default "" .Values.instrumentationImage | quote }}
     logs:
     {{- if .Values.instrumentationLogs }}
 {{ toYaml .Values.instrumentationLogs | indent 6 }}

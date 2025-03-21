@@ -39,6 +39,12 @@ postgresVersion: 17
 # below.
 # monitoring: false
 
+# instrumentation enables the ability to monitor the Postgres cluster through a
+# OpenTelemetry collector. This defaults to the value below.
+# This feature is currently behind the feature gates OpenTelemetryLogs and
+# OpenTelemetryMetrics
+# instrumentation: false
+
 ###################
 # Image Overrides #
 ###################
@@ -277,6 +283,16 @@ postgresVersion: 17
 # image. To set the image, which also enables monitoring, you need to set the
 # "monitoring" setting.
 # monitoringConfig: {}
+
+# The following "instrumentation_" fields will set the specified parts of the instrumentation
+# spec. To enable instrumentation, you need to set the "instrumentation" setting to "true".
+# This feature is currently behind the feature gates OpenTelemetryMetrics and OpenTelemetryLogs.
+
+# instrumentationConfig: {}
+# instrumentationImage: ""
+# instrumentationLogs: {}
+# instrumentationMetrics: {}
+# instrumentationResources: {}
 
 #######################
 # Kubernetes Settings #

@@ -39,10 +39,11 @@ postgresVersion: 17
 # below.
 # monitoring: false
 
-# instrumentation enables the ability to monitor the Postgres cluster through a
+# instrumentation enables the ability to monitor the Postgres cluster through an
 # OpenTelemetry collector. This defaults to the value below.
 # This feature is currently behind the feature gates OpenTelemetryLogs and
-# OpenTelemetryMetrics
+# OpenTelemetryMetrics; at least one of these feature gates must be turned
+# on for `instrumentation` to be turned on.
 # instrumentation: false
 
 ###################

@@ -49,6 +49,9 @@ spec:
           capabilities: { drop: [ALL] }
           readOnlyRootFilesystem: true
           runAsNonRoot: true
+        ports:
+        - containerPort: 8443
+          name: metrics
         livenessProbe:
           httpGet:
             path: /readyz

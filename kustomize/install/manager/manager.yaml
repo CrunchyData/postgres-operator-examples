@@ -23,10 +23,6 @@ spec:
           valueFrom: { fieldRef: { fieldPath: metadata.namespace } }
         - name: CRUNCHY_DEBUG
           value: "true"
-        - name: RELATED_IMAGE_POSTGRES_15
-          value: image-crunchy-postgres-15
-        - name: RELATED_IMAGE_POSTGRES_15_GIS_3.3
-          value: image-crunchy-postgres-15-gis-3.3
         - name: RELATED_IMAGE_POSTGRES_16
           value: image-crunchy-postgres-16
         - name: RELATED_IMAGE_POSTGRES_16_GIS_3.3
@@ -37,8 +33,8 @@ spec:
           value: image-crunchy-postgres-17
         - name: RELATED_IMAGE_POSTGRES_17_GIS_3.4
           value: image-crunchy-postgres-17-gis-3.4
-        - name: RELATED_IMAGE_PGADMIN
-          value: image-pgadmin-v4
+        - name: RELATED_IMAGE_POSTGRES_17_GIS_3.5
+          value: image-crunchy-postgres-17-gis-3.5
         - name: RELATED_IMAGE_PGBACKREST
           value: image-pgbackrest
         - name: RELATED_IMAGE_PGBOUNCER
@@ -49,6 +45,8 @@ spec:
           value: image-crunchy-upgrade
         - name: RELATED_IMAGE_STANDALONE_PGADMIN
           value: image-pgadmin
+        - name: RELATED_IMAGE_COLLECTOR
+          value: image-collector
         securityContext:
           seccompProfile:
             type: RuntimeDefault
@@ -56,6 +54,9 @@ spec:
           capabilities: { drop: [ALL] }
           readOnlyRootFilesystem: true
           runAsNonRoot: true
+        ports:
+        - containerPort: 8443
+          name: metrics
         livenessProbe:
           httpGet:
             path: /readyz

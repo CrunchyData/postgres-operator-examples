@@ -2,11 +2,10 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.15.0
-  labels:
-    app.kubernetes.io/name: pgo
-    app.kubernetes.io/version: 5.7.4
+    controller-gen.kubebuilder.io/version: v0.17.2
   name: pgadmins.postgres-operator.crunchydata.com
+  labels:
+    app.kubernetes.io/version: 5.8.0
 spec:
   group: postgres-operator.crunchydata.com
   names:
@@ -309,7 +308,7 @@ spec:
                                       pod labels will be ignored. The default value is empty.
                                       The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                       Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                      This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                      This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                     items:
                                       type: string
                                     type: array
@@ -324,7 +323,7 @@ spec:
                                       pod labels will be ignored. The default value is empty.
                                       The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                       Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                      This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                      This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                     items:
                                       type: string
                                     type: array
@@ -485,7 +484,7 @@ spec:
                                   pod labels will be ignored. The default value is empty.
                                   The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                   Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                  This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                  This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                 items:
                                   type: string
                                 type: array
@@ -500,7 +499,7 @@ spec:
                                   pod labels will be ignored. The default value is empty.
                                   The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                   Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                  This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                  This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                 items:
                                   type: string
                                 type: array
@@ -654,7 +653,7 @@ spec:
                                       pod labels will be ignored. The default value is empty.
                                       The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                       Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                      This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                      This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                     items:
                                       type: string
                                     type: array
@@ -669,7 +668,7 @@ spec:
                                       pod labels will be ignored. The default value is empty.
                                       The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                       Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                      This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                      This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                     items:
                                       type: string
                                     type: array
@@ -830,7 +829,7 @@ spec:
                                   pod labels will be ignored. The default value is empty.
                                   The same key is forbidden to exist in both matchLabelKeys and labelSelector.
                                   Also, matchLabelKeys cannot be set when labelSelector isn't set.
-                                  This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                  This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                 items:
                                   type: string
                                 type: array
@@ -845,7 +844,7 @@ spec:
                                   pod labels will be ignored. The default value is empty.
                                   The same key is forbidden to exist in both mismatchLabelKeys and labelSelector.
                                   Also, mismatchLabelKeys cannot be set when labelSelector isn't set.
-                                  This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
+                                  This is a beta field and requires enabling MatchLabelKeysInPodAffinity feature gate (enabled by default).
                                 items:
                                   type: string
                                 type: array
@@ -936,17 +935,26 @@ spec:
                         More info: https://www.pgadmin.org/docs/pgadmin4/latest/external_database.html
                       properties:
                         key:
-                          description: The key of the secret to select from.  Must be a valid secret key.
+                          description: Name of the data field within the Secret.
+                          maxLength: 253
+                          minLength: 1
+                          pattern: ^[-._a-zA-Z0-9]+$
                           type: string
+                          x-kubernetes-validations:
+                            - message: cannot be "." or start with ".."
+                              rule: self != "." && !self.startsWith("..")
                         name:
-                          default: ""
-                          description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                          description: Name of the Secret.
+                          maxLength: 253
+                          minLength: 1
+                          pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?([.][a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
                           type: string
                         optional:
-                          description: Specify whether the Secret or its key must be defined
+                          description: Whether or not the Secret or its data must be defined. Defaults to false.
                           type: boolean
                       required:
                         - key
+                        - name
                       type: object
                       x-kubernetes-map-type: atomic
                     files:
@@ -954,20 +962,19 @@ spec:
                         Files allows the user to mount projected volumes into the pgAdmin
                         container so that files can be referenced by pgAdmin as needed.
                       items:
-                        description: Projection that may be projected along with other supported volume types
+                        description: |-
+                          Projection that may be projected along with other supported volume types.
+                          Exactly one of these fields must be set.
                         properties:
                           clusterTrustBundle:
                             description: |-
                               ClusterTrustBundle allows a pod to access the `.spec.trustBundle` field
                               of ClusterTrustBundle objects in an auto-updating file.
 
-
                               Alpha, gated by the ClusterTrustBundleProjection feature gate.
-
 
                               ClusterTrustBundle objects can either be selected by name, or by the
                               combination of signer name and a label selector.
-
 
                               Kubelet performs aggressive normalization of the PEM contents written
                               into the pod filesystem.  Esoteric PEM features such as inter-block
@@ -1091,7 +1098,12 @@ spec:
                                 x-kubernetes-list-type: atomic
                               name:
                                 default: ""
-                                description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                                description: |-
+                                  Name of the referent.
+                                  This field is effectively required, but due to backwards compatibility is
+                                  allowed to be empty. Instances of this type with an empty value here are
+                                  almost certainly wrong.
+                                  More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
                                 type: string
                               optional:
                                 description: optional specify whether the ConfigMap or its keys must be defined
@@ -1203,7 +1215,12 @@ spec:
                                 x-kubernetes-list-type: atomic
                               name:
                                 default: ""
-                                description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                                description: |-
+                                  Name of the referent.
+                                  This field is effectively required, but due to backwards compatibility is
+                                  allowed to be empty. Instances of this type with an empty value here are
+                                  almost certainly wrong.
+                                  More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
                                 type: string
                               optional:
                                 description: optional field specify whether the Secret or its key must be defined
@@ -1242,7 +1259,7 @@ spec:
                       type: array
                     gunicorn:
                       description: |-
-                        Settings for the gunicorn server.
+                        Settings for the Gunicorn server.
                         More info: https://docs.gunicorn.org/en/latest/settings.html
                       type: object
                       x-kubernetes-preserve-unknown-fields: true
@@ -1252,25 +1269,82 @@ spec:
                         More info: https://www.pgadmin.org/docs/pgadmin4/latest/ldap.html
                       properties:
                         key:
-                          description: The key of the secret to select from.  Must be a valid secret key.
+                          description: Name of the data field within the Secret.
+                          maxLength: 253
+                          minLength: 1
+                          pattern: ^[-._a-zA-Z0-9]+$
                           type: string
+                          x-kubernetes-validations:
+                            - message: cannot be "." or start with ".."
+                              rule: self != "." && !self.startsWith("..")
                         name:
-                          default: ""
-                          description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                          description: Name of the Secret.
+                          maxLength: 253
+                          minLength: 1
+                          pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?([.][a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
                           type: string
                         optional:
-                          description: Specify whether the Secret or its key must be defined
+                          description: Whether or not the Secret or its data must be defined. Defaults to false.
                           type: boolean
                       required:
                         - key
+                        - name
                       type: object
                       x-kubernetes-map-type: atomic
+                    oauthConfigurations:
+                      description: |-
+                        Secrets for the `OAUTH2_CONFIG` setting. If there are `OAUTH2_CONFIG` values
+                        in the settings field, they will be combined with the values loaded here.
+                        More info: https://www.pgadmin.org/docs/pgadmin4/latest/oauth2.html
+                      items:
+                        properties:
+                          name:
+                            description: The OAUTH2_NAME of this configuration.
+                            maxLength: 20
+                            minLength: 1
+                            pattern: ^[A-Za-z0-9]+$
+                            type: string
+                          secret:
+                            description: A Secret containing the settings of one OAuth2 provider as a JSON object.
+                            properties:
+                              key:
+                                description: Name of the data field within the Secret.
+                                maxLength: 253
+                                minLength: 1
+                                pattern: ^[-._a-zA-Z0-9]+$
+                                type: string
+                                x-kubernetes-validations:
+                                  - message: cannot be "." or start with ".."
+                                    rule: self != "." && !self.startsWith("..")
+                              name:
+                                description: Name of the Secret.
+                                maxLength: 253
+                                minLength: 1
+                                pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?([.][a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+                                type: string
+                            required:
+                              - key
+                              - name
+                            type: object
+                            x-kubernetes-map-type: atomic
+                        required:
+                          - name
+                          - secret
+                        type: object
+                        x-kubernetes-map-type: atomic
+                      maxItems: 10
+                      minItems: 1
+                      type: array
+                      x-kubernetes-list-map-keys:
+                        - name
+                      x-kubernetes-list-type: map
                     settings:
                       description: |-
                         Settings for the pgAdmin server process. Keys should be uppercase and
                         values must be constants.
                         More info: https://www.pgadmin.org/docs/pgadmin4/latest/config_py.html
                       type: object
+                      x-kubernetes-map-type: granular
                       x-kubernetes-preserve-unknown-fields: true
                   type: object
                 dataVolumeClaimSpec:
@@ -1457,7 +1531,7 @@ spec:
                         set to a Pending state, as reflected by the modifyVolumeStatus field, until such as a resource
                         exists.
                         More info: https://kubernetes.io/docs/concepts/storage/volume-attributes-classes/
-                        (Alpha) Using this field requires the VolumeAttributesClass feature gate to be enabled.
+                        (Beta) Using this field requires the VolumeAttributesClass feature gate to be enabled (off by default).
                       type: string
                     volumeMode:
                       description: |-
@@ -1468,6 +1542,12 @@ spec:
                       description: volumeName is the binding reference to the PersistentVolume backing this claim.
                       type: string
                   type: object
+                  x-kubernetes-map-type: atomic
+                  x-kubernetes-validations:
+                    - message: missing accessModes
+                      rule: 0 < size(self.accessModes)
+                    - message: missing storage request
+                      rule: has(self.resources.requests.storage)
                 image:
                   description: The image name to use for pgAdmin instance.
                   type: string
@@ -1480,6 +1560,7 @@ spec:
                     - Always
                     - Never
                     - IfNotPresent
+                  maxLength: 15
                   type: string
                 imagePullSecrets:
                   description: |-
@@ -1493,11 +1574,555 @@ spec:
                     properties:
                       name:
                         default: ""
-                        description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                        description: |-
+                          Name of the referent.
+                          This field is effectively required, but due to backwards compatibility is
+                          allowed to be empty. Instances of this type with an empty value here are
+                          almost certainly wrong.
+                          More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
                         type: string
                     type: object
                     x-kubernetes-map-type: atomic
                   type: array
+                instrumentation:
+                  description: |-
+                    Configuration for the OpenTelemetry collector container used to collect
+                    logs and metrics.
+                  properties:
+                    config:
+                      description: Config is the place for users to configure exporters and provide files.
+                      properties:
+                        detectors:
+                          description: |-
+                            Resource detectors add identifying attributes to logs and metrics. These run in the order they are defined.
+                            More info: https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/-/processor/resourcedetectionprocessor#readme
+                          items:
+                            properties:
+                              attributes:
+                                additionalProperties:
+                                  type: boolean
+                                description: |-
+                                  Attributes to use from this detector. Detectors usually add every attribute
+                                  they know automatically. Names omitted here behave according to detector defaults.
+                                maxProperties: 30
+                                minProperties: 1
+                                type: object
+                                x-kubernetes-map-type: atomic
+                              name:
+                                description: 'Name of the resource detector to enable: `aks`, `eks`, `gcp`, etc.'
+                                maxLength: 20
+                                minLength: 1
+                                type: string
+                            required:
+                              - name
+                            type: object
+                            x-kubernetes-map-type: atomic
+                          maxItems: 10
+                          minItems: 1
+                          type: array
+                          x-kubernetes-list-map-keys:
+                            - name
+                          x-kubernetes-list-type: map
+                        exporters:
+                          description: |-
+                            Exporters allows users to configure OpenTelemetry exporters that exist
+                            in the collector image.
+                          type: object
+                          x-kubernetes-preserve-unknown-fields: true
+                        files:
+                          description: |-
+                            Files allows the user to mount projected volumes into the collector
+                            Pod so that files can be referenced by the collector as needed.
+                          items:
+                            description: |-
+                              Projection that may be projected along with other supported volume types.
+                              Exactly one of these fields must be set.
+                            properties:
+                              clusterTrustBundle:
+                                description: |-
+                                  ClusterTrustBundle allows a pod to access the `.spec.trustBundle` field
+                                  of ClusterTrustBundle objects in an auto-updating file.
+
+                                  Alpha, gated by the ClusterTrustBundleProjection feature gate.
+
+                                  ClusterTrustBundle objects can either be selected by name, or by the
+                                  combination of signer name and a label selector.
+
+                                  Kubelet performs aggressive normalization of the PEM contents written
+                                  into the pod filesystem.  Esoteric PEM features such as inter-block
+                                  comments and block headers are stripped.  Certificates are deduplicated.
+                                  The ordering of certificates within the file is arbitrary, and Kubelet
+                                  may change the order over time.
+                                properties:
+                                  labelSelector:
+                                    description: |-
+                                      Select all ClusterTrustBundles that match this label selector.  Only has
+                                      effect if signerName is set.  Mutually-exclusive with name.  If unset,
+                                      interpreted as "match nothing".  If set but empty, interpreted as "match
+                                      everything".
+                                    properties:
+                                      matchExpressions:
+                                        description: matchExpressions is a list of label selector requirements. The requirements are ANDed.
+                                        items:
+                                          description: |-
+                                            A label selector requirement is a selector that contains values, a key, and an operator that
+                                            relates the key and values.
+                                          properties:
+                                            key:
+                                              description: key is the label key that the selector applies to.
+                                              type: string
+                                            operator:
+                                              description: |-
+                                                operator represents a key's relationship to a set of values.
+                                                Valid operators are In, NotIn, Exists and DoesNotExist.
+                                              type: string
+                                            values:
+                                              description: |-
+                                                values is an array of string values. If the operator is In or NotIn,
+                                                the values array must be non-empty. If the operator is Exists or DoesNotExist,
+                                                the values array must be empty. This array is replaced during a strategic
+                                                merge patch.
+                                              items:
+                                                type: string
+                                              type: array
+                                              x-kubernetes-list-type: atomic
+                                          required:
+                                            - key
+                                            - operator
+                                          type: object
+                                        type: array
+                                        x-kubernetes-list-type: atomic
+                                      matchLabels:
+                                        additionalProperties:
+                                          type: string
+                                        description: |-
+                                          matchLabels is a map of {key,value} pairs. A single {key,value} in the matchLabels
+                                          map is equivalent to an element of matchExpressions, whose key field is "key", the
+                                          operator is "In", and the values array contains only "value". The requirements are ANDed.
+                                        type: object
+                                    type: object
+                                    x-kubernetes-map-type: atomic
+                                  name:
+                                    description: |-
+                                      Select a single ClusterTrustBundle by object name.  Mutually-exclusive
+                                      with signerName and labelSelector.
+                                    type: string
+                                  optional:
+                                    description: |-
+                                      If true, don't block pod startup if the referenced ClusterTrustBundle(s)
+                                      aren't available.  If using name, then the named ClusterTrustBundle is
+                                      allowed not to exist.  If using signerName, then the combination of
+                                      signerName and labelSelector is allowed to match zero
+                                      ClusterTrustBundles.
+                                    type: boolean
+                                  path:
+                                    description: Relative path from the volume root to write the bundle.
+                                    type: string
+                                  signerName:
+                                    description: |-
+                                      Select all ClusterTrustBundles that match this signer name.
+                                      Mutually-exclusive with name.  The contents of all selected
+                                      ClusterTrustBundles will be unified and deduplicated.
+                                    type: string
+                                required:
+                                  - path
+                                type: object
+                              configMap:
+                                description: configMap information about the configMap data to project
+                                properties:
+                                  items:
+                                    description: |-
+                                      items if unspecified, each key-value pair in the Data field of the referenced
+                                      ConfigMap will be projected into the volume as a file whose name is the
+                                      key and content is the value. If specified, the listed keys will be
+                                      projected into the specified paths, and unlisted keys will not be
+                                      present. If a key is specified which is not present in the ConfigMap,
+                                      the volume setup will error unless it is marked optional. Paths must be
+                                      relative and may not contain the '..' path or start with '..'.
+                                    items:
+                                      description: Maps a string key to a path within a volume.
+                                      properties:
+                                        key:
+                                          description: key is the key to project.
+                                          type: string
+                                        mode:
+                                          description: |-
+                                            mode is Optional: mode bits used to set permissions on this file.
+                                            Must be an octal value between 0000 and 0777 or a decimal value between 0 and 511.
+                                            YAML accepts both octal and decimal values, JSON requires decimal values for mode bits.
+                                            If not specified, the volume defaultMode will be used.
+                                            This might be in conflict with other options that affect the file
+                                            mode, like fsGroup, and the result can be other mode bits set.
+                                          format: int32
+                                          type: integer
+                                        path:
+                                          description: |-
+                                            path is the relative path of the file to map the key to.
+                                            May not be an absolute path.
+                                            May not contain the path element '..'.
+                                            May not start with the string '..'.
+                                          type: string
+                                      required:
+                                        - key
+                                        - path
+                                      type: object
+                                    type: array
+                                    x-kubernetes-list-type: atomic
+                                  name:
+                                    default: ""
+                                    description: |-
+                                      Name of the referent.
+                                      This field is effectively required, but due to backwards compatibility is
+                                      allowed to be empty. Instances of this type with an empty value here are
+                                      almost certainly wrong.
+                                      More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                    type: string
+                                  optional:
+                                    description: optional specify whether the ConfigMap or its keys must be defined
+                                    type: boolean
+                                type: object
+                                x-kubernetes-map-type: atomic
+                              downwardAPI:
+                                description: downwardAPI information about the downwardAPI data to project
+                                properties:
+                                  items:
+                                    description: Items is a list of DownwardAPIVolume file
+                                    items:
+                                      description: DownwardAPIVolumeFile represents information to create the file containing the pod field
+                                      properties:
+                                        fieldRef:
+                                          description: 'Required: Selects a field of the pod: only annotations, labels, name, namespace and uid are supported.'
+                                          properties:
+                                            apiVersion:
+                                              description: Version of the schema the FieldPath is written in terms of, defaults to "v1".
+                                              type: string
+                                            fieldPath:
+                                              description: Path of the field to select in the specified API version.
+                                              type: string
+                                          required:
+                                            - fieldPath
+                                          type: object
+                                          x-kubernetes-map-type: atomic
+                                        mode:
+                                          description: |-
+                                            Optional: mode bits used to set permissions on this file, must be an octal value
+                                            between 0000 and 0777 or a decimal value between 0 and 511.
+                                            YAML accepts both octal and decimal values, JSON requires decimal values for mode bits.
+                                            If not specified, the volume defaultMode will be used.
+                                            This might be in conflict with other options that affect the file
+                                            mode, like fsGroup, and the result can be other mode bits set.
+                                          format: int32
+                                          type: integer
+                                        path:
+                                          description: 'Required: Path is  the relative path name of the file to be created. Must not be absolute or contain the ''..'' path. Must be utf-8 encoded. The first item of the relative path must not start with ''..'''
+                                          type: string
+                                        resourceFieldRef:
+                                          description: |-
+                                            Selects a resource of the container: only resources limits and requests
+                                            (limits.cpu, limits.memory, requests.cpu and requests.memory) are currently supported.
+                                          properties:
+                                            containerName:
+                                              description: 'Container name: required for volumes, optional for env vars'
+                                              type: string
+                                            divisor:
+                                              anyOf:
+                                                - type: integer
+                                                - type: string
+                                              description: Specifies the output format of the exposed resources, defaults to "1"
+                                              pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                                              x-kubernetes-int-or-string: true
+                                            resource:
+                                              description: 'Required: resource to select'
+                                              type: string
+                                          required:
+                                            - resource
+                                          type: object
+                                          x-kubernetes-map-type: atomic
+                                      required:
+                                        - path
+                                      type: object
+                                    type: array
+                                    x-kubernetes-list-type: atomic
+                                type: object
+                              secret:
+                                description: secret information about the secret data to project
+                                properties:
+                                  items:
+                                    description: |-
+                                      items if unspecified, each key-value pair in the Data field of the referenced
+                                      Secret will be projected into the volume as a file whose name is the
+                                      key and content is the value. If specified, the listed keys will be
+                                      projected into the specified paths, and unlisted keys will not be
+                                      present. If a key is specified which is not present in the Secret,
+                                      the volume setup will error unless it is marked optional. Paths must be
+                                      relative and may not contain the '..' path or start with '..'.
+                                    items:
+                                      description: Maps a string key to a path within a volume.
+                                      properties:
+                                        key:
+                                          description: key is the key to project.
+                                          type: string
+                                        mode:
+                                          description: |-
+                                            mode is Optional: mode bits used to set permissions on this file.
+                                            Must be an octal value between 0000 and 0777 or a decimal value between 0 and 511.
+                                            YAML accepts both octal and decimal values, JSON requires decimal values for mode bits.
+                                            If not specified, the volume defaultMode will be used.
+                                            This might be in conflict with other options that affect the file
+                                            mode, like fsGroup, and the result can be other mode bits set.
+                                          format: int32
+                                          type: integer
+                                        path:
+                                          description: |-
+                                            path is the relative path of the file to map the key to.
+                                            May not be an absolute path.
+                                            May not contain the path element '..'.
+                                            May not start with the string '..'.
+                                          type: string
+                                      required:
+                                        - key
+                                        - path
+                                      type: object
+                                    type: array
+                                    x-kubernetes-list-type: atomic
+                                  name:
+                                    default: ""
+                                    description: |-
+                                      Name of the referent.
+                                      This field is effectively required, but due to backwards compatibility is
+                                      allowed to be empty. Instances of this type with an empty value here are
+                                      almost certainly wrong.
+                                      More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                    type: string
+                                  optional:
+                                    description: optional field specify whether the Secret or its key must be defined
+                                    type: boolean
+                                type: object
+                                x-kubernetes-map-type: atomic
+                              serviceAccountToken:
+                                description: serviceAccountToken is information about the serviceAccountToken data to project
+                                properties:
+                                  audience:
+                                    description: |-
+                                      audience is the intended audience of the token. A recipient of a token
+                                      must identify itself with an identifier specified in the audience of the
+                                      token, and otherwise should reject the token. The audience defaults to the
+                                      identifier of the apiserver.
+                                    type: string
+                                  expirationSeconds:
+                                    description: |-
+                                      expirationSeconds is the requested duration of validity of the service
+                                      account token. As the token approaches expiration, the kubelet volume
+                                      plugin will proactively rotate the service account token. The kubelet will
+                                      start trying to rotate the token if the token is older than 80 percent of
+                                      its time to live or if the token is older than 24 hours.Defaults to 1 hour
+                                      and must be at least 10 minutes.
+                                    format: int64
+                                    type: integer
+                                  path:
+                                    description: |-
+                                      path is the path relative to the mount point of the file to project the
+                                      token into.
+                                    type: string
+                                required:
+                                  - path
+                                type: object
+                            type: object
+                          minItems: 1
+                          type: array
+                          x-kubernetes-list-type: atomic
+                      type: object
+                    image:
+                      description: |-
+                        Image name to use for collector containers. When omitted, the value
+                        comes from an operator environment variable.
+                      type: string
+                    logs:
+                      description: Logs is the place for users to configure the log collection.
+                      properties:
+                        batches:
+                          description: Log records are exported in small batches. Set this field to change their size and frequency.
+                          properties:
+                            maxDelay:
+                              default: 200ms
+                              description: |-
+                                Maximum time to wait before exporting a log record. Higher numbers
+                                allow more records to be deduplicated and compressed before export.
+                              format: duration
+                              maxLength: 20
+                              minLength: 1
+                              pattern: ^((PT)?( *[0-9]+ *(?i:(ms|s|m)|(milli|sec|min)s?))+|0)$
+                              type: string
+                              x-kubernetes-validations:
+                                - rule: duration("0") <= self && self <= duration("5m")
+                            maxRecords:
+                              description: |-
+                                Maximum number of records to include in an exported batch. When present,
+                                batches this size are sent without any further delay.
+                              format: int32
+                              minimum: 1
+                              type: integer
+                            minRecords:
+                              default: 8192
+                              description: |-
+                                Number of records to wait for before exporting a batch. Higher numbers
+                                allow more records to be deduplicated and compressed before export.
+                              format: int32
+                              minimum: 0
+                              type: integer
+                          type: object
+                          x-kubernetes-map-type: atomic
+                          x-kubernetes-validations:
+                            - message: to disable batching, both minRecords and maxDelay must be zero
+                              rule: (has(self.minRecords) && self.minRecords == 0) == (has(self.maxDelay) && self.maxDelay == duration('0'))
+                            - message: minRecords cannot be larger than maxRecords
+                              rule: '!has(self.maxRecords) || self.minRecords <= self.maxRecords'
+                        exporters:
+                          description: The names of exporters that should send logs.
+                          items:
+                            type: string
+                          minItems: 1
+                          type: array
+                          x-kubernetes-list-type: set
+                        retentionPeriod:
+                          description: |-
+                            How long to retain log files locally. An RFC 3339 duration or a number
+                            and unit: `12 hr`, `3d`, `4 weeks`, etc.
+                          format: duration
+                          maxLength: 20
+                          minLength: 1
+                          pattern: ^(PT)?( *[0-9]+ *(?i:(h|hr|d|w|wk)|(hour|day|week)s?))+$
+                          type: string
+                          x-kubernetes-validations:
+                            - message: must be at least one hour
+                              rule: duration("1h") <= self && self <= duration("8760h")
+                      type: object
+                    metrics:
+                      description: Metrics is the place for users to configure metrics collection.
+                      properties:
+                        customQueries:
+                          description: |-
+                            Where users can turn off built-in metrics and also provide their own
+                            custom queries.
+                          properties:
+                            add:
+                              description: User defined queries and metrics.
+                              items:
+                                properties:
+                                  collectionInterval:
+                                    default: 5s
+                                    description: How often the queries should be run.
+                                    format: duration
+                                    maxLength: 20
+                                    minLength: 1
+                                    pattern: ^((PT)?( *[0-9]+ *(?i:(ms|s|m)|(milli|sec|min)s?))+|0)$
+                                    type: string
+                                    x-kubernetes-validations:
+                                      - rule: duration("0") <= self && self <= duration("60m")
+                                  name:
+                                    description: |-
+                                      The name of this batch of queries, which will be used in naming the OTel
+                                      SqlQuery receiver.
+                                    maxLength: 20
+                                    pattern: ^[^\pZ\pC\pS]+$
+                                    type: string
+                                  queries:
+                                    description: A ConfigMap holding the yaml file that contains the queries.
+                                    properties:
+                                      key:
+                                        description: Name of the data field within the ConfigMap.
+                                        maxLength: 253
+                                        minLength: 1
+                                        pattern: ^[-._a-zA-Z0-9]+$
+                                        type: string
+                                        x-kubernetes-validations:
+                                          - message: cannot be "." or start with ".."
+                                            rule: self != "." && !self.startsWith("..")
+                                      name:
+                                        description: Name of the ConfigMap.
+                                        maxLength: 253
+                                        minLength: 1
+                                        pattern: ^[a-z0-9]([-a-z0-9]*[a-z0-9])?([.][a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
+                                        type: string
+                                    required:
+                                      - key
+                                      - name
+                                    type: object
+                                    x-kubernetes-map-type: atomic
+                                required:
+                                  - name
+                                  - queries
+                                type: object
+                              type: array
+                            remove:
+                              description: |-
+                                A list of built-in queries that should be removed. If all queries for a
+                                given SQL statement are removed, the SQL statement will no longer be run.
+                              items:
+                                type: string
+                              type: array
+                          type: object
+                      type: object
+                    resources:
+                      description: Resources holds the resource requirements for the collector container.
+                      properties:
+                        claims:
+                          description: |-
+                            Claims lists the names of resources, defined in spec.resourceClaims,
+                            that are used by this container.
+
+                            This is an alpha field and requires enabling the
+                            DynamicResourceAllocation feature gate.
+
+                            This field is immutable. It can only be set for containers.
+                          items:
+                            description: ResourceClaim references one entry in PodSpec.ResourceClaims.
+                            properties:
+                              name:
+                                description: |-
+                                  Name must match the name of one entry in pod.spec.resourceClaims of
+                                  the Pod where this field is used. It makes that resource available
+                                  inside a container.
+                                type: string
+                              request:
+                                description: |-
+                                  Request is the name chosen for a request in the referenced claim.
+                                  If empty, everything from the claim is made available, otherwise
+                                  only the result of this request.
+                                type: string
+                            required:
+                              - name
+                            type: object
+                          type: array
+                          x-kubernetes-list-map-keys:
+                            - name
+                          x-kubernetes-list-type: map
+                        limits:
+                          additionalProperties:
+                            anyOf:
+                              - type: integer
+                              - type: string
+                            pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                            x-kubernetes-int-or-string: true
+                          description: |-
+                            Limits describes the maximum amount of compute resources allowed.
+                            More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+                          type: object
+                        requests:
+                          additionalProperties:
+                            anyOf:
+                              - type: integer
+                              - type: string
+                            pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                            x-kubernetes-int-or-string: true
+                          description: |-
+                            Requests describes the minimum amount of compute resources required.
+                            If Requests is omitted for a container, it defaults to Limits if that is explicitly specified,
+                            otherwise to an implementation-defined value. Requests cannot exceed Limits.
+                            More info: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+                          type: object
+                      type: object
+                  type: object
                 metadata:
                   description: Metadata contains metadata for custom resources
                   properties:
@@ -1524,10 +2149,8 @@ spec:
                         Claims lists the names of resources, defined in spec.resourceClaims,
                         that are used by this container.
 
-
                         This is an alpha field and requires enabling the
                         DynamicResourceAllocation feature gate.
-
 
                         This field is immutable. It can only be set for containers.
                       items:
@@ -1538,6 +2161,12 @@ spec:
                               Name must match the name of one entry in pod.spec.resourceClaims of
                               the Pod where this field is used. It makes that resource available
                               inside a container.
+                            type: string
+                          request:
+                            description: |-
+                              Request is the name chosen for a request in the referenced claim.
+                              If empty, everything from the claim is made available, otherwise
+                              only the result of this request.
                             type: string
                         required:
                           - name
@@ -1704,7 +2333,12 @@ spec:
                             type: string
                           name:
                             default: ""
-                            description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names'
+                            description: |-
+                              Name of the referent.
+                              This field is effectively required, but due to backwards compatibility is
+                              allowed to be empty. Instances of this type with an empty value here are
+                              almost certainly wrong.
+                              More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
                             type: string
                           optional:
                             description: Specify whether the Secret or its key must be defined
@@ -1720,6 +2354,7 @@ spec:
                         enum:
                           - Administrator
                           - User
+                        maxLength: 15
                         type: string
                       username:
                         description: |-
@@ -1745,8 +2380,7 @@ spec:
                     conditions represent the observations of pgAdmin's current state.
                     Known .status.conditions.type is: "PersistentVolumeResizing"
                   items:
-                    description: "Condition contains details for one aspect of the current state of this API Resource.\n---\nThis struct is intended for direct use as an array at the field path .status.conditions.  For example,\n\n\n\ttype FooStatus struct{\n\t    // Represents the observations of a foo's current state.\n\t    // Known .status.conditions.type are: \"Available\", \"Progressing\", and\
-                      \ \"Degraded\"\n\t    // +patchMergeKey=type\n\t    // +patchStrategy=merge\n\t    // +listType=map\n\t    // +listMapKey=type\n\t    Conditions []metav1.Condition `json:\"conditions,omitempty\" patchStrategy:\"merge\" patchMergeKey:\"type\" protobuf:\"bytes,1,rep,name=conditions\"`\n\n\n\t    // other fields\n\t}"
+                    description: Condition contains details for one aspect of the current state of this API Resource.
                     properties:
                       lastTransitionTime:
                         description: |-
@@ -1787,12 +2421,7 @@ spec:
                           - Unknown
                         type: string
                       type:
-                        description: |-
-                          type of condition in CamelCase or in foo.example.com/CamelCase.
-                          ---
-                          Many .condition.type values are consistent across resources like Available, but because arbitrary conditions can be
-                          useful (see .node.status.conditions), the ability to deconflict is important.
-                          The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
+                        description: type of condition in CamelCase or in foo.example.com/CamelCase.
                         maxLength: 316
                         pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                         type: string

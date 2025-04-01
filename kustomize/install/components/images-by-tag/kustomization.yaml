@@ -2,49 +2,40 @@ kind: Component
 images:
 - name: image-pgadmin
   newName: registry.developers.crunchydata.com/crunchydata/crunchy-pgadmin4
-  newTag: ubi8-8.14-2
-- name: image-pgadmin-v4
-  newName: registry.developers.crunchydata.com/crunchydata/crunchy-pgadmin4
-  newTag: ubi8-4.30-35
+  newTag: ubi9-9.1-2513
 - name: image-pgbackrest
   newName: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest
-  newTag: ubi8-2.54.1-1
+  newTag: ubi9-2.54.2-2513
 - name: image-pgbouncer
   newName: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer
-  newTag: ubi8-1.23-4
+  newTag: ubi9-1.24-2513
 - name: image-postgres-exporter
   newName: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter
-  newTag: ubi8-0.16.0-1
-- name: image-postgres-operator-5.7
+  newTag: ubi9-0.16.0-2513
+- name: image-postgres-operator-5.8
   newName: registry.developers.crunchydata.com/crunchydata/postgres-operator
-  newTag: ubi8-5.7.4-0
-- name: image-postgres-operator-5.6
-  newName: registry.developers.crunchydata.com/crunchydata/postgres-operator
-  newTag: ubi8-5.6.6-0
-- name: image-crunchy-postgres-15
-  newName: registry.developers.crunchydata.com/crunchydata/crunchy-postgres
-  newTag: ubi8-15.12-0
+  newTag: ubi9-5.8.0-0
 - name: image-crunchy-postgres-16
   newName: registry.developers.crunchydata.com/crunchydata/crunchy-postgres
-  newTag: ubi8-16.8-0
+  newTag: ubi9-16.8-2513
 - name: image-crunchy-postgres-17
   newName: registry.developers.crunchydata.com/crunchydata/crunchy-postgres
-  newTag: ubi8-17.4-0
+  newTag: ubi9-17.4-2513
 - name: image-crunchy-upgrade
   newName: registry.developers.crunchydata.com/crunchydata/crunchy-upgrade
-  newTag: ubi8-5.7.4-0
-- name: image-crunchy-postgres-15-gis-3.3
-  newName: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis
-  newTag: ubi8-15.12-3.3-2
+  newTag: ubi9-17.4-2513
 - name: image-crunchy-postgres-16-gis-3.3
   newName: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis
-  newTag: ubi8-16.8-3.3-2
+  newTag: ubi9-16.8-3.3-2513
 - name: image-crunchy-postgres-16-gis-3.4
   newName: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis
-  newTag: ubi8-16.8-3.4-2
+  newTag: ubi9-16.8-3.4-2513
 - name: image-crunchy-postgres-17-gis-3.4
   newName: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis
-  newTag: ubi8-17.4-3.4-2
+  newTag: ubi9-17.4-3.4-2513
 - name: image-crunchy-postgres-17-gis-3.5
   newName: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis
-  newTag: ubi8-17.4-3.5-0
+  newTag: ubi9-17.4-3.5-2513
+- name: image-collector
+  newName: registry.developers.crunchydata.com/crunchydata/postgres-operator
+  newTag: ubi9-5.8.0-0

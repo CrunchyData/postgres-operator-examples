@@ -5,7 +5,7 @@ metadata:
   name: postgres-operator
 rules:
 - apiGroups:
-  - ''
+  - ""
   resources:
   - configmaps
   - persistentvolumeclaims
@@ -20,7 +20,7 @@ rules:
   - patch
   - watch
 - apiGroups:
-  - ''
+  - ""
   resources:
   - endpoints
   verbs:
@@ -32,21 +32,21 @@ rules:
   - patch
   - watch
 - apiGroups:
-  - ''
+  - ""
   resources:
   - endpoints/restricted
   - pods/exec
   verbs:
   - create
 - apiGroups:
-  - ''
+  - ""
   resources:
   - events
   verbs:
   - create
   - patch
 - apiGroups:
-  - ''
+  - ""
   resources:
   - pods
   verbs:
@@ -67,6 +67,18 @@ rules:
   - list
   - patch
   - watch
+- apiGroups:
+  - authentication.k8s.io
+  resources:
+  - tokenreviews
+  verbs:
+  - create
+- apiGroups:
+  - authorization.k8s.io
+  resources:
+  - subjectaccessreviews
+  verbs:
+  - create
 - apiGroups:
   - batch
   resources:

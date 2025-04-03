@@ -35,7 +35,7 @@ groups:
 
 ########## POSTGRESQL RULES ##########
   - alert: PGIsUp
-    expr: pg_up < 1
+    expr: "pg_up < 1 or up < 1"
     for: 60s
     labels:
       service: postgresql

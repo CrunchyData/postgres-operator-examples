@@ -35,6 +35,14 @@ spec:
         {{- else -}}
         {{- include "install.defaultEnv" . | nindent 10 }}
         {{- end }}
+        {{- if .Values.workers }}
+        - name: PGO_WORKERS
+          value: {{ .Values.workers | quote }}
+        {{- end }}
+        {{- include "install.relatedImages" . | indent 8 }}
+        {{- if .Values.disable_check_for_upgrades }}
+        - name: CHECK_FOR_UPGRADES
+          value: "true"
         {{- if .Values.extraEnv }}
         {{- toYaml .Values.extraEnv | nindent 10 }}
         {{- end }}

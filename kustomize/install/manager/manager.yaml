@@ -46,7 +46,7 @@ spec:
         - name: RELATED_IMAGE_STANDALONE_PGADMIN
           value: image-pgadmin
         - name: RELATED_IMAGE_COLLECTOR
-          value: image-collector
+          value: image-postgres-operator-5.8
         securityContext:
           seccompProfile:
             type: RuntimeDefault

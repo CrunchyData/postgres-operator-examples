@@ -4,4 +4,4 @@ kind: Kustomization
 namespace: postgres-operator
 
 resources:
-- cn-postgres.yaml
+- mm-postgres.yaml

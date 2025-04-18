@@ -3,7 +3,7 @@ kind: PostgresCluster
 metadata:
   name: cn-mattermost
 spec:
-  image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-16.3-1
+  image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-16.6-2
   postgresVersion: 16
   instances:
     - name: instance1
@@ -25,16 +25,19 @@ spec:
       labels:
         my-label: mattermost
     type: NodePort
-    nodePort: 31002
+    nodePort: 31003
   monitoring:
     pgmonitor:
       exporter:
-        image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-5.6.0-0
+        image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-0.16.0-0
   backups:
     pgbackrest:
-      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.51-1
+      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.54.1-0
       repos:
       - name: repo1
+        schedules:
+            full: "0 1 * * 0"
+            differential: "0 1 * * 1-6"
         volume:
           volumeClaimSpec:
             accessModes:
@@ -42,10 +45,13 @@ spec:
             resources:
               requests:
                 storage: 20Gi
+  # proxy:
+  #   pgBouncer:
+  #     image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.21-3
   patroni:
     dynamicConfiguration:
       postgresql:
         pg_hba:
-          - host cn-mattermost cn-mattermost 10.1.77.105/32 md5
+          - host cn-mattermost cn-mattermost 10.1.77.41/32 md5
           - local all all peer
           - host all all 0.0.0.0/0 md5

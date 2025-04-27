@@ -185,6 +185,26 @@ spec:
 {{ toYaml .Values.monitoringConfig | indent 8 }}
         {{- end }}
   {{- end }}
+  {{- if .Values.instrumentation }}
+  instrumentation:
+    config:
+    {{- if .Values.instrumentationConfig }}
+{{ toYaml .Values.instrumentationConfig | indent 6 }}
+    {{- end }}
+    image: {{ default "" .Values.instrumentationImage | quote }}
+    logs:
+    {{- if .Values.instrumentationLogs }}
+{{ toYaml .Values.instrumentationLogs | indent 6 }}
+    {{- end }}
+    metrics:
+    {{- if .Values.instrumentationMetrics }}
+{{ toYaml .Values.instrumentationMetrics | indent 6 }}
+    {{- end }}
+    resources:
+    {{- if .Values.instrumentationResources }}
+{{ toYaml .Values.instrumentationResources | indent 6 }}
+    {{- end }}
+  {{- end }}
   {{- if .Values.shutdown }}
   shutdown: true
   {{- end }}

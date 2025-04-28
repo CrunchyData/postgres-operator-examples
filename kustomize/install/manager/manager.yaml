@@ -1,0 +1,71 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pgo
+spec:
+  replicas: 1
+  strategy: { type: Recreate }
+  template:
+    spec:
+      serviceAccountName: pgo
+      containers:
+      - name: operator
+        image: postgres-operator
+        env:
+        - name: PGO_INSTALLER
+          value: kustomize
+        - name: PGO_INSTALLER_ORIGIN
+          value: examples-repo
+        - name: PGO_CONTROLLER_LEASE_NAME
+          value: cpk-leader-election-lease
+        - name: PGO_NAMESPACE
+          valueFrom: { fieldRef: { fieldPath: metadata.namespace } }
+        - name: CRUNCHY_DEBUG
+          value: "true"
+        - name: RELATED_IMAGE_POSTGRES_16
+          value: image-crunchy-postgres-16
+        - name: RELATED_IMAGE_POSTGRES_16_GIS_3.3
+          value: image-crunchy-postgres-16-gis-3.3
+        - name: RELATED_IMAGE_POSTGRES_16_GIS_3.4
+          value: image-crunchy-postgres-16-gis-3.4
+        - name: RELATED_IMAGE_POSTGRES_17
+          value: image-crunchy-postgres-17
+        - name: RELATED_IMAGE_POSTGRES_17_GIS_3.4
+          value: image-crunchy-postgres-17-gis-3.4
+        - name: RELATED_IMAGE_POSTGRES_17_GIS_3.5
+          value: image-crunchy-postgres-17-gis-3.5
+        - name: RELATED_IMAGE_PGBACKREST
+          value: image-pgbackrest
+        - name: RELATED_IMAGE_PGBOUNCER
+          value: image-pgbouncer
+        - name: RELATED_IMAGE_PGEXPORTER
+          value: image-postgres-exporter
+        - name: RELATED_IMAGE_PGUPGRADE
+          value: image-crunchy-upgrade
+        - name: RELATED_IMAGE_STANDALONE_PGADMIN
+          value: image-pgadmin
+        - name: RELATED_IMAGE_COLLECTOR
+          value: image-postgres-operator-5.8
+        securityContext:
+          seccompProfile:
+            type: RuntimeDefault
+          allowPrivilegeEscalation: false
+          capabilities: { drop: [ALL] }
+          readOnlyRootFilesystem: true
+          runAsNonRoot: true
+        ports:
+        - containerPort: 8443
+          name: metrics
+        livenessProbe:
+          httpGet:
+            path: /readyz
+            port: 8081
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 8081
+          initialDelaySeconds: 5
+          periodSeconds: 10

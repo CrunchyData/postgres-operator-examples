@@ -1,9 +1,11 @@
+---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: {{ include "install.roleKind" . }}
 metadata:
   name: {{ include "install.roleName" . }}
   labels:
     {{- include "install.labels" . | nindent 4 }}
+    {{- include "install.clusterLabels" . | nindent 4 }}
 rules:
 - apiGroups:
   - ''
@@ -11,6 +13,7 @@ rules:
   - configmaps
   - persistentvolumeclaims
   - secrets
+  - serviceaccounts
   - services
   verbs:
   - create
@@ -56,16 +59,6 @@ rules:
   - patch
   - watch
 - apiGroups:
-  - ''
-  resources:
-  - serviceaccounts
-  verbs:
-  - create
-  - get
-  - list
-  - patch
-  - watch
-- apiGroups:
   - apps
   resources:
   - deployments
@@ -77,6 +70,18 @@ rules:
   - list
   - patch
   - watch
+- apiGroups:
+  - authentication.k8s.io
+  resources:
+  - tokenreviews
+  verbs:
+  - create
+- apiGroups:
+  - authorization.k8s.io
+  resources:
+  - subjectaccessreviews
+  verbs:
+  - create
 - apiGroups:
   - batch
   resources:
@@ -90,6 +95,69 @@ rules:
   - patch
   - watch
 - apiGroups:
+  - coordination.k8s.io
+  resources:
+  - leases
+  verbs:
+  - create
+  - get
+  - update
+  - watch
+- apiGroups:
+  - policy
+  resources:
+  - poddisruptionbudgets
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - watch
+- apiGroups:
+  - postgres-operator.crunchydata.com
+  resources:
+  - crunchybridgeclusters
+  verbs:
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - postgres-operator.crunchydata.com
+  resources:
+  - crunchybridgeclusters/finalizers
+  - crunchybridgeclusters/status
+  verbs:
+  - patch
+  - update
+- apiGroups:
+  - postgres-operator.crunchydata.com
+  resources:
+  - pgadmins
+  - pgupgrades
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - postgres-operator.crunchydata.com
+  resources:
+  - pgadmins/finalizers
+  - pgupgrades/finalizers
+  - postgresclusters/finalizers
+  verbs:
+  - update
+- apiGroups:
+  - postgres-operator.crunchydata.com
+  resources:
+  - pgadmins/status
+  - pgupgrades/status
+  - postgresclusters/status
+  verbs:
+  - patch
+- apiGroups:
   - postgres-operator.crunchydata.com
   resources:
   - postgresclusters
@@ -99,24 +167,24 @@ rules:
   - patch
   - watch
 - apiGroups:
-  - postgres-operator.crunchydata.com
-  resources:
-  - postgresclusters/finalizers
-  verbs:
-  - update
-- apiGroups:
-  - postgres-operator.crunchydata.com
-  resources:
-  - postgresclusters/status
-  verbs:
-  - patch
-- apiGroups:
   - rbac.authorization.k8s.io
   resources:
   - rolebindings
   - roles
   verbs:
   - create
+  - delete
+  - get
+  - list
+  - patch
+  - watch
+- apiGroups:
+  - snapshot.storage.k8s.io
+  resources:
+  - volumesnapshots
+  verbs:
+  - create
+  - delete
   - get
   - list
   - patch

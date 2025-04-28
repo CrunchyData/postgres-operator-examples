@@ -1,0 +1,11 @@
+kind: Kustomization
+
+configurations:
+  - kustomize_related_images.yaml
+
+resources:
+  - manager.yaml
+
+images:
+  - name: postgres-operator
+    newName: image-postgres-operator-5.8

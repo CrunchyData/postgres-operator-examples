@@ -20,21 +20,25 @@ spec:
 {{ toYaml .Values.imagePullSecrets | indent 8 }}
       {{- end }}
       containers:
-      - name: operator
-        image: "{{ .Values.image.image }}"
-        env:
-        - name: CRUNCHY_DEBUG
-          value: {{ if eq .Values.debug false  }}"false"{{- else }}"true"{{- end }}
-        {{- range  $image_name, $image_val := .Values.relatedImages }}
-        - name: RELATED_IMAGE_{{ $image_name | upper }}
-          value: "{{ $image_val.image }}"
-        {{- end }}
-        {{- if .Values.singleNamespace }}
-        - name: PGO_TARGET_NAMESPACE
-          valueFrom: { fieldRef: { apiVersion: v1, fieldPath: metadata.namespace } }
-        {{- end }}
-        securityContext:
-          allowPrivilegeEscalation: false
-          readOnlyRootFilesystem: true
-          runAsNonRoot: true
+        - name: operator
+          image: "{{ .Values.image.image }}"
+          env:
+          - name: CRUNCHY_DEBUG
+            value: {{ if eq .Values.debug false  }}"false"{{- else }}"true"{{- end }}
+          {{- range  $image_name, $image_val := .Values.relatedImages }}
+          - name: RELATED_IMAGE_{{ $image_name | upper }}
+            value: "{{ $image_val.image }}"
+          {{- end }}
+          {{- if .Values.singleNamespace }}
+          - name: PGO_TARGET_NAMESPACE
+            valueFrom: { fieldRef: { apiVersion: v1, fieldPath: metadata.namespace } }
+          {{- end }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
       serviceAccount: {{ include "install.serviceAccountName" . }}
+      tolerations:
+        {{- toYaml .Values.tolerations | nindent 8 }}
+      affinity:
+        {{- toYaml .Values.affinity | nindent 8 }}

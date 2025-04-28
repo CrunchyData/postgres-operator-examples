@@ -33,3 +33,9 @@ debug: true
 # **only for installation**. This is an array that uses the  image pull secret
 # format, i.e. "name: value"
 imagePullSecrets: []
+
+# tolerations allows you to define pod tolerations for the operator pods.
+tolerations: []
+
+# affinity allows you to define pod affinity and anti-affinity rules for the operator pods.
+affinity: {}

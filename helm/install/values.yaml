@@ -39,11 +39,6 @@ singleNamespace: false
 # debug allows you to enable or disable the "debug" level of logging.
 debug: true
 
-# imagePullSecrets defines any image pull secrets to use
-# **only for installation**. This is an array that uses the  image pull secret
-# format, i.e. "name: value"
-imagePullSecrets: []
-
 # pgoControllerLeaseName sets the name of the Lease that holds the Leader Election
 # Lock, thereby enabling High Availability for the Operator. If this is unset,
 # Leader Election will be turned off. To utilize the Leader Election and make PGO

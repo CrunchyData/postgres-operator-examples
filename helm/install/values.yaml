@@ -87,3 +87,9 @@ resources:
 # envOverride:
 #   - name: PG_DEBUG
 #     value: "true"
+
+# tolerations allows you to define pod tolerations for the operator pods.
+tolerations: []
+
+# affinity allows you to define pod affinity and anti-affinity rules for the operator pods.
+affinity: {}

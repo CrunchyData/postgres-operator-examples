@@ -5,7 +5,7 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.17.2
   name: crunchybridgeclusters.postgres-operator.crunchydata.com
   labels:
-    app.kubernetes.io/version: 5.8.1
+    app.kubernetes.io/version: 5.8.2
 spec:
   group: postgres-operator.crunchydata.com
   names:

@@ -5,7 +5,7 @@ metadata:
     controller-gen.kubebuilder.io/version: v0.17.2
   name: postgresclusters.postgres-operator.crunchydata.com
   labels:
-    app.kubernetes.io/version: 5.8.1
+    app.kubernetes.io/version: 5.8.2
 spec:
   group: postgres-operator.crunchydata.com
   names:
@@ -41,9 +41,19 @@ spec:
               description: PostgresClusterSpec defines the desired state of PostgresCluster
               properties:
                 authentication:
+                  description: Authentication settings for the PostgreSQL server
                   properties:
                     rules:
-                      description: 'More info: https://www.postgresql.org/docs/current/auth-pg-hba-conf.html'
+                      description: |-
+                        Postgres compares every new connection to these rules in the order they are
+                        defined. The first rule that matches determines if and how the connection
+                        must then authenticate. Connections that match no rules are disconnected.
+
+                        When this is omitted or empty, Postgres accepts encrypted connections to any
+                        database from users that have a password. To refuse all network connections,
+                        set this to one rule that matches "host" connections to the "reject" method.
+
+                        More info: https://www.postgresql.org/docs/current/auth-pg-hba-conf.html
                       items:
                         properties:
                           connection:
@@ -78,6 +88,7 @@ spec:
                             description: |-
                               The authentication method to use when a connection matches this rule.
                               The special value "reject" refuses connections that match this rule.
+
                               More info: https://www.postgresql.org/docs/current/auth-methods.html
                             maxLength: 20
                             minLength: 1
@@ -92,6 +103,7 @@ spec:
                                 - type: integer
                                 - type: string
                               x-kubernetes-int-or-string: true
+                            description: Additional settings for this rule or its authentication method.
                             maxProperties: 20
                             type: object
                             x-kubernetes-map-type: atomic
@@ -108,9 +120,15 @@ spec:
                         x-kubernetes-map-type: atomic
                         x-kubernetes-validations:
                           - message: '"hba" cannot be combined with other fields'
-                            rule: 'has(self.hba) ? !has(self.connection) && !has(self.databases) && !has(self.method) && !has(self.options) && !has(self.users) : true'
+                            rule: '[has(self.hba), has(self.connection) || has(self.databases) || has(self.method) || has(self.options) || has(self.users)].exists_one(b,b)'
                           - message: '"connection" and "method" are required'
-                            rule: 'has(self.hba) ? true : has(self.connection) && has(self.method)'
+                            rule: has(self.hba) || (has(self.connection) && has(self.method))
+                          - message: the "ldap" method requires an "ldapbasedn", "ldapprefix", or "ldapsuffix" option
+                            rule: has(self.hba) || self.method != "ldap" || (has(self.options) && ["ldapbasedn","ldapprefix","ldapsuffix"].exists(k, k in self.options))
+                          - message: cannot use "ldapbasedn", "ldapbinddn", "ldapbindpasswd", "ldapsearchattribute", or "ldapsearchfilter" options with "ldapprefix" or "ldapsuffix" options
+                            rule: has(self.hba) || self.method != "ldap" || !has(self.options) || [["ldapprefix","ldapsuffix"], ["ldapbasedn","ldapbinddn","ldapbindpasswd","ldapsearchattribute","ldapsearchfilter"]].exists_one(a, a.exists(k, k in self.options))
+                          - message: the "radius" method requires "radiusservers" and "radiussecrets" options
+                            rule: has(self.hba) || self.method != "radius" || (has(self.options) && ["radiusservers","radiussecrets"].all(k, k in self.options))
                       maxItems: 10
                       type: array
                       x-kubernetes-list-type: atomic
@@ -4211,6 +4229,7 @@ spec:
                       type: object
                   type: object
                 config:
+                  description: General configuration of the PostgreSQL server
                   properties:
                     files:
                       description: Files to mount under "/etc/postgres".
@@ -6291,8 +6310,7 @@ spec:
                         - stanza
                       type: object
                       x-kubernetes-validations:
-                        - fieldPath: .repo
-                          message: Only S3, GCS or Azure repos can be used as a pgBackRest data source.
+                        - message: Only S3, GCS or Azure repos can be used as a pgBackRest data source.
                           rule: '!has(self.repo.volume)'
                     postgresCluster:
                       description: |-

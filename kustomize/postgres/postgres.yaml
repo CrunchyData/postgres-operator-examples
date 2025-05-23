@@ -2,10 +2,12 @@ apiVersion: postgres-operator.crunchydata.com/v1beta1
 kind: PostgresCluster
 metadata:
   name: hippo
+  annotations:
+    postgres-operator.crunchydata.com/autoCreateUserSchema: "true"
 spec:
   postgresVersion: 17
   users:
-    - name: rhino
+    - name: hippo
       databases:
         - zoo
   instances:

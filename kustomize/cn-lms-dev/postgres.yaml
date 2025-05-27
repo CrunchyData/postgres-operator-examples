@@ -1,7 +1,7 @@
 apiVersion: postgres-operator.crunchydata.com/v1beta1
 kind: PostgresCluster
 metadata:
-  name: cn-lms
+  name: cn-lms-dev
 spec:
   image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi8-16.2-3.4-0
   postgresVersion: 16
@@ -15,9 +15,9 @@ spec:
           requests:
             storage: 10Gi
   users:
-    - name: cn-lms
+    - name: cn-lms-dev
       databases:
-        - cn-lms
+        - cn-lms-dev
       options: 'SUPERUSER'
   service:
     metadata:
@@ -25,7 +25,7 @@ spec:
         my-annotation: value1
       labels:
         my-label: value2
-    type: NodePort
+    type: LoadBalancer
     nodePort: 32001
   patroni:
     dynamicConfiguration:

@@ -25,7 +25,7 @@ spec:
         my-annotation: value1
       labels:
         my-label: value2
-    type: NodePort
+    type: LoadBalancer
     nodePort: 31001
   monitoring:
     pgmonitor:

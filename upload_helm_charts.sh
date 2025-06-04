@@ -12,6 +12,6 @@ do
     CHART=$(grep ^name ./$filename/Chart.yaml | awk '{print $2}' | tr -d '\n')
     helm dependency build ./$filename
     helm package $filename --version $VERSION
-    helm cm-push $CHART-$VERSION.tgz harbor --force
+    helm push $CHART-$VERSION.tgz oci://harbor.devops.indico.io/indico-charts
   fi 
 done

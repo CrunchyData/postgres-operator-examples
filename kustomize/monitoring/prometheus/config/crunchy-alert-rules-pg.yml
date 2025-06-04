@@ -1,6 +1,6 @@
 ###
 #
-# Copyright © 2017-2024 Crunchy Data Solutions, Inc. All Rights Reserved.
+# Copyright © 2017-2025 Crunchy Data Solutions, Inc. All Rights Reserved.
 #
 ###
 
@@ -35,7 +35,7 @@ groups:
 
 ########## POSTGRESQL RULES ##########
   - alert: PGIsUp
-    expr: pg_up < 1
+    expr: "pg_up < 1 or up < 1"
     for: 60s
     labels:
       service: postgresql

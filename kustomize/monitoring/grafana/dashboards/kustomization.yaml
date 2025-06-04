@@ -11,6 +11,7 @@ configMapGenerator:
   - postgresql_service_health.json
   - prometheus_alerts.json
   - query_statistics.json
+  - pgbouncer_direct.json
 
 generatorOptions:
   disableNameSuffixHash: true

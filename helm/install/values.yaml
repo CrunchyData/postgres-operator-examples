@@ -2,36 +2,34 @@
 # controllerImages are used to run the operator's controllers.
 # The cluster image defined below runs the PostgresCluster and PGUpgrade controllers.
 controllerImages:
-  cluster: registry.developers.crunchydata.com/crunchydata/postgres-operator:ubi8-5.7.0-0
+  cluster: registry.developers.crunchydata.com/crunchydata/postgres-operator:ubi9-5.8.2-0
 
 # relatedImages are used when an image is omitted from PostgresCluster, PGAdmin or PGUpgrade specs.
 relatedImages:
   postgres_17:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-17.0-0
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi9-17.5-2520
+  postgres_17_gis_3.5:
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi9-17.5-3.5-2520
   postgres_17_gis_3.4:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi8-17.0-3.4-0
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi9-17.5-3.4-2520
   postgres_16:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-16.4-2
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi9-16.9-2520
   postgres_16_gis_3.4:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi8-16.4-3.4-2
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi9-16.9-3.4-2520
   postgres_16_gis_3.3:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi8-16.4-3.3-2
-  postgres_15:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-15.8-2
-  postgres_15_gis_3.3:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi8-15.8-3.3-2
-  pgadmin:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-pgadmin4:ubi8-4.30-31
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi9-16.9-3.3-2520
   pgbackrest:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.53.1-0
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi9-2.54.2-2520
   pgbouncer:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.23-0
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi9-1.24-2520
   pgexporter:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-0.15.0-12
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi9-0.17.1-2520
   pgupgrade:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-upgrade:ubi8-5.7.0-0
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-upgrade:ubi9-17.5-2520
   standalone_pgadmin:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-pgadmin4:ubi8-8.12-0
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-pgadmin4:ubi9-9.2-2520
+  collector:
+    image: registry.developers.crunchydata.com/crunchydata/postgres-operator:ubi9-5.8.2-0
 
 # singleNamespace controls where PGO watches for PostgresClusters. When false,
 # PGO watches for and responds to PostgresClusters in all namespaces. When true,
@@ -89,3 +87,9 @@ resources:
 # envOverride:
 #   - name: PG_DEBUG
 #     value: "true"
+
+# tolerations allows you to define pod tolerations for the operator pods.
+# tolerations: []
+
+# affinity allows you to define pod affinity and anti-affinity rules for the operator pods.
+# affinity: {}

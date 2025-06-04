@@ -19,24 +19,24 @@ spec:
         args: ["start-dev"]
         name: keycloak
         env:
-        - name: DB_VENDOR
+        - name: KC_DB
           value: "postgres"
-        - name: DB_ADDR
+        - name: KC_DB_URL_HOST
           valueFrom: { secretKeyRef: { name: keycloakdb-pguser-keycloakdb, key: host } }
-        - name: DB_PORT
+        - name: KC_DB_URL_PORT
           valueFrom: { secretKeyRef: { name: keycloakdb-pguser-keycloakdb, key: port } }
-        - name: DB_DATABASE
+        - name: KC_DB_URL_DATABASE
           valueFrom: { secretKeyRef: { name: keycloakdb-pguser-keycloakdb, key: dbname } }
-        - name: DB_USER
+        - name: KC_DB_USERNAME
           valueFrom: { secretKeyRef: { name: keycloakdb-pguser-keycloakdb, key: user } }
-        - name: DB_PASSWORD
+        - name: KC_DB_PASSWORD
           valueFrom: { secretKeyRef: { name: keycloakdb-pguser-keycloakdb, key: password } }
-        - name: KEYCLOAK_ADMIN
+        - name: KC_BOOTSTRAP_ADMIN_USERNAME
           value: "admin"
-        - name: KEYCLOAK_ADMIN_PASSWORD
+        - name: KC_BOOTSTRAP_ADMIN_PASSWORD
           value: "admin"
-        - name: KC_PROXY
-          value: "edge"
+        - name: KC_PROXY_HEADERS
+          value: "xforwarded"
         ports:
         - name: http
           containerPort: 8080

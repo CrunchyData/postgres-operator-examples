@@ -1,0 +1,59 @@
+apiVersion: postgres-operator.crunchydata.com/v1beta1
+kind: PostgresCluster
+metadata:
+  name: keycloak-prod
+spec:
+  image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-17.2-0
+  postgresVersion: 17
+  instances:
+    - name: instance1
+      dataVolumeClaimSpec:
+        accessModes:
+        - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: 50Gi  # Zwiększone dla production
+  users:
+    - name: keycloak
+      databases:
+        - keycloak
+      options: 'SUPERUSER'
+  
+  service:
+    metadata:
+      annotations:
+        service.beta.kubernetes.io/aws-load-balancer-type: nlb  # Lepsze dla production
+      labels:
+        app: keycloak-postgres
+    type: LoadBalancer
+    # Usuń nodePort - będzie przydzielony automatycznie
+  
+  patroni:
+    dynamicConfiguration:
+      pg_hba:
+        - "hostssl all all all md5"  # Używaj SSL
+  
+  monitoring:
+    pgmonitor:
+      exporter:
+        image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-5.6.0-0
+  
+  backups:
+    pgbackrest:
+      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.51-0
+      repos:
+      - name: repo1
+        schedules:
+          full: "0 2 * * 0"        # Pełny backup w niedzielę o 2:00
+          differential: "0 2 * * 1-6"  # Różnicowy backup codziennie o 2:00
+        volume:
+          volumeClaimSpec:
+            accessModes:
+            - "ReadWriteOnce"
+            resources:
+              requests:
+                storage: 100Gi  # Większe dla backupów production
+  
+  proxy:
+    pgBouncer:
+      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.21-3

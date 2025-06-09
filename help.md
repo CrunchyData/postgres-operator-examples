@@ -11,6 +11,8 @@ kubectl apply -k kustomize/cn-lms-prod
 kubectl apply -k kustomize/cn-mattermost
 kubectl apply -k kustomize/mm-mattermost
 
+kubectl apply -k kustomize/gitlab-prod
+
 kubectl -n postgres-operator get svc --selector=postgres-operator.crunchydata.com/cluster=cn-lms-prod
 
 # usuwanie terminng

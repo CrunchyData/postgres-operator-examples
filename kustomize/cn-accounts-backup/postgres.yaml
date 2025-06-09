@@ -29,8 +29,20 @@ spec:
   
   patroni:
     dynamicConfiguration:
-      pg_hba:
-        - "hostnossl all all all md5"
+      postgresql:
+        pg_hba:
+        - "local all postgres peer"
+        - "hostssl replication _crunchyrepl all cert"
+        - "hostssl postgres _crunchyrepl all cert" 
+        - "host all _crunchyrepl all reject"
+        - "host all ccp_monitoring 127.0.0.0/8 scram-sha-256"
+        - "host all ccp_monitoring ::1/128 scram-sha-256"
+        - "host all ccp_monitoring all reject"
+        - "hostssl all _crunchypgbouncer all scram-sha-256"
+        - "host all _crunchypgbouncer all reject"
+        - "host all all 0.0.0.0/0 md5"             # Wszystkie IP bez SSL
+        - "hostssl all all all scram-sha-256"      # SSL z SCRAM
+        - "local all all md5"   
   monitoring:
     pgmonitor:
       exporter:

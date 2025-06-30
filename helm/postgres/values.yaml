@@ -101,6 +101,10 @@ postgresVersion: 17
 # (HA). Settings "instances" overrides this value.
 # instanceReplicas: 1
 
+# instanceAccessMode sets the access mode of Postgres Persistent Volume. This
+# defaults to the value below.
+# instanceAccessMode: "ReadWriteOnce"
+
 ##############################
 # Advanced Postgres Settings #
 ##############################

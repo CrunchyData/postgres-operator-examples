@@ -25,7 +25,7 @@ spec:
         storageClassName: {{ .Values.instanceStorageClassName | quote }}
         {{- end }}
         accessModes:
-        - "ReadWriteOnce"
+        - {{ default "ReadWriteOnce" .Values.instanceAccessMode | quote }}
         resources:
           requests:
             storage: {{ default "1Gi" .Values.instanceSize | quote }}

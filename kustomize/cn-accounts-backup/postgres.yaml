@@ -16,7 +16,7 @@ spec:
   users:
     - name: accounts
       databases:
-        - accounts
+        - postgres
       options: 'SUPERUSER'
   
   service:
@@ -30,6 +30,9 @@ spec:
   patroni:
     dynamicConfiguration:
       postgresql:
+        parameters:
+          timezone: 'Europe/Warsaw'                  # Ustawienie strefy czasowej na Warszawę
+          log_timezone: 'Europe/Warsaw'              # Strefa czasowa dla logów
         pg_hba:
         - "local all postgres peer"
         - "hostssl replication _crunchyrepl all cert"

@@ -1,0 +1,48 @@
+name: Sync review-ready label
+
+permissions:
+  contents: read
+  pull-requests: write
+
+on:
+  pull_request:
+    branches: [master]
+    types:
+      - labeled
+      - unlabeled
+      - opened
+      - edited
+      - closed
+      - reopened
+      - synchronize
+      - converted_to_draft
+      - ready_for_review
+      - review_requested
+      - review_request_removed
+      - auto_merge_enabled
+      - auto_merge_disabled
+
+jobs:
+  label:
+    name: Sync review label
+    runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]'
+    timeout-minutes: 5
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Ensure label exists
+        run: |
+          gh label create review-ready --color B2D89F --description "PR is ready for the review" --repo ${{ github.repository }} || true
+      - name: Sync label
+        run: |
+          ISDRAFT1=$(gh pr view ${{ github.event.pull_request.number }} --json isDraft --jq '.isDraft' --repo ${{ github.repository }})
+          ISDRAFT="$(echo -e "${ISDRAFT1}" | tr -d '[:space:]')"
+          echo "isdraft=$ISDRAFT"
+          if [[ "false" == "$ISDRAFT" ]]; then
+            echo "Set label"
+            gh pr edit ${{ github.event.pull_request.number }} --add-label review-ready --repo ${{ github.repository }}
+          else
+            echo "Remove label"
+            gh pr edit ${{ github.event.pull_request.number }} --remove-label review-ready --repo ${{ github.repository }}
+          fi

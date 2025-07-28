@@ -130,5 +130,3 @@ imagePullSecrets:
   value: "{{ trimSuffix "," $out }}"
 {{- end }}
 {{- end }}{{/* define */}}
-
-

@@ -29,7 +29,7 @@ spec:
           OAUTH2_SCOPE: "openid email profile"
           OAUTH2_USERINFO_ENDPOINT: "userinfo"
           OAUTH2_SSL_CERT_VERIFICATION: "False" # for testing purposes
-          OAUTH2_BUTTON_COLOR: "red"   
+          OAUTH2_BUTTON_COLOR: "red"
       OAUTH2_AUTO_CREATE_USER : "True"
       DEBUG: "True" # for testing purposes
       SERVER_MODE: "True"

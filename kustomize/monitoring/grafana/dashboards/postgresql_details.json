@@ -151,7 +151,7 @@
       "pluginVersion": "7.4.5",
       "targets": [
         {
-          "expr": "min(ccp_backrest_last_incr_backup_time_since_completion_seconds{pg_cluster=\"[[cluster]]\"} < ccp_backrest_last_diff_backup_time_since_completion_seconds{pg_cluster=\"[[cluster]]\"} or ccp_backrest_last_incr_backup_time_since_completion_seconds{pg_cluster=\"[[cluster]]\"} < ccp_backrest_last_full_backup_time_since_completion_seconds{pg_cluster=\"[[cluster]]\"} or ccp_backrest_last_incr_backup_time_since_completion_seconds{pg_cluster=\"[[cluster]]\"}) ",
+          "expr": "min(ccp_backrest_last_incr_backup_time_since_completion_seconds{pg_cluster=\"[[cluster]]\"} or ccp_backrest_last_diff_backup_time_since_completion_seconds{pg_cluster=\"[[cluster]]\"} or ccp_backrest_last_full_backup_time_since_completion_seconds{pg_cluster=\"[[cluster]]\"}) ",
           "format": "time_series",
           "interval": "",
           "intervalFactor": 1,
@@ -1701,29 +1701,29 @@
           "step": 2
         },
         {
-          "expr": "sum(ccp_stat_bgwriter_buffers_backend{pg_cluster=\"[[cluster]]\",pod=~\"[[pod]]\"})",
+          "expr": "sum(ccp_stat_io_bgwriter_writes{pg_cluster=\"[[cluster]]\",pod=~\"[[pod]]\"}) or sum(ccp_stat_bgwriter_buffers_backend{pg_cluster=\"[[cluster]]\",pod=~\"[[pod]]\"})",
           "format": "time_series",
           "intervalFactor": 2,
-          "legendFormat": "Backend",
-          "metric": "ccp_stat_bgwriter_buffers_backend",
+          "legendFormat": "Writes",
+          "metric": "ccp_stat_io_bgwriter_writes",
           "refId": "B",
           "step": 2
         },
         {
-          "expr": "sum(ccp_stat_bgwriter_buffers_backend_fsync{pg_cluster=\"[[cluster]]\",pod=~\"[[pod]]\"})",
+          "expr": "sum(ccp_stat_io_bgwriter_fsyncs{pg_cluster=\"[[cluster]]\",pod=~\"[[pod]]\"}) or sum(ccp_stat_bgwriter_buffers_backend_fsync{pg_cluster=\"[[cluster]]\",pod=~\"[[pod]]\"})",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "FSync",
-          "metric": "ccp_stat_bgwriter_buffers_backend_fsync",
+          "metric": "ccp_stat_io_bgwriter_fsyncs",
           "refId": "C",
           "step": 2
         },
         {
-          "expr": "sum(ccp_stat_bgwriter_buffers_checkpoint{pg_cluster=\"[[cluster]]\",pod=~\"[[pod]]\"})",
+          "expr": "sum(ccp_stat_checkpointer_buffers_written{pg_cluster=\"[[cluster]]\",pod=~\"[[pod]]\"}) or sum(ccp_stat_bgwriter_buffers_checkpoint{pg_cluster=\"[[cluster]]\",pod=~\"[[pod]]\"})",
           "format": "time_series",
           "intervalFactor": 2,
           "legendFormat": "CheckPoint",
-          "metric": "ccp_stat_bgwriter_buffers_checkpoint",
+          "metric": "ccp_stat_checkpointer_buffers_written",
           "refId": "D",
           "step": 2
         },

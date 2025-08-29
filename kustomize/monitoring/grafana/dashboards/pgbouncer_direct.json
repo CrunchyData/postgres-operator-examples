@@ -28,7 +28,7 @@
       "name": "Prometheus",
       "version": "1.0.0"
     }
-  ],  
+  ],
   "annotations": {
     "list": [
       {
@@ -660,7 +660,7 @@
           ],
           "value": [
             "$__all"
-          ]      
+          ]
         },
         "datasource": "PROMETHEUS",
         "definition": "label_values(ccp_pgbouncer_databases_pool_size{cluster_name=\"[[cluster_name]]\", pod=\"[[pgbnode]]\"},name)",

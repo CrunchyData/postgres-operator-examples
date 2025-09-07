@@ -43,3 +43,7 @@ spec:
             resources:
               requests:
                 storage: 20Gi
+  authentication:
+    rules:
+      - hba: "host cn-lms-prod cn-lms-prod 10.244.7.0/24 trust"
+      - hba: "host all all 0.0.0.0/0 md5"

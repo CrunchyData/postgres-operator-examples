@@ -10,6 +10,7 @@ kubectl apply -k kustomize/cn-lms-dev
 kubectl apply -k kustomize/cn-lms-prod
 kubectl apply -k kustomize/cn-mattermost
 kubectl apply -k kustomize/mm-mattermost
+kubectl apply -k kustomize/mixeway-flow
 
 kubectl delete -k kustomize/gitlab-prod
 

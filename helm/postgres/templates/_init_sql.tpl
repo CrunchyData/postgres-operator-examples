@@ -17,9 +17,9 @@
 \c {{ $db }};
 CREATE EXTENSION IF NOT EXISTS vector SCHEMA public;
 {{- range $users }}
-GRANT USAGE, CREATE ON SCHEMA public TO {{ . }};
+GRANT USAGE, CREATE ON SCHEMA public TO "{{ . }}";
 CREATE SCHEMA IF NOT EXISTS {{ . }};
-GRANT ALL ON SCHEMA {{ . }} TO {{ . }};
+GRANT ALL ON SCHEMA {{ . }} TO "{{ . }}";
 {{- end }}
 {{- end }}
 

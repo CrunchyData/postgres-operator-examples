@@ -1,0 +1,438 @@
+{
+  "$defs": {
+    "ApoloSecret": {
+      "properties": {
+        "key": {
+          "title": "Key",
+          "type": "string"
+        }
+      },
+      "required": [
+        "key"
+      ],
+      "title": "ApoloSecret",
+      "type": "object",
+      "x-description": "Apolo Secret Configuration.",
+      "x-is-advanced-field": false,
+      "x-meta-type": "inline",
+      "x-title": "Secret",
+      "x-type": "ApoloSecret"
+    },
+    "Bucket": {
+      "properties": {
+        "id": {
+          "description": "The bucket ID.",
+          "title": "Bucket ID",
+          "type": "string"
+        },
+        "owner": {
+          "description": "The owner of the bucket.",
+          "title": "Bucket owner",
+          "type": "string"
+        },
+        "details": {
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "The details of the bucket.",
+          "title": "Bucket details",
+          "type": "object"
+        },
+        "credentials": {
+          "description": "The credentials of the bucket.",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/S3BucketCredentials"
+              },
+              {
+                "$ref": "#/$defs/MinioBucketCredentials"
+              },
+              {
+                "$ref": "#/$defs/GCPBucketCredentials"
+              }
+            ]
+          },
+          "title": "Bucket credentials",
+          "type": "array"
+        },
+        "bucket_provider": {
+          "$ref": "#/$defs/BucketProvider",
+          "description": "The provider of the bucket.",
+          "title": "Bucket provider"
+        }
+      },
+      "required": [
+        "id",
+        "owner",
+        "bucket_provider"
+      ],
+      "title": "Bucket",
+      "type": "object",
+      "x-description": "Configuration for Bucket.",
+      "x-is-advanced-field": false,
+      "x-meta-type": "dynamic",
+      "x-title": "Bucket",
+      "x-type": "Bucket"
+    },
+    "BucketProvider": {
+      "enum": [
+        "AWS",
+        "MINIO",
+        "GCP",
+        "AZURE",
+        "OPEN_STACK"
+      ],
+      "title": "BucketProvider",
+      "type": "string"
+    },
+    "CredentialsType": {
+      "enum": [
+        "READ_ONLY",
+        "READ_WRITE"
+      ],
+      "title": "CredentialsType",
+      "type": "string"
+    },
+    "GCPBucketCredentials": {
+      "properties": {
+        "name": {
+          "description": "The name of the bucket.",
+          "title": "Bucket name",
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/$defs/CredentialsType",
+          "default": "READ_ONLY",
+          "description": "The type of the bucket.",
+          "title": "Bucket type"
+        },
+        "key_data": {
+          "$ref": "#/$defs/ApoloSecret",
+          "description": "The key data of the bucket.",
+          "title": "Bucket key data"
+        }
+      },
+      "required": [
+        "name",
+        "key_data"
+      ],
+      "title": "GCPBucketCredentials",
+      "type": "object",
+      "x-description": "",
+      "x-is-advanced-field": false,
+      "x-meta-type": "inline",
+      "x-title": "",
+      "x-type": "PostgresUsers"
+    },
+    "MinioBucketCredentials": {
+      "properties": {
+        "name": {
+          "description": "The name of the bucket.",
+          "title": "Bucket name",
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/$defs/CredentialsType",
+          "default": "READ_ONLY",
+          "description": "The type of the bucket.",
+          "title": "Bucket type"
+        },
+        "access_key_id": {
+          "description": "The access key ID of the bucket.",
+          "title": "Bucket access key ID",
+          "type": "string"
+        },
+        "secret_access_key": {
+          "$ref": "#/$defs/ApoloSecret",
+          "description": "The secret access key of the bucket.",
+          "title": "Bucket secret access key"
+        },
+        "endpoint_url": {
+          "description": "The endpoint URL of the bucket.",
+          "title": "Bucket endpoint URL",
+          "type": "string"
+        },
+        "region_name": {
+          "description": "The region name of the bucket.",
+          "title": "Bucket region name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "access_key_id",
+        "secret_access_key",
+        "endpoint_url",
+        "region_name"
+      ],
+      "title": "MinioBucketCredentials",
+      "type": "object",
+      "x-description": "",
+      "x-is-advanced-field": false,
+      "x-meta-type": "inline",
+      "x-title": "",
+      "x-type": "PostgresUsers"
+    },
+    "PGBackupConfig": {
+      "properties": {
+        "enable": {
+          "const": true,
+          "default": true,
+          "description": "Enable backups for the Postgres cluster. We automatically create and configure the corresponding backup bucket for you. Note: this bucket will not be automatically removed when you remove the app.",
+          "title": "Enable backups",
+          "type": "boolean"
+        },
+        "backup_bucket": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Bucket"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Optionally provide your own bucket for backups. If not provided, a default bucket will be created.",
+          "title": "Custom backup bucket"
+        }
+      },
+      "title": "PGBackupConfig",
+      "type": "object",
+      "x-description": "Enable backup for your Postgres cluster.",
+      "x-is-advanced-field": false,
+      "x-meta-type": "inline",
+      "x-title": "Enable Backups",
+      "x-type": "PGBackupConfig"
+    },
+    "PGBouncer": {
+      "properties": {
+        "preset": {
+          "$ref": "#/$defs/Preset",
+          "description": "Preset to use for the PGBouncer instance."
+        },
+        "replicas": {
+          "default": 2,
+          "description": "Number of replicas for the PGBouncer instance.",
+          "exclusiveMinimum": 0,
+          "title": "PGBouncer replicas",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "preset"
+      ],
+      "title": "PGBouncer",
+      "type": "object",
+      "x-description": "Configuration for PG Bouncer.",
+      "x-is-advanced-field": false,
+      "x-meta-type": "inline",
+      "x-title": "PG Bouncer",
+      "x-type": "PGBouncer"
+    },
+    "PostgresConfig": {
+      "properties": {
+        "postgres_version": {
+          "$ref": "#/$defs/PostgresSupportedVersions",
+          "default": "16",
+          "x-description": "Set version of the Postgres server to use.",
+          "x-is-advanced-field": false,
+          "x-meta-type": "inline",
+          "x-title": "Postgres version"
+        },
+        "instance_replicas": {
+          "default": 3,
+          "exclusiveMinimum": 0,
+          "title": "Instance Replicas",
+          "type": "integer",
+          "x-description": "Set number of replicas for the Postgres instance.",
+          "x-is-advanced-field": false,
+          "x-meta-type": "inline",
+          "x-title": "Postgres instance replicas"
+        },
+        "instance_size": {
+          "default": 1,
+          "exclusiveMinimum": 0,
+          "title": "Instance Size",
+          "type": "integer",
+          "x-description": "Set size of the Postgres instance disk (in GB).",
+          "x-is-advanced-field": false,
+          "x-meta-type": "inline",
+          "x-title": "Postgres instance disk size"
+        },
+        "db_users": {
+          "items": {
+            "$ref": "#/$defs/PostgresDBUser"
+          },
+          "minItems": 1,
+          "title": "Db Users",
+          "type": "array",
+          "x-description": "Configure list of users and databases they have access to. Multiple users could have access to the same database.Postgres user 'postgres' is always created and has access to all databases.",
+          "x-is-advanced-field": false,
+          "x-meta-type": "inline",
+          "x-title": "Database users"
+        }
+      },
+      "required": [
+        "db_users"
+      ],
+      "title": "PostgresConfig",
+      "type": "object",
+      "x-description": "Configuration for Postgres.",
+      "x-is-advanced-field": false,
+      "x-meta-type": "inline",
+      "x-title": "Postgres",
+      "x-type": "PostgresConfig"
+    },
+    "PostgresDBUser": {
+      "properties": {
+        "name": {
+          "maxLength": 63,
+          "minLength": 1,
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$",
+          "title": "Name",
+          "type": "string",
+          "x-description": "Name of the database user. Must be 1-63 characters long, start and end with a lowercase letter or number, and contain only lowercase letters, numbers, or hyphens.",
+          "x-is-advanced-field": false,
+          "x-meta-type": "inline",
+          "x-title": "Database user name"
+        },
+        "db_names": {
+          "items": {
+            "maxLength": 63,
+            "minLength": 1,
+            "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$",
+            "type": "string"
+          },
+          "title": "Db Names",
+          "type": "array",
+          "x-description": "List of databases this user should have access to. Databases will be created if they do not exist.",
+          "x-is-advanced-field": false,
+          "x-meta-type": "inline",
+          "x-title": "Databases"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "PostgresDBUser",
+      "type": "object",
+      "x-description": "",
+      "x-is-advanced-field": false,
+      "x-meta-type": "inline",
+      "x-title": "",
+      "x-type": "PostgresUsers"
+    },
+    "PostgresSupportedVersions": {
+      "enum": [
+        "12",
+        "13",
+        "14",
+        "15",
+        "16"
+      ],
+      "title": "PostgresSupportedVersions",
+      "type": "string"
+    },
+    "Preset": {
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string",
+          "x-description": "The name of the preset.",
+          "x-is-advanced-field": false,
+          "x-meta-type": "inline",
+          "x-title": "Resource Preset"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "Preset",
+      "type": "object",
+      "x-description": "Select the resource preset used per service replica.",
+      "x-is-advanced-field": false,
+      "x-meta-type": "inline",
+      "x-title": "Resource Preset",
+      "x-type": "Preset"
+    },
+    "S3BucketCredentials": {
+      "properties": {
+        "name": {
+          "description": "The name of the bucket.",
+          "title": "Bucket name",
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/$defs/CredentialsType",
+          "default": "READ_ONLY",
+          "description": "The type of the bucket.",
+          "title": "Bucket type"
+        },
+        "access_key_id": {
+          "$ref": "#/$defs/ApoloSecret",
+          "description": "The access key ID of the bucket.",
+          "title": "Bucket access key ID"
+        },
+        "secret_access_key": {
+          "$ref": "#/$defs/ApoloSecret",
+          "description": "The secret access key of the bucket.",
+          "title": "Bucket secret access key"
+        },
+        "endpoint_url": {
+          "description": "The endpoint URL of the bucket.",
+          "title": "Bucket endpoint URL",
+          "type": "string"
+        },
+        "region_name": {
+          "description": "The region name of the bucket.",
+          "title": "Bucket region name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "access_key_id",
+        "secret_access_key",
+        "endpoint_url",
+        "region_name"
+      ],
+      "title": "S3BucketCredentials",
+      "type": "object",
+      "x-description": "",
+      "x-is-advanced-field": false,
+      "x-meta-type": "inline",
+      "x-title": "",
+      "x-type": "PostgresUsers"
+    }
+  },
+  "properties": {
+    "preset": {
+      "$ref": "#/$defs/Preset"
+    },
+    "postgres_config": {
+      "$ref": "#/$defs/PostgresConfig"
+    },
+    "pg_bouncer": {
+      "$ref": "#/$defs/PGBouncer"
+    },
+    "backup": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/PGBackupConfig"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    }
+  },
+  "required": [
+    "preset",
+    "postgres_config",
+    "pg_bouncer"
+  ],
+  "title": "PostgresInputs",
+  "type": "object"
+}

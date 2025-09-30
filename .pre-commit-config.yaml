@@ -11,11 +11,20 @@ repos:
         exclude: ^helm/
       - id: end-of-file-fixer
       - id: trailing-whitespace
-  - repo: https://github.com/mrtazz/checkmake.git
-    rev: 0.2.2
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.6.9
     hooks:
-      - id: checkmake
-  - repo: https://github.com/gruntwork-io/pre-commit
-    rev: v0.1.30
+      - id: ruff
+        args: [--fix, --exit-non-zero-on-fix]
+      - id: ruff-format
+  - repo: https://github.com/asottile/setup-cfg-fmt
+    rev: v2.4.0
     hooks:
-      - id: helmlint
+      - id: setup-cfg-fmt
+  - repo: local
+    hooks:
+      - id: generate-types-schemas
+        name: Generate types schemas
+        entry: make gen-types-schemas
+        language: system
+        pass_filenames: false

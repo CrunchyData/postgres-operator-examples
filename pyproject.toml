@@ -22,7 +22,7 @@ pydantic = "^2.9.2"
 pyyaml = "^6.0.2"
 types-PyYAML = "^6.0.12.20241230"
 yarl = "^1.18.3"
-apolo-app-types = {version = "^25.10.10", extras = ["fixtures"]}
+apolo-app-types = {version = "^25.10.12", extras = ["fixtures"]}
 pre-commit = "^4.2.0"
 multidict = "^6.6.4"
 

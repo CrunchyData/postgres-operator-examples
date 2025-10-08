@@ -250,14 +250,14 @@ trio = ["trio (>=0.31.0)"]
 
 [[package]]
 name = "apolo-app-types"
-version = "25.10.10"
+version = "25.10.12"
 description = "Apolo Platform App Types."
 optional = false
 python-versions = "<4.0,>=3.9.0"
 groups = ["main"]
 files = [
-    {file = "apolo_app_types-25.10.10-py3-none-any.whl", hash = "sha256:fe0a493412a0e87ace29cacffcf9767fcf648c7ac8320b7252936cb9bf88e59d"},
-    {file = "apolo_app_types-25.10.10.tar.gz", hash = "sha256:f209a8024f3b9c2780d626693ded3cc52ac7ed81ea13c3de3d2017ebab69caa3"},
+    {file = "apolo_app_types-25.10.12-py3-none-any.whl", hash = "sha256:ff0ec3bb1954ca39800512d64053aaadf15c29eb7ea0247662a0cd8abf3e3675"},
+    {file = "apolo_app_types-25.10.12.tar.gz", hash = "sha256:315129652c882ccd95a76c02fbf4eab1cff3af57c19101fd887f2c576d997998"},
 ]
 
 [package.dependencies]
@@ -2408,4 +2408,4 @@ propcache = ">=0.2.1"
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.11.0,<4.0"
-content-hash = "a09037d6144290282742f857ccfbe88fc002f28584451c8a19aa7e4d1f9b9802"
+content-hash = "5f27741a6cc12b65d327e415803d57c6c7a90f6c1865edba3e2a306a011e7016"

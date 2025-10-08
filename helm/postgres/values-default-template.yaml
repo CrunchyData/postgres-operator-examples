@@ -1,0 +1,5 @@
+instanceReplicas: 3
+pgBouncerReplicas: 2
+monitoring: true
+users:
+  - name: postgres

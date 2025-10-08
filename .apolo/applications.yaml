@@ -1,0 +1,38 @@
+- app_type: postgresql
+  name: postgres
+  title: PostgreSQL
+  install_type: workflow
+  helm_path: helm/postgres
+  inputs:
+    schema_path: .apolo/src/apolo_apps_postgresql/schemas/PostgresInputs.json
+    types_name: PostgresInputs
+    processor: PostgresInputsChartValueProcessor
+    image: ghcr.io/neuro-inc/mlops-app-crunchy-postgres
+  outputs:
+    schema_path: .apolo/src/apolo_apps_postgresql/schemas/PostgresOutputs.json
+    types_name: PostgresOutputs
+    processor: PostgresOutputsProcessor
+    image: ghcr.io/neuro-inc/mlops-app-crunchy-postgres
+  short_description: Deploy PostgreSQL cluster on Apolo platform
+  app_package_name: apolo_apps_postgresql
+  logo: https://storage.googleapis.com/development-421920-assets/app-logos/postgresql.svg
+  description: |
+    Crunchy PostgreSQL is a scalable, production-grade relational database service
+    designed for high availability, performance, and flexibility.\n
+    This managed application includes built-in support for automated backups,
+    replication, and failover to ensure data resilience and minimal downtime.\n
+    It comes preconfigured with popular extensions like pgvector for AI and machine learning workloads,
+    as well as enhanced observability, tuning options,
+    and robust security features—making it ideal for modern, data-intensive applications.
+  changelog:
+    file: ./CHANGELOG.md
+  tags: ["Postgres", "PostgreSQL", "RDBMS"]
+  urls:
+    - name: Crunchy PostgreSQL for Kubernetes documentation
+      type: documentation
+      url: https://access.crunchydata.com/documentation/postgres-operator/latest/overview
+  assets:
+    - type: image
+      url: https://storage.googleapis.com/development-421920-assets/app-logos/postgresql-banner1.svg
+    - type: image
+      url: https://storage.googleapis.com/development-421920-assets/app-logos/postgresql-banner2.png

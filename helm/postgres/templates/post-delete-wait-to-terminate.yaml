@@ -1,0 +1,22 @@
+{{- if .Values.singleNamespace }}
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Chart.Name }}-wait-for-terminate
+  annotations:
+    "helm.sh/hook": post-delete
+    "helm.sh/hook-delete-policy": "hook-succeeded"
+spec:
+  template:
+    spec:
+      serviceAccountName: {{ include "install.serviceAccountName" . }}
+      containers:
+      - name: pre-delete-check
+        image: bitnami/kubectl:1.29.4
+        command:
+        - bash
+        - -c
+        - |
+          kubectl wait --for=delete postgrescluster {{ default .Release.Name .Values.name }} --timeout=5m
+      restartPolicy: Never
+{{- end }}

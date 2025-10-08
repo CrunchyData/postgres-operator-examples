@@ -1,0 +1,102 @@
+on:
+  workflow_call: {}
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout commit
+        uses: actions/checkout@v4
+      - name: Install python
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
+          cache: pip
+      - uses: actions/cache@v4
+        name: Define a cache for the virtual environment based on the dependencies lock file
+        with:
+          path: ./.venv
+          key: venv-${{ hashFiles('.pre-commit-config.yaml') }}
+      - name: Install Poetry
+        run: pip install poetry
+      - name: Setup Python dependencies cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pypoetry
+          key: poetry-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: |
+            poetry-
+      - name: Install dependencies
+        run: make install
+      - name: Lint
+        run: |
+          echo "::add-matcher::.github/actionlint-matcher.json"
+          make lint
+
+  test-unit:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout commit
+        uses: actions/checkout@v4
+      - name: Install python
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
+          cache: pip
+      - name: Install Poetry
+        run: pip install poetry
+      - name: Setup Python dependencies cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pypoetry
+          key: poetry-${{ hashFiles('**/poetry.lock') }}
+          restore-keys: |
+            poetry-
+      - name: Install dependencies
+        run: make setup
+      - name: Run unit tests
+        run: make test-unit
+
+  # test-integration:
+  #   name: Integration tests
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout commit
+  #       uses: actions/checkout@v4
+  #     - name: Install python
+  #       uses: actions/setup-python@v5
+  #       with:
+  #         python-version-file: .python-version
+  #         cache: pip
+  #     - name: Install Poetry
+  #       run: pip install poetry
+  #     - name: Setup Python dependencies cache
+  #       uses: actions/cache@v4
+  #       with:
+  #         path: ~/.cache/pypoetry
+  #         key: poetry-${{ hashFiles('**/poetry.lock') }}
+  #         restore-keys: |
+  #           poetry-
+  #     - name: Install dependencies
+  #       run: make setup
+  #     - name: Run integration tests
+  #       run: make test-integration
+
+  check:
+    name: Check
+    needs:
+      - lint
+      - test-unit
+      # - test-integration
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Decide whether the needed jobs succeeded or failed
+        uses: re-actors/alls-green@release/v1
+        with:
+          jobs: ${{ toJSON(needs) }}

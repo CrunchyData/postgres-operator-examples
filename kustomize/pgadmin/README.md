@@ -5,4 +5,3 @@ Starting with **PGO v5.5.0** the user interface has its own CRD. You have better
 For more architectural insights please refer to [docs](https://access.crunchydata.com/documentation/postgres-operator/latest/guides/pgadmin)
 
 For a list of possible pgadmin settings refer to [pgadmin docs](https://www.pgadmin.org/docs/pgadmin4/latest/config_py.html)
-

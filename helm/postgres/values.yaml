@@ -158,10 +158,9 @@ postgresVersion: 17
 
 # databaseInitSQL references a ConfigMap that contains a SQL file that should be
 # run a cluster bootstrap.
-# databaseInitSQL:
-#   name: bootstrap-sql
-#   key: bootstrap.sql
-
+databaseInitSQL:
+  name: init-sql-script
+  key: bootstrap.sql
 # standby sets whether to run this as a standby cluster. Setting "enabled" to
 # "true" enables the standby cluster while "repoName" points to a pgBackRest
 # archive to replay WAL files from, and "host" and "port" point to a primary

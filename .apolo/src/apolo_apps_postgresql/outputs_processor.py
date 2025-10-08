@@ -24,7 +24,7 @@ def get_postgres_cluster_users(app_instance_id: str) -> dict[str, t.Any]:
         api_group="postgres-operator.crunchydata.com",
         api_version="v1beta1",
         crd_plural_name="postgresclusters",
-        label_selector=f"app.kubernetes.io/instance={app_instance_id}",
+        label_selector=f"argocd.argoproj.io/instance={app_instance_id}",
     )
     assert len(pg_clusters["items"]) == 1, "Expected exactly one Postgres cluster"
     pg_cluster = pg_clusters["items"][0]

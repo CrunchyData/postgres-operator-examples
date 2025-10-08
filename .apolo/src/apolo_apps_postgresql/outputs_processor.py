@@ -19,11 +19,12 @@ MAX_SLEEP_SEC = 10
 POSTGRES_ADMIN_USERNAME = "postgres"
 
 
-def get_postgres_cluster_users() -> dict[str, t.Any]:
+def get_postgres_cluster_users(app_instance_id: str) -> dict[str, t.Any]:
     pg_clusters = get_crd_objects(
         api_group="postgres-operator.crunchydata.com",
         api_version="v1beta1",
         crd_plural_name="postgresclusters",
+        label_selector=f"app.kubernetes.io/instance={app_instance_id}",
     )
     assert len(pg_clusters["items"]) == 1, "Expected exactly one Postgres cluster"
     pg_cluster = pg_clusters["items"][0]
@@ -89,7 +90,9 @@ async def get_postgres_outputs(
         msg = "Failed to get postgres outputs"
         raise Exception(msg)
 
-    requested_users = get_postgres_cluster_users()
+    requested_users = get_postgres_cluster_users(
+        app_instance_id=app_instance_id,
+    )
     users = []
     admin_user = None
 

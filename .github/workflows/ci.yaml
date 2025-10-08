@@ -52,11 +52,6 @@ jobs:
     steps:
       - name: Checkout commit
         uses: actions/checkout@v4
-      - name: Purge old artifacts
-        uses: kolpav/purge-artifacts-action@v1
-        with:
-          token: ${{ github.token }}
-          expire-in: 30mins
       - name: Login to ghcr.io
         uses: docker/login-action@v3.5.0
         with:
@@ -84,26 +79,42 @@ jobs:
           export IMAGE_TAG=${GITHUB_REF#refs/tags/}
           make push-hook-image
 
-  release-operator-chart:
+  chart-release:
     runs-on: ubuntu-latest
-    name: Release operator chart
-    needs: test
+    env:
+      HELM_EXPERIMENTAL_OCI: 1
+      OCI_REGISTRY: ghcr.io
+    permissions:
+      contents: read
+      packages: write
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Configure Git
+
+      - name: Package Charts
         run: |
-          git config user.name "$GITHUB_ACTOR"
-          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
-      - name: Install Helm
-        uses: azure/setup-helm@v1
-        with:
-          version: v3.7.1
-      - name: Run chart-releaser
-        uses: helm/chart-releaser-action@v1.7.0
-        env:
-          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-        with:
-          charts_dir: helm
+          # Package charts
+          mkdir -p ./packaged
+
+          for DIR in helm/*; do
+            # Check if Chart.yaml exists in this directory
+            if [ -f "${DIR}/Chart.yaml" ]; then
+              echo "Packaging ${DIR}"
+              helm dependency update $DIR
+              helm lint $DIR
+              helm package $DIR --destination ./packaged
+            fi
+          done
+
+      - name: Log in to GitHub Packages
+        run: |
+          echo ${{ secrets.GITHUB_TOKEN }} | helm registry login $OCI_REGISTRY -u ${{ github.actor }} --password-stdin
+
+      - name: Push Charts to GitHub Packages
+        run: |
+          for CHART in ./packaged/*.tgz; do
+            echo "Publishing $CHART to $OCI_REGISTRY/${{ github.repository_owner }}/charts"
+            helm push "$CHART" oci://$OCI_REGISTRY/${{ github.repository_owner }}/charts
+          done

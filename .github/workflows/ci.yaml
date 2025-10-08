@@ -86,6 +86,7 @@ jobs:
     env:
       HELM_EXPERIMENTAL_OCI: 1
       OCI_REGISTRY: ghcr.io
+      GH_PAGES_BRANCH: gh-pages
     permissions:
       contents: read
       packages: write
@@ -94,6 +95,11 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
       - name: Package Charts
         run: |
@@ -119,7 +125,7 @@ jobs:
           for CHART in ./packaged/*.tgz; do
             CHART_NAME=$(basename $CHART | sed -E 's/-(.*).tgz$/\1/')
             CHART_VERSION=$(helm inspect chart "$CHART" | grep '^version:' | awk '{print $2}')
-            REPO=oci://ghcr.io/${{ github.repository_owner }}/${{ github.repository }}
+            REPO=oci://ghcr.io/${{ github.repository }}
 
             # Check if chart version already exists
             if helm pull "$REPO/$CHART_NAME" --version "$CHART_VERSION" --destination /tmp/existing 2>/dev/null; then

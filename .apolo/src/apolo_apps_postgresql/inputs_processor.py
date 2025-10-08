@@ -236,6 +236,7 @@ class PostgresInputsChartValueProcessor(BaseChartValueProcessor[PostgresInputs])
             # empirically measured, postgrescluster crd name is limited to 37 chars
             # otherwise it will fail to create STSs and other resources
             "name": postgrescluster_crd_name,
+            "postgresVersion": input_.postgres_config.postgres_version.value,
         }
         users_config = self._create_users_config(input_.postgres_config.db_users)
 

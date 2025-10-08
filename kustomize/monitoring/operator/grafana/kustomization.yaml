@@ -14,4 +14,3 @@ resources:
 - datasources.yaml
 - ../../grafana/dashboards
 - dashboards.yaml
-

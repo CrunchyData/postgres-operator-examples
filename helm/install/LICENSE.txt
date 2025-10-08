@@ -8,7 +8,7 @@ Crunchy PostgreSQL for Kubernetes. This Crunchy PostgreSQL for Kubernetes Terms
 of Use establishes a framework that will enable Crunchy Data to provide Crunchy
 Data packaged open source software, made available as a series of containers (the
 "Crunchy Data Software"), to users, subject to applicable terms and conditions.
- 
+
 By using or accessing the Crunchy Data Software, the using or accessing party
 agrees to applicable terms and conditions and agrees that the applicable terms as
 set forth in this Crunchy PostgreSQL for Kubernetes Terms of Use will govern the

@@ -7,11 +7,11 @@ spec:
     matchLabels:
       postgres-operator.crunchydata.com/crunchy-otel-collector: "true"
 
-  # Uncomment to monitor a single namespace only      
+  # Uncomment to monitor a single namespace only
   # namespaceSelector:
   #   matchNames:
   #     - postgres-operator
-  
+
   podMetricsEndpoints:
   - port: otel-metrics
     interval: 15s
@@ -62,11 +62,11 @@ spec:
     - key: postgres-operator.crunchydata.com/control-plane
       operator: Exists
 
-  # Uncomment to monitor a single namespace only      
+  # Uncomment to monitor a single namespace only
   # namespaceSelector:
   #   matchNames:
   #     - postgres-operator
-  
+
   podMetricsEndpoints:
   - port: metrics
     interval: 15s

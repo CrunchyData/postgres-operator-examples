@@ -123,12 +123,12 @@ jobs:
       - name: Push Charts to GitHub Packages
         run: |
           for CHART in ./packaged/*.tgz; do
-            CHART_NAME=$(basename $CHART | sed -E 's/-(.*).tgz$/\1/')
+            CHART_NAME=$(helm inspect chart "$CHART" | grep '^name:' | awk '{print $2}')
             CHART_VERSION=$(helm inspect chart "$CHART" | grep '^version:' | awk '{print $2}')
             REPO=oci://ghcr.io/${{ github.repository }}
 
             # Check if chart version already exists
-            if helm pull "$REPO/$CHART_NAME" --version "$CHART_VERSION" --destination /tmp/existing 2>/dev/null; then
+            if helm pull "$REPO/$CHART_NAME" --version "$CHART_VERSION" --destination /tmp 2>/dev/null; then
               echo "Chart ${CHART_NAME} version ${CHART_VERSION} already exists, skipping"
             else
               echo "Publishing $CHART"

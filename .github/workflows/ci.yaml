@@ -81,6 +81,7 @@ jobs:
 
   operator-chart-release:
     runs-on: ubuntu-latest
+    needs: test
     env:
       HELM_EXPERIMENTAL_OCI: 1
       OCI_REGISTRY: ghcr.io
@@ -115,6 +116,15 @@ jobs:
       - name: Push Charts to GitHub Packages
         run: |
           for CHART in ./packaged/*.tgz; do
-            echo "Publishing $CHART to $OCI_REGISTRY/${{ github.repository_owner }}/charts"
-            helm push "$CHART" oci://$OCI_REGISTRY/${{ github.repository_owner }}/charts
+            CHART_NAME=$(basename $CHART | sed -E 's/-(.*).tgz$/\1/')
+            CHART_VERSION=$(helm inspect chart "$CHART" | grep '^version:' | awk '{print $2}')
+            REPO=oci://ghcr.io/${{ github.repository_owner }}/charts
+
+            # Check if chart version already exists
+            if helm chart list $REPO | grep -q "${CHART_NAME}" && helm chart list $REPO | grep -q "${CHART_VERSION}"; then
+              echo "Chart ${CHART_NAME} version ${CHART_VERSION} already exists, skipping"
+            else
+              echo "Publishing $CHART"
+              helm push "$CHART" $REPO
+            fi
           done

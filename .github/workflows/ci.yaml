@@ -86,6 +86,7 @@ jobs:
 
   release-operator-chart:
     runs-on: ubuntu-latest
+    name: Release operator chart
     needs: test
     steps:
       - name: Checkout

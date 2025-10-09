@@ -5,11 +5,12 @@ metadata:
   name: postgres-operator
 rules:
 - apiGroups:
-  - ''
+  - ""
   resources:
   - configmaps
   - persistentvolumeclaims
   - secrets
+  - serviceaccounts
   - services
   verbs:
   - create
@@ -19,7 +20,7 @@ rules:
   - patch
   - watch
 - apiGroups:
-  - ''
+  - ""
   resources:
   - endpoints
   verbs:
@@ -31,35 +32,25 @@ rules:
   - patch
   - watch
 - apiGroups:
-  - ''
+  - ""
   resources:
   - endpoints/restricted
   - pods/exec
   verbs:
   - create
 - apiGroups:
-  - ''
+  - ""
   resources:
   - events
   verbs:
   - create
   - patch
 - apiGroups:
-  - ''
+  - ""
   resources:
   - pods
   verbs:
   - delete
-  - get
-  - list
-  - patch
-  - watch
-- apiGroups:
-  - ''
-  resources:
-  - serviceaccounts
-  verbs:
-  - create
   - get
   - list
   - patch
@@ -77,6 +68,18 @@ rules:
   - patch
   - watch
 - apiGroups:
+  - authentication.k8s.io
+  resources:
+  - tokenreviews
+  verbs:
+  - create
+- apiGroups:
+  - authorization.k8s.io
+  resources:
+  - subjectaccessreviews
+  verbs:
+  - create
+- apiGroups:
   - batch
   resources:
   - cronjobs
@@ -87,6 +90,15 @@ rules:
   - get
   - list
   - patch
+  - watch
+- apiGroups:
+  - coordination.k8s.io
+  resources:
+  - leases
+  verbs:
+  - create
+  - get
+  - update
   - watch
 - apiGroups:
   - policy
@@ -158,6 +170,18 @@ rules:
   - roles
   verbs:
   - create
+  - delete
+  - get
+  - list
+  - patch
+  - watch
+- apiGroups:
+  - snapshot.storage.k8s.io
+  resources:
+  - volumesnapshots
+  verbs:
+  - create
+  - delete
   - get
   - list
   - patch

@@ -2,32 +2,34 @@
 # controllerImages are used to run the operator's controllers.
 # The cluster image defined below runs the PostgresCluster and PGUpgrade controllers.
 controllerImages:
-  cluster: registry.developers.crunchydata.com/crunchydata/postgres-operator:ubi8-5.6.1-0
+  cluster: registry.developers.crunchydata.com/crunchydata/postgres-operator:ubi9-5.8.3-0
 
 # relatedImages are used when an image is omitted from PostgresCluster, PGAdmin or PGUpgrade specs.
 relatedImages:
+  postgres_17:
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi9-17.6-2534
+  postgres_17_gis_3.5:
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi9-17.6-3.5-2534
+  postgres_17_gis_3.4:
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi9-17.6-3.4-2534
   postgres_16:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-16.4-0
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi9-16.10-2534
   postgres_16_gis_3.4:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi8-16.4-3.4-0
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi9-16.10-3.4-2534
   postgres_16_gis_3.3:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi8-16.4-3.3-0
-  postgres_15:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-15.8-0
-  postgres_15_gis_3.3:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi8-15.8-3.3-0
-  pgadmin:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-pgadmin4:ubi8-4.30-29
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi9-16.10-3.3-2534
   pgbackrest:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.52.1-1
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi9-2.56.0-2534
   pgbouncer:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.22-4
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi9-1.24-2534
   pgexporter:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-0.15.0-10
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi9-0.17.1-2534
   pgupgrade:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-upgrade:ubi8-5.6.1-0
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-upgrade:ubi9-17.6-2534
   standalone_pgadmin:
-    image: registry.developers.crunchydata.com/crunchydata/crunchy-pgadmin4:ubi8-8.10-0
+    image: registry.developers.crunchydata.com/crunchydata/crunchy-pgadmin4:ubi9-9.2-2534
+  collector:
+    image: registry.developers.crunchydata.com/crunchydata/postgres-operator:ubi9-5.8.3-0
 
 # singleNamespace controls where PGO watches for PostgresClusters. When false,
 # PGO watches for and responds to PostgresClusters in all namespaces. When true,
@@ -36,6 +38,16 @@ singleNamespace: false
 
 # debug allows you to enable or disable the "debug" level of logging.
 debug: false
+
+# pgoControllerLeaseName sets the name of the Lease that holds the Leader Election
+# Lock, thereby enabling High Availability for the Operator. If this is unset,
+# Leader Election will be turned off. To utilize the Leader Election and make PGO
+# highly available you will also need to increment the replica count.
+pgoControllerLeaseName: cpk-leader-election-lease
+
+# replicas sets the number of PGO instances.
+# Warning: This should only be greater than 1 if pgoControllerLeaseName is set!
+replicas: 1
 
 # imagePullSecretNames is a list of secret names to use for pulling controller images.
 # More info: https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
@@ -77,3 +89,9 @@ disable_check_for_upgrades: true
 # envOverride:
 #   - name: PG_DEBUG
 #     value: "true"
+
+# tolerations allows you to define pod tolerations for the operator pods.
+# tolerations: []
+
+# affinity allows you to define pod affinity and anti-affinity rules for the operator pods.
+# affinity: {}

@@ -19,16 +19,17 @@ MAX_SLEEP_SEC = 10
 POSTGRES_ADMIN_USERNAME = "postgres"
 
 
-def get_postgres_cluster_users() -> dict[str, t.Any]:
+def get_postgres_cluster(app_instance_id: str) -> dict[str, t.Any]:
     pg_clusters = get_crd_objects(
         api_group="postgres-operator.crunchydata.com",
         api_version="v1beta1",
         crd_plural_name="postgresclusters",
+        label_selector=f"argocd.argoproj.io/instance={app_instance_id}",
     )
-    assert len(pg_clusters["items"]) == 1, "Expected exactly one Postgres cluster"
-    pg_cluster = pg_clusters["items"][0]
-    users = pg_cluster["spec"].get("users", [])
-    return {user["name"]: user for user in users}
+    if not len(pg_clusters["items"]) == 1:
+        msg = f"Expected exactly one Postgres cluster, got {pg_clusters}"
+        raise Exception(msg)
+    return pg_clusters["items"][0]
 
 
 def postgres_creds_from_kube_secret_data(
@@ -73,23 +74,35 @@ async def get_postgres_outputs(
     helm_values: dict[str, t.Any],
     app_instance_id: str,
 ) -> dict[str, t.Any]:
+    pg_cluster = get_postgres_cluster(
+        app_instance_id=app_instance_id,
+    )
+    pg_cluster_name = pg_cluster["metadata"]["name"]
+
     for trial in range(1, MAX_SLEEP_SEC):
         logger.info("Trying to get postgres outputs")  # noqa: T201
         secrets = await get_secret(
-            label="postgres-operator.crunchydata.com/role=pguser"
+            label=(
+                "postgres-operator.crunchydata.com/role=pguser,"
+                f"postgres-operator.crunchydata.com/cluster={pg_cluster_name}"
+            )
         )
         if secrets:
-            logger.info("Secrets found")  # noqa: T201
+            msg = (
+                f"Found {len(secrets.items)} user secrets for cluster {pg_cluster_name}"
+            )
+            logger.info(msg)
             break
-        logger.info(  # noqa: T201
-            "Failed to get postgres outputs, retrying in %s seconds", trial
-        )
+        msg = f"Failed to get postgres outputs, retrying in {trial} seconds"
+        logger.info(msg)
         await asyncio.sleep(trial)
     else:
         msg = "Failed to get postgres outputs"
         raise Exception(msg)
 
-    requested_users = get_postgres_cluster_users()
+    requested_users = {
+        user["name"]: user for user in pg_cluster["spec"].get("users", [])
+    }
     users = []
     admin_user = None
 

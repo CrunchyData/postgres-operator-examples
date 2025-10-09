@@ -2,9 +2,14 @@ apiVersion: postgres-operator.crunchydata.com/v1beta1
 kind: PostgresCluster
 metadata:
   name: hippo
+  annotations:
+    postgres-operator.crunchydata.com/autoCreateUserSchema: "true"
 spec:
-  image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-16.3-1
-  postgresVersion: 16
+  postgresVersion: 17
+  users:
+    - name: hippo
+      databases:
+        - zoo
   instances:
     - name: instance1
       dataVolumeClaimSpec:
@@ -15,7 +20,6 @@ spec:
             storage: 1Gi
   backups:
     pgbackrest:
-      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.51-1
       repos:
       - name: repo1
         volume:

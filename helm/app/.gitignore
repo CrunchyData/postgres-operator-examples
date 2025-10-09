@@ -1,4 +1,0 @@
-values-*.yaml
-!values-postgres-template.yaml
-charts
-Chart.lock

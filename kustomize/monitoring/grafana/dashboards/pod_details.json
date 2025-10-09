@@ -60,6 +60,73 @@
   ],
   "panels": [
     {
+      "datasource": "PROMETHEUS",
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [
+            {
+              "options": {
+                "2": {
+                  "index": 2,
+                  "text": "Primary"
+                },
+                "1": {
+                  "index": 1,
+                  "text": "Replica"
+                }
+              },
+              "type": "value"
+            }
+          ]
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 2,
+        "w": 24,
+        "x": 0,
+        "y": 0
+      },
+      "id": 17,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "text": {
+          "valueSize": 30
+        },
+        "textMode": "auto"
+      },
+      "pluginVersion": "9.2.20",
+      "targets": [
+        {
+          "datasource": "PROMETHEUS",
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "ccp_is_in_recovery_status{pod=\"[[pod]]\", pg_cluster=\"[[cluster]]\"}",
+          "format": "table",
+          "instant": true,
+          "legendFormat": "__auto",
+          "range": false,
+          "refId": "A"
+        }
+      ],
+      "title": "Pod Type",
+      "type": "stat"
+    },
+    {
       "aliasColors": {
         "% Throttled": "yellow",
         "% Used": "blue",
@@ -1129,7 +1196,7 @@
         "allValue": null,
         "current": {},
         "datasource": "PROMETHEUS",
-        "definition": "label_values({pg_cluster=\"[[cluster]]\"},pod)",
+        "definition": "label_values({pg_cluster=\"[[cluster]]\", exp_type!=\"pgbouncer\"},pod)",
         "description": null,
         "error": null,
         "hide": 0,
@@ -1139,7 +1206,7 @@
         "name": "pod",
         "options": [],
         "query": {
-          "query": "label_values({pg_cluster=\"[[cluster]]\"},pod)",
+          "query": "label_values({pg_cluster=\"[[cluster]]\", exp_type!=\"pgbouncer\"},pod)",
           "refId": "PROMETHEUS-pod-Variable-Query"
         },
         "refresh": 1,

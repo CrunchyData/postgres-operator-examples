@@ -237,6 +237,10 @@ class PostgresInputsChartValueProcessor(BaseChartValueProcessor[PostgresInputs])
             # otherwise it will fail to create STSs and other resources
             "name": postgrescluster_crd_name,
             "postgresVersion": input_.postgres_config.postgres_version.value,
+            "databaseInitSQL": {
+                "name": f"{postgrescluster_crd_name}-init-sql",
+                "key": "bootstrap.sql",
+            },
         }
         users_config = self._create_users_config(input_.postgres_config.db_users)
 

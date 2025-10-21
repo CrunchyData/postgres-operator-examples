@@ -9,12 +9,13 @@
       "pluginName": "Prometheus"
     }
   ],
+  "__elements": {},
   "__requires": [
     {
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "7.4.5"
+      "version": "11.1.13"
     },
     {
       "type": "datasource",
@@ -39,7 +40,10 @@
     "list": [
       {
         "builtIn": 1,
-        "datasource": "-- Grafana --",
+        "datasource": {
+          "type": "datasource",
+          "uid": "grafana"
+        },
         "enable": true,
         "hide": true,
         "iconColor": "rgba(0, 211, 255, 1)",
@@ -50,6 +54,7 @@
   },
   "description": "Show current firing and pending alerts, and  severity alert counts.",
   "editable": false,
+  "fiscalYearStartMonth": 0,
   "gnetId": 4181,
   "graphTooltip": 0,
   "id": null,
@@ -65,7 +70,10 @@
   "panels": [
     {
       "collapsed": false,
-      "datasource": "PROMETHEUS",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PROMETHEUS"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -74,27 +82,38 @@
       },
       "id": 10,
       "panels": [],
-      "repeat": null,
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PROMETHEUS"
+          },
+          "refId": "A"
+        }
+      ],
       "title": "Environment Summary",
       "type": "row"
     },
     {
-      "cacheTimeout": null,
-      "datasource": "PROMETHEUS",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PROMETHEUS"
+      },
       "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
-          "custom": {},
           "mappings": [
             {
-              "id": 0,
-              "op": "=",
-              "text": "N/A",
-              "type": 1,
-              "value": "null"
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
             }
           ],
           "thresholds": {
@@ -117,26 +136,31 @@
         "y": 1
       },
       "id": 6,
-      "interval": null,
-      "links": [],
       "maxDataPoints": 100,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
         "justifyMode": "auto",
         "orientation": "horizontal",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [],
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "text": {},
-        "textMode": "auto"
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "7.4.5",
+      "pluginVersion": "11.1.13",
       "targets": [
         {
-          "expr": "sum(count by (kubernetes_namespace) (pg_up{pg_cluster!=''})) + sum(count by (kubernetes_namespace) (patroni_postgres_running{pg_cluster!=''}))",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PROMETHEUS"
+          },
+          "expr": "count(group by (kubernetes_namespace)(pg_up{pg_cluster!=''}) or group by (kubernetes_namespace)(patroni_postgres_running{pg_cluster!=''}))",
           "format": "time_series",
           "instant": true,
           "interval": "",
@@ -149,22 +173,25 @@
       "type": "stat"
     },
     {
-      "cacheTimeout": null,
-      "datasource": "PROMETHEUS",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PROMETHEUS"
+      },
       "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
-          "custom": {},
           "mappings": [
             {
-              "id": 0,
-              "op": "=",
-              "text": "N/A",
-              "type": 1,
-              "value": "null"
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
             }
           ],
           "thresholds": {
@@ -187,14 +214,13 @@
         "y": 1
       },
       "id": 13,
-      "interval": null,
-      "links": [],
       "maxDataPoints": 100,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
         "justifyMode": "auto",
         "orientation": "horizontal",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "mean"
@@ -202,13 +228,19 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "text": {},
-        "textMode": "auto"
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "7.4.5",
+      "pluginVersion": "11.1.13",
       "targets": [
         {
-          "expr": "sum(count by (pg_cluster) (pg_up{pg_cluster!=''})) + sum(count by (pg_cluster) (patroni_postgres_running{pg_cluster!=''}))",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PROMETHEUS"
+          },
+          "expr": "sum(group by (pg_cluster)(pg_up{pg_cluster!=''}) or group by (pg_cluster)(patroni_postgres_running{pg_cluster!=''}))",
           "format": "time_series",
           "instant": true,
           "interval": "",
@@ -221,22 +253,25 @@
       "type": "stat"
     },
     {
-      "cacheTimeout": null,
-      "datasource": "PROMETHEUS",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PROMETHEUS"
+      },
       "description": "",
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
-          "custom": {},
           "mappings": [
             {
-              "id": 0,
-              "op": "=",
-              "text": "N/A",
-              "type": 1,
-              "value": "null"
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
             }
           ],
           "thresholds": {
@@ -259,14 +294,13 @@
         "y": 1
       },
       "id": 14,
-      "interval": null,
-      "links": [],
       "maxDataPoints": 100,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
         "justifyMode": "auto",
         "orientation": "horizontal",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "mean"
@@ -274,12 +308,18 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "text": {},
-        "textMode": "auto"
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "7.4.5",
+      "pluginVersion": "11.1.13",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PROMETHEUS"
+          },
           "expr": "sum(count(pg_up{pg_cluster!=''})) + sum(count(patroni_postgres_running{pg_cluster!=''}))",
           "format": "time_series",
           "instant": true,
@@ -294,7 +334,10 @@
     },
     {
       "collapsed": false,
-      "datasource": "PROMETHEUS",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PROMETHEUS"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -303,26 +346,37 @@
       },
       "id": 11,
       "panels": [],
-      "repeat": null,
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PROMETHEUS"
+          },
+          "refId": "A"
+        }
+      ],
       "title": "Alert Summary",
       "type": "row"
     },
     {
-      "cacheTimeout": null,
-      "datasource": "PROMETHEUS",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PROMETHEUS"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
-          "custom": {},
           "mappings": [
             {
-              "id": 0,
-              "op": "=",
-              "text": "N/A",
-              "type": 1,
-              "value": "null"
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
             }
           ],
           "thresholds": {
@@ -352,14 +406,13 @@
         "y": 4
       },
       "id": 2,
-      "interval": null,
-      "links": [],
       "maxDataPoints": 100,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
         "justifyMode": "auto",
         "orientation": "horizontal",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "mean"
@@ -367,10 +420,12 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "text": {},
-        "textMode": "auto"
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "7.4.5",
+      "pluginVersion": "11.1.13",
       "targets": [
         {
           "bucketAggs": [
@@ -384,6 +439,10 @@
               "type": "date_histogram"
             }
           ],
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PROMETHEUS"
+          },
           "dsType": "elasticsearch",
           "expr": "sum(ALERTS{alertstate=\"firing\",severity=\"critical\"} > 0) OR on() vector(0)",
           "format": "time_series",
@@ -405,21 +464,24 @@
       "type": "stat"
     },
     {
-      "cacheTimeout": null,
-      "datasource": "PROMETHEUS",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PROMETHEUS"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
-          "custom": {},
           "mappings": [
             {
-              "id": 0,
-              "op": "=",
-              "text": "N/A",
-              "type": 1,
-              "value": "null"
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
             }
           ],
           "thresholds": {
@@ -442,25 +504,30 @@
         "y": 4
       },
       "id": 5,
-      "interval": null,
-      "links": [],
       "maxDataPoints": 100,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
         "justifyMode": "auto",
         "orientation": "horizontal",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [],
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "text": {},
-        "textMode": "auto"
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "7.4.5",
+      "pluginVersion": "11.1.13",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PROMETHEUS"
+          },
           "expr": "sum(ALERTS{alertstate=\"firing\",severity=\"warning\"} > 0) OR on() vector(0)",
           "format": "time_series",
           "instant": true,
@@ -474,21 +541,24 @@
       "type": "stat"
     },
     {
-      "cacheTimeout": null,
-      "datasource": "PROMETHEUS",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PROMETHEUS"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
-          "custom": {},
           "mappings": [
             {
-              "id": 0,
-              "op": "=",
-              "text": "N/A",
-              "type": 1,
-              "value": "null"
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
             }
           ],
           "thresholds": {
@@ -511,14 +581,13 @@
         "y": 4
       },
       "id": 9,
-      "interval": null,
-      "links": [],
       "maxDataPoints": 100,
       "options": {
         "colorMode": "background",
         "graphMode": "none",
         "justifyMode": "auto",
         "orientation": "horizontal",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "mean"
@@ -526,12 +595,18 @@
           "fields": "",
           "values": false
         },
+        "showPercentChange": false,
         "text": {},
-        "textMode": "auto"
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "7.4.5",
+      "pluginVersion": "11.1.13",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PROMETHEUS"
+          },
           "expr": "sum(ALERTS{alertstate=\"firing\",severity=\"info\"} > 0) OR on() vector(0)",
           "format": "time_series",
           "interval": "",
@@ -545,7 +620,10 @@
     },
     {
       "collapsed": false,
-      "datasource": "PROMETHEUS",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PROMETHEUS"
+      },
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -554,32 +632,45 @@
       },
       "id": 12,
       "panels": [],
-      "repeat": null,
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PROMETHEUS"
+          },
+          "refId": "A"
+        }
+      ],
       "title": "Alerts",
       "type": "row"
     },
     {
-      "datasource": "PROMETHEUS",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PROMETHEUS"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
           "custom": {
-            "align": null,
-            "displayMode": "auto",
-            "filterable": true
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": true,
+            "inspect": false
           },
           "decimals": 2,
           "displayName": "",
           "mappings": [
             {
-              "from": "",
-              "id": 1,
-              "text": "",
-              "to": "",
-              "type": 1,
-              "value": ""
+              "options": {
+                "": {
+                  "text": ""
+                }
+              },
+              "type": "value"
             }
           ],
           "thresholds": {
@@ -613,8 +704,11 @@
             },
             "properties": [
               {
-                "id": "custom.displayMode",
-                "value": "color-background"
+                "id": "custom.cellOptions",
+                "value": {
+                  "mode": "gradient",
+                  "type": "color-background"
+                }
               },
               {
                 "id": "custom.width",
@@ -679,14 +773,26 @@
         "y": 7
       },
       "id": 1,
-      "links": [],
       "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "7.4.5",
+      "pluginVersion": "11.1.13",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PROMETHEUS"
+          },
           "expr": "ALERTS{alertstate='firing'} > 0",
           "format": "table",
           "instant": true,
@@ -753,15 +859,21 @@
       "type": "table"
     },
     {
-      "datasource": "PROMETHEUS",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PROMETHEUS"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
             "mode": "thresholds"
           },
           "custom": {
-            "align": null,
-            "filterable": true
+            "cellOptions": {
+              "type": "auto"
+            },
+            "filterable": true,
+            "inspect": false
           },
           "decimals": 2,
           "displayName": "",
@@ -797,8 +909,7 @@
                 "value": 2
               },
               {
-                "id": "custom.align",
-                "value": null
+                "id": "custom.align"
               }
             ]
           },
@@ -809,8 +920,7 @@
             },
             "properties": [
               {
-                "id": "custom.width",
-                "value": null
+                "id": "custom.width"
               }
             ]
           },
@@ -871,14 +981,26 @@
         "y": 12
       },
       "id": 3,
-      "links": [],
       "options": {
+        "cellHeight": "sm",
+        "footer": {
+          "countRows": false,
+          "fields": "",
+          "reducer": [
+            "sum"
+          ],
+          "show": false
+        },
         "showHeader": true,
         "sortBy": []
       },
-      "pluginVersion": "7.4.5",
+      "pluginVersion": "11.1.13",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PROMETHEUS"
+          },
           "expr": "ALERTS{alertstate=\"pending\"}",
           "format": "table",
           "instant": false,
@@ -929,8 +1051,7 @@
     }
   ],
   "refresh": "15m",
-  "schemaVersion": 27,
-  "style": "dark",
+  "schemaVersion": 39,
   "tags": [
     "vendor=crunchydata"
   ],
@@ -957,5 +1078,6 @@
   "timezone": "browser",
   "title": "Prometheus Alerts",
   "uid": "lwxXsZsMk",
-  "version": 1
+  "version": 1,
+  "weekStart": ""
 }

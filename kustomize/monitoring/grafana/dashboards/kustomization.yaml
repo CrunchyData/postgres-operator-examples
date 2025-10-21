@@ -4,6 +4,7 @@ kind: Kustomization
 configMapGenerator:
 - name: grafana-dashboards
   files:
+  - crunchy_grafana_dashboards.yml
   - pgbackrest.json
   - pod_details.json
   - postgresql_overview.json

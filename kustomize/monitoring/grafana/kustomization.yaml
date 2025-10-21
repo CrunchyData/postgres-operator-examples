@@ -17,10 +17,6 @@ configMapGenerator:
 - name: grafana-datasources
   files:
   - config/crunchy_grafana_datasource.yml
-- name: grafana-dashboards
-  behavior: merge
-  files:
-  - config/crunchy_grafana_dashboards.yml
 
 secretGenerator:
 - name: grafana-admin

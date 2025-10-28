@@ -9,24 +9,25 @@
       "pluginName": "Prometheus"
     }
   ],
+  "__elements": {},
   "__requires": [
     {
       "type": "grafana",
       "id": "grafana",
       "name": "Grafana",
-      "version": "7.4.5"
-    },
-    {
-      "type": "panel",
-      "id": "graph",
-      "name": "Graph",
-      "version": ""
+      "version": "11.1.13"
     },
     {
       "type": "datasource",
       "id": "prometheus",
       "name": "Prometheus",
       "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "timeseries",
+      "name": "Time series",
+      "version": ""
     }
   ],
   "annotations": {
@@ -43,7 +44,7 @@
     ]
   },
   "editable": false,
-  "gnetId": null,
+  "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
   "id": null,
   "links": [
@@ -53,7 +54,7 @@
       "includeVars": true,
       "keepTime": true,
       "tags": [
-      "vendor=crunchydata"
+        "vendor=crunchydata"
       ],
       "title": "",
       "type": "dashboards"
@@ -61,544 +62,558 @@
   ],
   "panels": [
     {
-    "datasource": "PROMETHEUS",
-    "fieldConfig": {
-      "defaults": {
-      "color": {
-        "mode": "palette-classic"
+      "datasource": {
+        "type": "prometheus",
+        "uid": "PROMETHEUS"
       },
-      "custom": {
-        "axisBorderShow": false,
-        "axisCenteredZero": false,
-        "axisColorMode": "text",
-        "axisLabel": "",
-        "axisPlacement": "auto",
-        "barAlignment": 0,
-        "drawStyle": "line",
-        "fillOpacity": 10,
-        "gradientMode": "none",
-        "hideFrom": {
-        "legend": false,
-        "tooltip": false,
-        "viz": false
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
         },
-        "insertNulls": false,
-        "lineInterpolation": "linear",
-        "lineWidth": 1,
-        "pointSize": 5,
-        "scaleDistribution": {
-        "type": "linear"
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 0,
+        "y": 0
+      },
+      "id": 2,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
         },
-        "showPoints": "never",
-        "spanNulls": false,
-        "stacking": {
-        "group": "A",
-        "mode": "none"
-        },
-        "thresholdsStyle": {
-        "mode": "off"
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
         }
       },
-      "links": [],
-      "mappings": [],
-      "thresholds": {
-        "mode": "absolute",
-        "steps": [
+      "pluginVersion": "9.5.15",
+      "targets": [
         {
-          "color": "green",
-          "value": null
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PROMETHEUS"
+          },
+          "editorMode": "code",
+          "expr": "sum(ccp_pgbouncer_pools_client_active{cluster_name=~\"[[cluster_name]]\",pod=~\"[[pgbnode]]\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "client_active",
+          "range": true,
+          "refId": "A"
         },
         {
-          "color": "red",
-          "value": 80
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PROMETHEUS"
+          },
+          "editorMode": "code",
+          "expr": "sum(ccp_pgbouncer_pools_client_waiting{cluster_name=~\"[[cluster_name]]\",pod=~\"[[pgbnode]]\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "client_waiting",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PROMETHEUS"
+          },
+          "editorMode": "code",
+          "expr": "sum(ccp_pgbouncer_pools_server_active{cluster_name=~\"[[cluster_name]]\",pod=~\"[[pgbnode]]\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "server_active",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PROMETHEUS"
+          },
+          "editorMode": "code",
+          "expr": "sum(ccp_pgbouncer_pools_server_idle{cluster_name=~\"[[cluster_name]]\",pod=~\"[[pgbnode]]\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "server_idle",
+          "range": true,
+          "refId": "D"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PROMETHEUS"
+          },
+          "editorMode": "code",
+          "expr": "sum(ccp_pgbouncer_pools_server_used{cluster_name=~\"[[cluster_name]]\",pod=~\"[[pgbnode]]\"})",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "server_used",
+          "range": true,
+          "refId": "E"
         }
-        ]
-      },
-      "unit": "short"
-      },
-      "overrides": []
-    },
-    "gridPos": {
-      "h": 10,
-      "w": 12,
-      "x": 0,
-      "y": 0
-    },
-    "id": 2,
-    "options": {
-      "legend": {
-      "calcs": [],
-      "displayMode": "list",
-      "placement": "bottom",
-      "showLegend": true
-      },
-      "tooltip": {
-      "mode": "multi",
-      "sort": "none"
-      }
-    },
-    "pluginVersion": "9.5.15",
-    "targets": [
-      {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${ccp_datasource}"
-      },
-      "editorMode": "code",
-      "expr": "sum(ccp_pgbouncer_pools_client_active{cluster_name=~\"[[cluster_name]]\",pod=~\"[[pgbnode]]\"})",
-      "format": "time_series",
-      "intervalFactor": 1,
-      "legendFormat": "client_active",
-      "range": true,
-      "refId": "A"
-      },
-      {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${ccp_datasource}"
-      },
-      "editorMode": "code",
-      "expr": "sum(ccp_pgbouncer_pools_client_waiting{cluster_name=~\"[[cluster_name]]\",pod=~\"[[pgbnode]]\"})",
-      "format": "time_series",
-      "intervalFactor": 1,
-      "legendFormat": "client_waiting",
-      "range": true,
-      "refId": "B"
-      },
-      {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${ccp_datasource}"
-      },
-      "editorMode": "code",
-      "expr": "sum(ccp_pgbouncer_pools_server_active{cluster_name=~\"[[cluster_name]]\",pod=~\"[[pgbnode]]\"})",
-      "format": "time_series",
-      "intervalFactor": 1,
-      "legendFormat": "server_active",
-      "range": true,
-      "refId": "C"
-      },
-      {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${ccp_datasource}"
-      },
-      "editorMode": "code",
-      "expr": "sum(ccp_pgbouncer_pools_server_idle{cluster_name=~\"[[cluster_name]]\",pod=~\"[[pgbnode]]\"})",
-      "format": "time_series",
-      "intervalFactor": 1,
-      "legendFormat": "server_idle",
-      "range": true,
-      "refId": "D"
-      },
-      {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${ccp_datasource}"
-      },
-      "editorMode": "code",
-      "expr": "sum(ccp_pgbouncer_pools_server_used{cluster_name=~\"[[cluster_name]]\",pod=~\"[[pgbnode]]\"})",
-      "format": "time_series",
-      "intervalFactor": 1,
-      "legendFormat": "server_used",
-      "range": true,
-      "refId": "E"
-      }
-    ],
-    "title": "PGBouncer Total State Counts",
-    "type": "timeseries"
+      ],
+      "title": "PGBouncer Total State Counts",
+      "type": "timeseries"
     },
     {
-    "datasource": "PROMETHEUS",
-    "fieldConfig": {
-      "defaults": {
-      "color": {
-        "mode": "palette-classic"
-      },
-      "custom": {
-        "axisBorderShow": false,
-        "axisCenteredZero": false,
-        "axisColorMode": "text",
-        "axisLabel": "",
-        "axisPlacement": "auto",
-        "barAlignment": 0,
-        "drawStyle": "line",
-        "fillOpacity": 10,
-        "gradientMode": "none",
-        "hideFrom": {
-        "legend": false,
-        "tooltip": false,
-        "viz": false
-        },
-        "insertNulls": false,
-        "lineInterpolation": "linear",
-        "lineWidth": 1,
-        "pointSize": 5,
-        "scaleDistribution": {
-        "type": "linear"
-        },
-        "showPoints": "never",
-        "spanNulls": false,
-        "stacking": {
-        "group": "A",
-        "mode": "none"
-        },
-        "thresholdsStyle": {
-        "mode": "off"
-        }
-      },
-      "links": [],
-      "mappings": [],
-      "thresholds": {
-        "mode": "absolute",
-        "steps": [
-        {
-          "color": "green",
-          "value": null
-        },
-        {
-          "color": "red",
-          "value": 80
-        }
-        ]
-      },
-      "unit": "short"
-      },
-      "overrides": []
-    },
-    "gridPos": {
-      "h": 10,
-      "w": 12,
-      "x": 12,
-      "y": 0
-    },
-    "id": 4,
-    "options": {
-      "legend": {
-      "calcs": [],
-      "displayMode": "list",
-      "placement": "bottom",
-      "showLegend": true
-      },
-      "tooltip": {
-      "mode": "multi",
-      "sort": "none"
-      }
-    },
-    "pluginVersion": "9.5.15",
-    "targets": [
-      {
       "datasource": {
         "type": "prometheus",
-        "uid": "${ccp_datasource}"
+        "uid": "PROMETHEUS"
       },
-      "editorMode": "code",
-      "expr": "ccp_pgbouncer_lists_item_count{cluster_name=~\"[[cluster_name]]\",pod=~\"[[pgbnode]]\"}",
-      "format": "time_series",
-      "intervalFactor": 1,
-      "legendFormat": "{{list}}",
-      "range": true,
-      "refId": "A"
-      }
-    ],
-    "title": "PGBouncer Total Item Counts",
-    "type": "timeseries"
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 12,
+        "x": 12,
+        "y": 0
+      },
+      "id": 4,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "9.5.15",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PROMETHEUS"
+          },
+          "editorMode": "code",
+          "expr": "ccp_pgbouncer_lists_item_count{cluster_name=~\"[[cluster_name]]\",pod=~\"[[pgbnode]]\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "{{list}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "PGBouncer Total Item Counts",
+      "type": "timeseries"
     },
     {
-    "datasource": "PROMETHEUS",
-    "fieldConfig": {
-      "defaults": {
-      "color": {
-        "mode": "palette-classic"
-      },
-      "custom": {
-        "axisBorderShow": false,
-        "axisCenteredZero": false,
-        "axisColorMode": "text",
-        "axisLabel": "",
-        "axisPlacement": "auto",
-        "barAlignment": 0,
-        "drawStyle": "line",
-        "fillOpacity": 10,
-        "gradientMode": "none",
-        "hideFrom": {
-        "legend": false,
-        "tooltip": false,
-        "viz": false
-        },
-        "insertNulls": false,
-        "lineInterpolation": "linear",
-        "lineWidth": 1,
-        "pointSize": 5,
-        "scaleDistribution": {
-        "type": "linear"
-        },
-        "showPoints": "never",
-        "spanNulls": false,
-        "stacking": {
-        "group": "A",
-        "mode": "none"
-        },
-        "thresholdsStyle": {
-        "mode": "off"
-        }
-      },
-      "links": [],
-      "mappings": [],
-      "max": 1,
-      "min": 0,
-      "thresholds": {
-        "mode": "absolute",
-        "steps": [
-        {
-          "color": "green",
-          "value": null
-        },
-        {
-          "color": "red",
-          "value": 80
-        }
-        ]
-      },
-      "unit": "percentunit"
-      },
-      "overrides": []
-    },
-    "gridPos": {
-      "h": 10,
-      "w": 8,
-      "x": 0,
-      "y": 10
-    },
-    "id": 6,
-    "options": {
-      "legend": {
-      "calcs": [],
-      "displayMode": "list",
-      "placement": "bottom",
-      "showLegend": true
-      },
-      "tooltip": {
-      "mode": "multi",
-      "sort": "none"
-      }
-    },
-    "pluginVersion": "9.5.15",
-    "targets": [
-      {
       "datasource": {
         "type": "prometheus",
-        "uid": "${ccp_datasource}"
+        "uid": "PROMETHEUS"
       },
-      "editorMode": "code",
-      "expr": "ccp_pgbouncer_databases_current_connections{cluster_name=~\"[[cluster_name]]\", pod=~\"[[pgbnode]]\", name=~\"[[pool]]\"} / ccp_pgbouncer_databases_pool_size{cluster_name=~\"[[cluster_name]]\", pod=~\"[[pgbnode]]\", name=~\"[[pool]]\"}",
-      "format": "time_series",
-      "intervalFactor": 1,
-      "legendFormat": "{{name}}",
-      "range": true,
-      "refId": "A"
-      }
-    ],
-    "title": "Connection % Used Per Pool ([[pool]])",
-    "type": "timeseries"
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "max": 1,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percentunit"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 8,
+        "x": 0,
+        "y": 10
+      },
+      "id": 6,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "9.5.15",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PROMETHEUS"
+          },
+          "editorMode": "code",
+          "expr": "ccp_pgbouncer_databases_current_connections{cluster_name=~\"[[cluster_name]]\", pod=~\"[[pgbnode]]\", name=~\"[[pool]]\"} / ccp_pgbouncer_databases_pool_size{cluster_name=~\"[[cluster_name]]\", pod=~\"[[pgbnode]]\", name=~\"[[pool]]\"}",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "{{name}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Connection % Used Per Pool ([[pool]])",
+      "type": "timeseries"
     },
     {
-    "datasource": "PROMETHEUS",
-    "description": "",
-    "fieldConfig": {
-      "defaults": {
-      "color": {
-        "mode": "palette-classic"
-      },
-      "custom": {
-        "axisBorderShow": false,
-        "axisCenteredZero": false,
-        "axisColorMode": "text",
-        "axisLabel": "",
-        "axisPlacement": "auto",
-        "barAlignment": 0,
-        "drawStyle": "line",
-        "fillOpacity": 10,
-        "gradientMode": "none",
-        "hideFrom": {
-        "legend": false,
-        "tooltip": false,
-        "viz": false
-        },
-        "insertNulls": false,
-        "lineInterpolation": "linear",
-        "lineWidth": 1,
-        "pointSize": 5,
-        "scaleDistribution": {
-        "type": "linear"
-        },
-        "showPoints": "never",
-        "spanNulls": false,
-        "stacking": {
-        "group": "A",
-        "mode": "none"
-        },
-        "thresholdsStyle": {
-        "mode": "off"
-        }
-      },
-      "links": [],
-      "mappings": [],
-      "thresholds": {
-        "mode": "absolute",
-        "steps": [
-        {
-          "color": "green",
-          "value": null
-        },
-        {
-          "color": "red",
-          "value": 80
-        }
-        ]
-      },
-      "unit": "short"
-      },
-      "overrides": []
-    },
-    "gridPos": {
-      "h": 10,
-      "w": 8,
-      "x": 8,
-      "y": 10
-    },
-    "id": 8,
-    "options": {
-      "legend": {
-      "calcs": [],
-      "displayMode": "list",
-      "placement": "bottom",
-      "showLegend": true
-      },
-      "tooltip": {
-      "mode": "multi",
-      "sort": "none"
-      }
-    },
-    "pluginVersion": "9.5.15",
-    "targets": [
-      {
       "datasource": {
         "type": "prometheus",
-        "uid": "${ccp_datasource}"
+        "uid": "PROMETHEUS"
       },
-      "editorMode": "code",
-      "expr": "sum(ccp_pgbouncer_clients_wait_seconds{cluster_name=~\"[[cluster_name]]\",pod=~\"[[pgbnode]]\", database=~\"[[pool]]\"}) by (pool,state)",
-      "format": "time_series",
-      "intervalFactor": 1,
-      "legendFormat": "{{pool}}",
-      "range": true,
-      "refId": "A"
-      }
-    ],
-    "title": "Client Connection State Counts Per Pool  ([[pool]])",
-    "type": "timeseries"
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 8,
+        "x": 8,
+        "y": 10
+      },
+      "id": 8,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "9.5.15",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PROMETHEUS"
+          },
+          "editorMode": "code",
+          "expr": "sum(ccp_pgbouncer_clients_wait_seconds{cluster_name=~\"[[cluster_name]]\",pod=~\"[[pgbnode]]\", database=~\"[[pool]]\"}) by (pool,state)",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "{{pool}}",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Client Connection State Counts Per Pool  ([[pool]])",
+      "type": "timeseries"
     },
     {
-    "datasource": "PROMETHEUS",
-    "fieldConfig": {
-      "defaults": {
-      "color": {
-        "mode": "palette-classic"
-      },
-      "custom": {
-        "axisBorderShow": false,
-        "axisCenteredZero": false,
-        "axisColorMode": "text",
-        "axisLabel": "",
-        "axisPlacement": "auto",
-        "barAlignment": 0,
-        "drawStyle": "line",
-        "fillOpacity": 10,
-        "gradientMode": "none",
-        "hideFrom": {
-        "legend": false,
-        "tooltip": false,
-        "viz": false
-        },
-        "insertNulls": false,
-        "lineInterpolation": "linear",
-        "lineWidth": 1,
-        "pointSize": 5,
-        "scaleDistribution": {
-        "type": "linear"
-        },
-        "showPoints": "never",
-        "spanNulls": false,
-        "stacking": {
-        "group": "A",
-        "mode": "none"
-        },
-        "thresholdsStyle": {
-        "mode": "off"
-        }
-      },
-      "links": [],
-      "mappings": [],
-      "thresholds": {
-        "mode": "absolute",
-        "steps": [
-        {
-          "color": "green",
-          "value": null
-        },
-        {
-          "color": "red",
-          "value": 80
-        }
-        ]
-      },
-      "unit": "short"
-      },
-      "overrides": []
-    },
-    "gridPos": {
-      "h": 10,
-      "w": 8,
-      "x": 16,
-      "y": 10
-    },
-    "id": 10,
-    "options": {
-      "legend": {
-      "calcs": [],
-      "displayMode": "list",
-      "placement": "bottom",
-      "showLegend": true
-      },
-      "tooltip": {
-      "mode": "multi",
-      "sort": "none"
-      }
-    },
-    "pluginVersion": "9.5.15",
-    "targets": [
-      {
       "datasource": {
         "type": "prometheus",
-        "uid": "${ccp_datasource}"
+        "uid": "PROMETHEUS"
       },
-      "editorMode": "code",
-      "expr": "sum(ccp_pgbouncer_servers_close_needed{cluster_name=~\"[[cluster_name]]\",pod=~\"[[pgbnode]]\", database=~\"[[pool]]\"}) by (state)",
-      "format": "time_series",
-      "intervalFactor": 1,
-      "legendFormat": "__auto",
-      "range": true,
-      "refId": "A"
-      }
-    ],
-    "title": "Server Connection State Counts Per Pool  ([[pool]])",
-    "type": "timeseries"
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "links": [],
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "short"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 8,
+        "x": 16,
+        "y": 10
+      },
+      "id": 10,
+      "options": {
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "9.5.15",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "PROMETHEUS"
+          },
+          "editorMode": "code",
+          "expr": "sum(ccp_pgbouncer_servers_close_needed{cluster_name=~\"[[cluster_name]]\",pod=~\"[[pgbnode]]\", database=~\"[[pool]]\"}) by (state)",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "__auto",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Server Connection State Counts Per Pool  ([[pool]])",
+      "type": "timeseries"
     }
   ],
   "refresh": "5m",
   "schemaVersion": 39,
-  "style": "dark",
   "tags": [
     "vendor=crunchydata"
   ],
@@ -606,11 +621,13 @@
     "list": [
       {
         "current": {},
-        "datasource": "PROMETHEUS",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "PROMETHEUS"
+        },
         "definition": "label_values(up{exp_type='pgbouncer'},cluster_name)",
         "hide": 0,
         "includeAll": false,
-        "label": null,
         "multi": false,
         "name": "cluster_name",
         "options": [],
@@ -630,16 +647,18 @@
       },
       {
         "current": {},
-        "datasource": "PROMETHEUS",
-        "definition": "label_values(up{exp_type='pgbouncer'},pod)",
+        "datasource": {
+          "type": "prometheus",
+          "uid": "PROMETHEUS"
+        },
+        "definition": "label_values(up{cluster_name=\"[[cluster_name]]\",exp_type='pgbouncer'},pod)",
         "hide": 0,
         "includeAll": true,
-        "label": null,
         "multi": false,
         "name": "pgbnode",
         "options": [],
         "query": {
-          "query": "label_values(up{exp_type='pgbouncer'},pod)",
+          "query": "label_values(up{cluster_name=\"[[cluster_name]]\",exp_type='pgbouncer'},pod)",
           "refId": "PrometheusVariableQueryEditor-VariableQuery"
         },
         "refresh": 1,
@@ -653,20 +672,14 @@
         "useTags": false
       },
       {
-        "current": {
-          "selected": true,
-          "text": [
-            "All"
-          ],
-          "value": [
-            "$__all"
-          ]
+        "current": {},
+        "datasource": {
+          "type": "prometheus",
+          "uid": "PROMETHEUS"
         },
-        "datasource": "PROMETHEUS",
         "definition": "label_values(ccp_pgbouncer_databases_pool_size{cluster_name=\"[[cluster_name]]\", pod=\"[[pgbnode]]\"},name)",
         "hide": 0,
         "includeAll": true,
-        "label": null,
         "multi": false,
         "name": "pool",
         "options": [],
@@ -692,19 +705,20 @@
   },
   "timepicker": {
     "time_options": [
-    "5m",
-    "15m",
-    "1h",
-    "6h",
-    "12h",
-    "24h",
-    "2d",
-    "7d",
-    "30d"
+      "5m",
+      "15m",
+      "1h",
+      "6h",
+      "12h",
+      "24h",
+      "2d",
+      "7d",
+      "30d"
     ]
   },
   "timezone": "browser",
   "title": "PGBouncer",
   "uid": "a7ff3775-37c9-4072-b0bc-1292f5c5841b",
-  "version": 1
+  "version": 1,
+  "weekStart": ""
 }

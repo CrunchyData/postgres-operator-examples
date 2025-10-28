@@ -59,6 +59,10 @@ spec:
           defaultMode: 420
           name: grafana-datasources
       - name: grafana-dashboards
-        configMap:
+        projected:
           defaultMode: 420
-          name: grafana-dashboards
+          sources:
+            - configMap:
+                name: grafana-dashboards-1
+            - configMap:
+                name: grafana-dashboards-2

@@ -3,7 +3,7 @@ kind: CustomResourceDefinition
 metadata:
   name: pgadmins.postgres-operator.crunchydata.com
   labels:
-    app.kubernetes.io/version: 5.8.4
+    app.kubernetes.io/version: 5.8.5
 spec:
   group: postgres-operator.crunchydata.com
   names:

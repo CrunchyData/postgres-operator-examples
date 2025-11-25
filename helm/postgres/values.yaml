@@ -156,6 +156,19 @@ postgresVersion: 17
 # provides the information for the replication user.
 # customReplicationTLSSecret: {}
 
+# certmanagerto generate required certificates
+# issuerName according to your certmanager setup must be set 
+# customTLSSecret and customReplicationTLSSecret will overwrite certmanager certificates
+# Optional: 
+#   set org otherwise it default to "<.resource.name>-org"
+#   overwrite issuerKind e.g. to ClusterIssuer if not using the Issuer in the namespace
+#   overwrite issuerGroup if needed by you issuer
+# certmanager:
+#   issuerName: <must be configured>
+#   org: "hippo-org"
+#   issuerKind: ClusterIssuer
+#   issuerGroup: cert-manager.io
+
 # databaseInitSQL references a ConfigMap that contains a SQL file that should be
 # run a cluster bootstrap.
 # databaseInitSQL:

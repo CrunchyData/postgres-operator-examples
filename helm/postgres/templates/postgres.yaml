@@ -224,11 +224,24 @@ spec:
   {{- else if eq .Values.openshift false }}
   openshift: false
   {{- end }}
-  {{- if .Values.customTLSSecret }}
+  {{- $certmanagerEnable := default false .Values.certmanager -}}
+  {{- if or .Values.customTLSSecret .Values.certmanager }}
   customTLSSecret:
+  {{- if .Values.customTLSSecret }}
 {{ toYaml .Values.customTLSSecret | indent 4 }}
+  {{- else }}
+  {{- $prefix := (include "certmanager.prefix" .) }}
+  {{- $tlsSecret :=  printf "%s-tls" $prefix }}
+    name: {{ $tlsSecret }}    
   {{- end }}
-  {{- if .Values.customReplicationTLSSecret }}
+  {{- end }}
+  {{- if or .Values.customTLSSecret .Values.certmanager }}
   customReplicationTLSSecret:
+  {{- if .Values.customReplicationTLSSecret }}
 {{ toYaml .Values.customReplicationTLSSecret | indent 4 }}
+  {{- else }}
+  {{- $prefix := (include "certmanager.prefix" .) }}
+  {{- $tlsSecret :=  printf "%s-repl-tls" $prefix }}
+    name: {{ $tlsSecret }}    
+  {{- end }}
   {{- end }}

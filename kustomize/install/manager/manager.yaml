@@ -23,6 +23,10 @@ spec:
           valueFrom: { fieldRef: { fieldPath: metadata.namespace } }
         - name: CRUNCHY_DEBUG
           value: "true"
+        - name: RELATED_IMAGE_POSTGRES_15
+          value: image-crunchy-postgres-15
+        - name: RELATED_IMAGE_POSTGRES_15_GIS_3.3
+          value: image-crunchy-postgres-15-gis-3.3
         - name: RELATED_IMAGE_POSTGRES_16
           value: image-crunchy-postgres-16
         - name: RELATED_IMAGE_POSTGRES_16_GIS_3.3

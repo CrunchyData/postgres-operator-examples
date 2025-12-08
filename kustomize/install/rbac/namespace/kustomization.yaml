@@ -1,4 +1,0 @@
-resources:
-- ../cluster
-components:
-- ../../components/single-namespace

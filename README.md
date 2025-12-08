@@ -1,6 +1,6 @@
 # Examples for Using [PGO](https://github.com/CrunchyData/postgres-operator), the Postgres Operator from Crunchy Data
 
-This repository contains a collection of installers and examples for deploying, operating and maintaining Postgres clusters using PGO, the Postgres Operator from Crunchy Data as part of [Crunchy Postgres for Kubernetes](https://www.crunchydata.com/products/crunchy-postgresql-for-kubernetes).
+This repository contains a collection of examples for deploying, operating, and maintaining Postgres clusters using PGO, the Postgres Operator from Crunchy Data as part of [Crunchy Postgres for Kubernetes](https://www.crunchydata.com/products/crunchy-postgresql-for-kubernetes). Using these examples assumes that you already have PGO running. The kustomize installer for PGO can be found in the [postgres-operator](https://github.com/CrunchyData/postgres-operator) repo. The PGO helm installer can be [installed via the OCI registry](https://access.crunchydata.com/documentation/postgres-operator/latest/installation/helm).
 
 The use of these examples with PGO and other container images (aside from those provided by Crunchy Data) will require modifications of the examples.
 

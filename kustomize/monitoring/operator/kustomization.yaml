@@ -1,5 +1,0 @@
-namespace: postgres-operator
-
-resources:
-- grafana
-- prometheus

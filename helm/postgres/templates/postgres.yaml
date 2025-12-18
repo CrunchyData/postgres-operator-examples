@@ -1,4 +1,4 @@
-apiVersion: postgres-operator.crunchydata.com/v1beta1
+apiVersion: postgres-operator.crunchydata.com/{{ required "You must set the PostgresCluster API version to deploy." .Values.apiVersion }}
 kind: PostgresCluster
 metadata:
   name: {{ default .Release.Name .Values.name }}

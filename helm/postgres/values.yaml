@@ -15,7 +15,13 @@
 # available as one of the "RELATED_IMAGE_POSTGRES_..." images as part of the PGO
 # installation if you want to deploy the image without setting the "postgres"
 # image variable. This value is required.
-postgresVersion: 17
+postgresVersion: 18
+
+# apiVersion sets the PostgresCluster API version to use. When deploying a
+# PostgresCluster with PGO v6, you can use the newer v1 API version or the older
+# v1beta1. When deploying a PostgresCluster with PGO v5, you must use the older
+# PostgresCluster API version, v1beta1.
+apiVersion: v1
 
 # postGISVersion if set and coupled with a PostGIS enabled container, enables
 # PostGIS. This version number needs to be available as one of the

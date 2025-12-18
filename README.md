@@ -11,6 +11,8 @@ Each of the examples has its own README that guides you through the process of d
 The best way to get started is to fork this repository and experiment with the examples.
 The examples as provided are designed for the use of PGO along with Crunchy Data's Postgres distribution, Crunchy Postgres, as Crunchy Postgres for Kubernetes.  For more information on the use of container images downloaded from the Crunchy Data Developer Portal or other third party sources, please see 'License and Terms' below.
 
+By default, these examples are set to use the `v1` version of the PostgresCluster API, which is only available in PGO v6. If you plan to use these examples with PGO v5, or want to use the older API with PGO v6, you will need to change the version suffix in the `apiVersion` of the PostgresCluster manifests to `v1beta1`.
+
 ### Help with the Examples
 
 * For general questions or community support, we welcome you to join our [community Discord](https://discord.gg/BnsMEeaPBV).

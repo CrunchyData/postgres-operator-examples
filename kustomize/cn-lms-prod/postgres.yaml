@@ -1,11 +1,10 @@
-apiVersion: postgres-operator.crunchydata.com/v1beta1
+apiVersion: postgres-operator.crunchydata.com/v1
 kind: PostgresCluster
 metadata:
   name: cn-lms-prod
 spec:
-  image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi8-16.3-3.4-0
-  postgresVersion: 16
-  postGISVersion: "3.4"
+  postgresVersion: 18
+  postGISVersion: "3.6"
   instances:
     - name: instance1
       dataVolumeClaimSpec:
@@ -29,11 +28,9 @@ spec:
     nodePort: 31001
   monitoring:
     pgmonitor:
-      exporter:
-        image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-5.6.0-0
+      exporter: {}
   backups:
     pgbackrest:
-      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.51-0
       repos:
       - name: repo1
         volume:

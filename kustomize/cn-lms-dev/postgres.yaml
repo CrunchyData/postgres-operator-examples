@@ -2,8 +2,6 @@ apiVersion: postgres-operator.crunchydata.com/v1
 kind: PostgresCluster
 metadata:
   name: cn-lms-dev
-  annotations:
-    postgres-operator.crunchydata.com/autoCreateUserSchema: "true"
 spec:
   postgresVersion: 18
   postGISVersion: "3.6"

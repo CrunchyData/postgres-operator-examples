@@ -1,10 +1,9 @@
-apiVersion: postgres-operator.crunchydata.com/v1beta1
+apiVersion: postgres-operator.crunchydata.com/v1
 kind: PostgresCluster
 metadata:
   name: mixeway-flow
 spec:
-  image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-16.6-2
-  postgresVersion: 16
+  postgresVersion: 18
   instances:
     - name: instance1
       dataVolumeClaimSpec:
@@ -28,11 +27,9 @@ spec:
     # nodePort: 31002
   monitoring:
     pgmonitor:
-      exporter:
-        image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-0.16.0-0
+      exporter: {}
   backups:
     pgbackrest:
-      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.54.1-0
       repos:
       - name: repo1
         volume:
@@ -43,5 +40,4 @@ spec:
               requests:
                 storage: 20Gi
   proxy:
-    pgBouncer:
-      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.21-3
+    pgBouncer: {}

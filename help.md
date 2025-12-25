@@ -9,10 +9,10 @@ kubectl delete -k kustomize/cn-accounts-backup
 kubectl apply -k kustomize/cn-lms-prod
 kubectl apply -k kustomize/cn-lms-dev
 kubectl apply -k kustomize/cn-mattermost
-kubectl apply -k kustomize/mm-mattermost
-kubectl apply -k kustomize/mixeway-flow
+kubectl apply -k kustomize/cn-ch-mattermost
+kubectl apply -k kustomize/cn-mixeway-flow
 
-kubectl apply -k kustomize/keycloak-prod
+kubectl apply -k kustomize/cn-keycloak
 
 kubectl -n postgres-operator get svc --selector=postgres-operator.crunchydata.com/cluster=cn-lms-prod
 

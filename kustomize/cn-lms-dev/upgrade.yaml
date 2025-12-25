@@ -5,6 +5,5 @@ metadata:
   namespace: postgres-operator
 spec:
   postgresClusterName: cn-lms-dev
-  fromPostgresVersion: 16
-  toPostgresVersion: 17
-  image: registry.developers.crunchydata.com/crunchydata/crunchy-upgrade-gis:ubi9-17.6-2534
+  fromPostgresVersion: 17
+  toPostgresVersion: 18

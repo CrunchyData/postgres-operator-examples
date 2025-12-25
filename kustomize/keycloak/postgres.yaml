@@ -1,11 +1,11 @@
-apiVersion: postgres-operator.crunchydata.com/v1beta1
+apiVersion: postgres-operator.crunchydata.com/v1
 kind: PostgresCluster
 metadata:
   name: keycloakdb
   annotations:
     postgres-operator.crunchydata.com/autoCreateUserSchema: "true"
 spec:
-  postgresVersion: 17
+  postgresVersion: 18
   instances:
     - replicas: 2
       dataVolumeClaimSpec:

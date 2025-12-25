@@ -16,13 +16,17 @@ spec:
         - name: PGO_INSTALLER
           value: kustomize
         - name: PGO_INSTALLER_ORIGIN
-          value: examples-repo
+          value: postgres-operator-repo
         - name: PGO_CONTROLLER_LEASE_NAME
           value: cpk-leader-election-lease
         - name: PGO_NAMESPACE
           valueFrom: { fieldRef: { fieldPath: metadata.namespace } }
         - name: CRUNCHY_DEBUG
           value: "true"
+        - name: RELATED_IMAGE_POSTGRES_15
+          value: image-crunchy-postgres-15
+        - name: RELATED_IMAGE_POSTGRES_15_GIS_3.3
+          value: image-crunchy-postgres-15-gis-3.3
         - name: RELATED_IMAGE_POSTGRES_16
           value: image-crunchy-postgres-16
         - name: RELATED_IMAGE_POSTGRES_16_GIS_3.3
@@ -35,6 +39,12 @@ spec:
           value: image-crunchy-postgres-17-gis-3.4
         - name: RELATED_IMAGE_POSTGRES_17_GIS_3.5
           value: image-crunchy-postgres-17-gis-3.5
+        - name: RELATED_IMAGE_POSTGRES_17_GIS_3.6
+          value: image-crunchy-postgres-17-gis-3.6
+        - name: RELATED_IMAGE_POSTGRES_18
+          value: image-crunchy-postgres-18
+        - name: RELATED_IMAGE_POSTGRES_18_GIS_3.6
+          value: image-crunchy-postgres-18-gis-3.6
         - name: RELATED_IMAGE_PGBACKREST
           value: image-pgbackrest
         - name: RELATED_IMAGE_PGBOUNCER
@@ -46,7 +56,7 @@ spec:
         - name: RELATED_IMAGE_STANDALONE_PGADMIN
           value: image-pgadmin
         - name: RELATED_IMAGE_COLLECTOR
-          value: image-postgres-operator-5.8
+          value: image-postgres-operator-6.0
         securityContext:
           seccompProfile:
             type: RuntimeDefault

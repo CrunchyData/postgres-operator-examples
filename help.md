@@ -25,7 +25,7 @@ kubectl apply -k kustomize/cn-lms-dev-backup
 # update
 kubectl apply -k kustomize/postgres --dry-run='server'
 
-kubectl apply -k kustomize/cn-lms-dev --dry-run='server'
+kubectl delete -k kustomize/cn-lms-dev 
 
 
 kubectl -n postgres-operator annotate postgrescluster cn-lms-dev postgres-operator.crunchydata.com/allow-upgrade="cn-lms-dev-upgrade"

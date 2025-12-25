@@ -2,11 +2,10 @@ apiVersion: postgres-operator.crunchydata.com/v1
 kind: PostgresCluster
 metadata:
   name: cn-lms-dev
+  annotations:
+    postgres-operator.crunchydata.com/autoCreateUserSchema: "true"
 spec:
-  # image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi9-17.0-3.6-0
-  image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi9-17.7-3.6-2550
-  postgresVersion: 17
-  shutdown: false
+  postgresVersion: 18
   postGISVersion: "3.6"
   instances:
     - name: instance1
@@ -37,11 +36,9 @@ spec:
             - "hostnossl all all all md5"
   monitoring:
     pgmonitor:
-      exporter:
-        image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-5.5.1-0
+      exporter: {}
   backups:
     pgbackrest:
-      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi9-2.56-0
       repos:
       - name: repo1
         schedules:
@@ -54,6 +51,5 @@ spec:
             resources:
               requests:
                 storage: 20Gi
-  proxy:
-    pgBouncer:
-      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi9-1.25-0
+  # proxy:
+  #   pgBouncer: {}

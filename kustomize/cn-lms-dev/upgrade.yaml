@@ -1,9 +1,0 @@
-apiVersion: postgres-operator.crunchydata.com/v1beta1
-kind: PGUpgrade
-metadata:
-  name: cn-lms-dev-upgrade
-  namespace: postgres-operator
-spec:
-  postgresClusterName: cn-lms-dev
-  fromPostgresVersion: 17
-  toPostgresVersion: 18

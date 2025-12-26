@@ -1,0 +1,46 @@
+apiVersion: postgres-operator.crunchydata.com/v1
+kind: PostgresCluster
+metadata:
+  name: cn-lms-prod
+spec:
+  postgresVersion: 18
+  postGISVersion: "3.6"
+  instances:
+    - name: instance1
+      dataVolumeClaimSpec:
+        accessModes:
+        - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: 10Gi
+  users:
+    - name: cn-lms-prod
+      databases:
+        - cn-lms-prod
+      options: 'SUPERUSER'
+  service:
+    metadata:
+      annotations:
+        my-annotation: value1
+      labels:
+        my-label: value2
+    type: LoadBalancer
+    nodePort: 31001
+  monitoring:
+    pgmonitor:
+      exporter: {}
+  backups:
+    pgbackrest:
+      repos:
+      - name: repo1
+        volume:
+          volumeClaimSpec:
+            accessModes:
+            - "ReadWriteOnce"
+            resources:
+              requests:
+                storage: 20Gi
+  authentication:
+    rules:
+      - hba: "host cn-lms-prod cn-lms-prod 10.244.7.0/24 trust"
+      - hba: "host all all 0.0.0.0/0 md5"

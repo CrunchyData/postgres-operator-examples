@@ -1,0 +1,72 @@
+apiVersion: postgres-operator.crunchydata.com/v1beta1
+kind: PostgresCluster
+metadata:
+  name: cn-accounts-backup
+spec:
+  image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi8-16.2-3.4-0
+  postgresVersion: 16
+  instances:
+    - name: instance1
+      dataVolumeClaimSpec:
+        accessModes:
+        - "ReadWriteOnce"
+        storageClassName: local-path
+        resources:
+          requests:
+            storage: 20Gi
+  users:
+    - name: accounts
+      databases:
+        - postgres
+      options: 'SUPERUSER'
+  
+  service:
+    metadata:
+      annotations:
+        my-annotation: value1
+      labels:
+        my-label: value2
+    type: LoadBalancer
+  
+  patroni:
+    dynamicConfiguration:
+      postgresql:
+        parameters:
+          timezone: 'Europe/Warsaw'                  # Ustawienie strefy czasowej na Warszawę
+          log_timezone: 'Europe/Warsaw'              # Strefa czasowa dla logów
+        pg_hba:
+        - "local all postgres peer"
+        - "hostssl replication _crunchyrepl all cert"
+        - "hostssl postgres _crunchyrepl all cert" 
+        - "host all _crunchyrepl all reject"
+        - "host all ccp_monitoring 127.0.0.0/8 scram-sha-256"
+        - "host all ccp_monitoring ::1/128 scram-sha-256"
+        - "host all ccp_monitoring all reject"
+        - "hostssl all _crunchypgbouncer all scram-sha-256"
+        - "host all _crunchypgbouncer all reject"
+        - "host all all 0.0.0.0/0 md5"             # Wszystkie IP bez SSL
+        - "hostssl all all all scram-sha-256"      # SSL z SCRAM
+        - "local all all md5"   
+  monitoring:
+    pgmonitor:
+      exporter:
+        image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi8-5.6.0-0
+  
+  # backups:
+  #   pgbackrest:
+  #     image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.51-1
+  #     repos:
+  #     - name: repo1
+  #       schedules:
+  #         full: "0 1 * * 0"
+  #         differential: "0 1 * * 1-6"
+  #       volume:
+  #         volumeClaimSpec:
+  #           accessModes:
+  #           - "ReadWriteOnce"
+  #           resources:
+  #             requests:
+  #               storage: 20Gi
+  proxy:
+    pgBouncer:
+      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi8-1.21-3

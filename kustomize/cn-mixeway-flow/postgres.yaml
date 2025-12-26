@@ -1,0 +1,43 @@
+apiVersion: postgres-operator.crunchydata.com/v1
+kind: PostgresCluster
+metadata:
+  name: mixeway-flow
+spec:
+  postgresVersion: 18
+  instances:
+    - name: instance1
+      dataVolumeClaimSpec:
+        accessModes:
+        - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: 10Gi
+  users:
+    - name: mixeway-flow
+      databases:
+        - mixeway-flow
+      options: 'SUPERUSER'
+  service:
+    metadata:
+      annotations:
+        my-annotation: mixeway-flow
+      labels:
+        my-label: mixeway-flow
+    type: LoadBalancer
+    # nodePort: 31002
+  monitoring:
+    pgmonitor:
+      exporter: {}
+  backups:
+    pgbackrest:
+      repos:
+      - name: repo1
+        volume:
+          volumeClaimSpec:
+            accessModes:
+            - "ReadWriteOnce"
+            resources:
+              requests:
+                storage: 20Gi
+  proxy:
+    pgBouncer: {}

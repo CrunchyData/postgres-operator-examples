@@ -60,6 +60,8 @@ spec:
         volume:
           volumeClaimSpec:
             {{- if $repo.volume.backupsStorageClassName }}
+            storageClassName: {{ $repo.volume.backupsStorageClassName | quote }}
+            {{- else if .Values.backupsStorageClassName }}
             storageClassName: {{ .Values.backupsStorageClassName | quote }}
             {{- end }}
             accessModes:

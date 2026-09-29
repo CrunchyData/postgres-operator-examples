@@ -1,0 +1,120 @@
+apiVersion: postgres-operator.crunchydata.com/v1
+kind: PostgresCluster
+metadata:
+  name: cn-lms-prod
+  namespace: postgres-operator
+spec:
+  postgresVersion: 18
+  postGISVersion: "3.6"
+
+  instances:
+    - name: instance1
+      resources:
+        requests:
+          cpu: 500m
+          memory: 1Gi
+        limits:
+          cpu: 2000m
+          memory: 4Gi
+
+      dataVolumeClaimSpec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: local-path
+        resources:
+          requests:
+            storage: 10Gi
+
+      walVolumeClaimSpec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: local-path
+        resources:
+          requests:
+            storage: 5Gi
+
+  users:
+    - name: cn-lms-prod
+      databases: [cn-lms-prod]
+      options: "NOSUPERUSER CREATEROLE NOCREATEDB"
+      password:
+        type: AlphaNumeric
+
+  service:
+    metadata:
+      annotations:
+        metallb.io/address-pool: general-pool
+      labels:
+        my-label: cn-lms-prod
+    type: LoadBalancer
+    externalTrafficPolicy: Local
+    nodePort: 31001
+
+  patroni:
+    dynamicConfiguration:
+      ttl: 30
+      loop_wait: 10
+      retry_timeout: 10
+      postgresql:
+        parameters:
+          # --- Memory (limit 4Gi) ---
+          shared_buffers: "1GB"               # 25% RAM
+          effective_cache_size: "3GB"         # 75% RAM
+          work_mem: "16MB"
+          maintenance_work_mem: "256MB"
+          huge_pages: "off"
+
+          # --- WAL / Durability ---
+          synchronous_commit: "on"            # PRODUKCJA: bezpieczeństwo danych
+          wal_buffers: "64MB"
+          max_wal_size: "4GB"
+          min_wal_size: "1GB"
+          checkpoint_timeout: "15min"
+          checkpoint_completion_target: "0.9"
+
+          # --- Connections ---
+          max_connections: "200"
+          tcp_keepalives_idle: 60
+          tcp_keepalives_interval: 10
+          tcp_keepalives_count: 5
+
+          # --- Autovacuum ---
+          autovacuum_max_workers: "4"
+          autovacuum_naptime: "30s"
+          autovacuum_vacuum_scale_factor: "0.05"
+          autovacuum_analyze_scale_factor: "0.025"
+          autovacuum_vacuum_cost_limit: "400"
+
+          # --- Parallelism ---
+          max_worker_processes: "8"
+          max_parallel_workers: "4"
+          max_parallel_workers_per_gather: "2"
+
+          # --- Logging ---
+          log_min_duration_statement: "1000"
+          log_checkpoints: "on"
+          log_connections: "off"
+          log_lock_waits: "on"
+          deadlock_timeout: "1s"
+
+        pg_hba:
+          - "host cn-lms-prod cn-lms-prod 10.244.0.0/16 scram-sha-256"
+          - "host all all 0.0.0.0/0 md5"
+
+  backups:
+    pgbackrest:
+      global:
+        repo1-retention-full: "4"
+        repo1-retention-full-type: count
+        repo1-retention-diff: "14"
+      repos:
+        - name: repo1
+          schedules:
+            full: "0 1 * * 0"
+            differential: "0 1 * * 1-6"
+            incremental: "0 */6 * * *"
+          volume:
+            volumeClaimSpec:
+              accessModes: ["ReadWriteOnce"]
+              storageClassName: local-path
+              resources:
+                requests:
+                  storage: 20Gi

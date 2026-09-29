@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: cn-lms-dev-recovery-pv
+spec:
+  capacity:
+    storage: 20Gi
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: manual
+  nfs:
+    server: 192.168.125.48
+    path: /mnt/k8s-nfs/pvc-653c1295-806c-49e7-a9a8-73460f40672e_postgres-operator_cn-lms-dev-repo1

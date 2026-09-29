@@ -1,3 +1,17 @@
+## Uwaga (k8s-cn05): PostgreSQL 13 → użyj CloudNativePG, nie PGO
+
+Zainstalowany tu PGO to **v6**, który obsługuje obrazy tylko dla Postgres **14-18**
+(`RELATED_IMAGE_POSTGRES_*` w `kustomize/install/manager/manager.yaml`). PostgreSQL 13
+jest EOL od 2025-11 i rejestr Crunchy Data (`registry.developers.crunchydata.com`) nie
+publikuje już dla niego obrazów — próba pull kończy się 404.
+
+Dla klastrów PG13 używamy osobnego operatora, **CloudNativePG**, który wciąż hostuje
+działający obraz PG13 (`ghcr.io/cloudnative-pg/postgresql:13.16`). Zobacz katalog
+[`cloudnative-pg/`](../cloudnative-pg/) w repo głównym (instalacja operatora przez
+ArgoCD + przykładowy klaster `postgres13`).
+
+---
+
 # Examples for Using [PGO](https://github.com/CrunchyData/postgres-operator), the Postgres Operator from Crunchy Data
 
 This repository contains a collection of examples for deploying, operating, and maintaining Postgres clusters using PGO, the Postgres Operator from Crunchy Data as part of [Crunchy Postgres for Kubernetes](https://www.crunchydata.com/products/crunchy-postgresql-for-kubernetes). Using these examples assumes that you already have PGO running. The kustomize installer for PGO can be found in the [postgres-operator](https://github.com/CrunchyData/postgres-operator) repo. The PGO helm installer can be [installed via the OCI registry](https://access.crunchydata.com/documentation/postgres-operator/latest/installation/helm).

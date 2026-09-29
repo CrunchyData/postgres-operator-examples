@@ -1,0 +1,120 @@
+apiVersion: postgres-operator.crunchydata.com/v1
+kind: PostgresCluster
+metadata:
+  name: keycloak
+  namespace: postgres-operator
+spec:
+  postgresVersion: 18
+
+  instances:
+    - name: instance1
+      resources:
+        requests:
+          cpu: 200m
+          memory: 512Mi
+        limits:
+          cpu: 1000m
+          memory: 2Gi
+
+      dataVolumeClaimSpec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: local-path
+        resources:
+          requests:
+            storage: 1Gi
+
+      walVolumeClaimSpec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: local-path
+        resources:
+          requests:
+            storage: 2Gi
+
+  users:
+    - name: keycloak
+      databases: [keycloak]
+      options: "NOSUPERUSER NOCREATEROLE NOCREATEDB"
+      password:
+        type: AlphaNumeric
+
+  service:
+    metadata:
+      labels:
+        app: keycloak-postgres
+    type: ClusterIP
+
+  patroni:
+    dynamicConfiguration:
+      # Tolerancja na chwilowe braki połączenia z API serverem
+      ttl: 60           # domyślnie 30s - lider nie ustępuje tak szybko
+      loop_wait: 15     # domyślnie 10s
+      retry_timeout: 30 # domyślnie 10s - więcej czasu na retry API
+      postgresql:
+        parameters:
+          # --- Memory (limit 2Gi) ---
+          shared_buffers: "512MB"
+          effective_cache_size: "1536MB"
+          work_mem: "8MB"
+          maintenance_work_mem: "128MB"
+          huge_pages: "off"
+
+          # --- WAL / Durability ---
+          synchronous_commit: "on"
+          wal_buffers: "32MB"
+          max_wal_size: "2GB"
+          min_wal_size: "512MB"
+          checkpoint_timeout: "15min"
+          checkpoint_completion_target: "0.9"
+
+          # --- Connections ---
+          max_connections: "100"
+          tcp_keepalives_idle: 60
+          tcp_keepalives_interval: 10
+          tcp_keepalives_count: 5
+
+          # --- Autovacuum ---
+          autovacuum_max_workers: "3"
+          autovacuum_naptime: "30s"
+          autovacuum_vacuum_scale_factor: "0.05"
+          autovacuum_analyze_scale_factor: "0.025"
+
+          # --- Logging ---
+          log_min_duration_statement: "1000"
+          log_lock_waits: "on"
+          deadlock_timeout: "1s"
+
+        pg_hba:
+          - "host keycloak keycloak 10.244.0.0/16 scram-sha-256"
+          - "host all all 0.0.0.0/0 scram-sha-256"
+
+  # Session pooling wymagany przez Keycloak JDBC_PING2 / JGroups
+  proxy:
+    pgBouncer:
+      replicas: 1
+      config:
+        global:
+          pool_mode: session
+          max_client_conn: "200"
+          default_pool_size: "25"
+          server_idle_timeout: "600"
+          server_lifetime: "3600"
+          ignore_startup_parameters: "extra_float_digits"
+
+  backups:
+    pgbackrest:
+      global:
+        repo1-retention-full: "4"
+        repo1-retention-full-type: count
+        repo1-retention-diff: "14"
+      repos:
+        - name: repo1
+          schedules:
+            full: "0 2 * * 0"
+            differential: "0 2 * * 1-6"
+          volume:
+            volumeClaimSpec:
+              accessModes: ["ReadWriteOnce"]
+              storageClassName: local-path
+              resources:
+                requests:
+                  storage: 1Gi

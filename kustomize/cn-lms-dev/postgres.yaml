@@ -1,0 +1,127 @@
+apiVersion: postgres-operator.crunchydata.com/v1
+kind: PostgresCluster
+metadata:
+  name: cn-lms-dev
+  namespace: postgres-operator
+spec:
+  postgresVersion: 18
+  postGISVersion: "3.6"
+
+  instances:
+    - name: instance1
+      resources:
+        requests:
+          cpu: 200m
+          memory: 512Mi
+        limits:
+          cpu: 1000m
+          memory: 2Gi
+
+      dataVolumeClaimSpec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: local-path
+        resources:
+          requests:
+            storage: 10Gi
+
+      walVolumeClaimSpec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: local-path
+        resources:
+          requests:
+            storage: 5Gi
+
+  users:
+    - name: cn-lms-dev
+      databases: [cn-lms-dev]
+      options: "NOSUPERUSER NOCREATEROLE NOCREATEDB"
+      password:
+        type: AlphaNumeric
+
+  service:
+    metadata:
+      annotations:
+        metallb.io/address-pool: general-pool
+      labels:
+        my-label: cn-lms-dev
+    type: LoadBalancer
+    externalTrafficPolicy: Local
+    nodePort: 32001
+
+  patroni:
+    leaderLeaseDurationSeconds: 60
+    syncPeriodSeconds: 30
+    dynamicConfiguration:
+      ttl: 120
+      loop_wait: 30
+      retry_timeout: 60
+      postgresql:
+        parameters:
+          # --- Memory (limit 2Gi) ---
+          shared_buffers: "512MB"
+          effective_cache_size: "1536MB"
+          work_mem: "8MB"
+          maintenance_work_mem: "128MB"
+          huge_pages: "off"
+
+          # --- WAL (dev: off dla szybkości, akceptowalna utrata danych) ---
+          synchronous_commit: "off"
+          wal_buffers: "32MB"
+          max_wal_size: "2GB"
+          min_wal_size: "512MB"
+          checkpoint_timeout: "15min"
+          checkpoint_completion_target: "0.9"
+
+          # --- Connections ---
+          max_connections: "200"
+          tcp_keepalives_idle: 60
+          tcp_keepalives_interval: 10
+          tcp_keepalives_count: 5
+
+          # --- Autovacuum ---
+          autovacuum_max_workers: "2"
+          autovacuum_naptime: "60s"
+          autovacuum_vacuum_scale_factor: "0.1"
+          autovacuum_analyze_scale_factor: "0.05"
+
+          # --- Logging ---
+          log_min_duration_statement: "2000"
+          log_lock_waits: "on"
+          deadlock_timeout: "1s"
+
+        pg_hba:
+          - "host cn-lms-dev cn-lms-dev 10.244.0.0/16 scram-sha-256"
+          - "host all all 0.0.0.0/0 md5"
+
+  proxy:
+    pgBouncer:
+      replicas: 1
+      config:
+        global:
+          pool_mode: transaction
+          max_client_conn: "500"
+          default_pool_size: "20"
+          server_idle_timeout: "120"
+          server_connect_timeout: "10"
+          query_wait_timeout: "30"
+          client_idle_timeout: "300"
+          ignore_startup_parameters: "extra_float_digits"
+
+  backups:
+    pgbackrest:
+      global:
+        repo1-retention-full: "2"
+        repo1-retention-full-type: count
+        repo1-retention-diff: "7"
+      repos:
+        - name: repo1
+          schedules:
+            full: "0 1 * * 0"
+            differential: "0 1 * * 1-6"
+          volume:
+            volumeClaimSpec:
+              accessModes: ["ReadWriteOnce"]
+              storageClassName: local-path
+              resources:
+                requests:
+                  storage: 20Gi

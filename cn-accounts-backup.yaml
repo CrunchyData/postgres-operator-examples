@@ -1,0 +1,65 @@
+apiVersion: postgres-operator.crunchydata.com/v1beta1
+kind: PostgresCluster
+metadata:
+  name: cn-accounts-backup
+  namespace: postgres-operator
+spec:
+  image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-gis:ubi9-16.11-3.4-2547
+  postgresVersion: 16
+  instances:
+  - name: instance1
+    replicas: 1
+    dataVolumeClaimSpec:
+      accessModes:
+      - ReadWriteOnce
+      storageClassName: local-path
+      resources:
+        requests:
+          storage: 20Gi
+  monitoring:
+    pgmonitor:
+      exporter:
+        image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres-exporter:ubi9-0.18.1-2621
+  patroni:
+    leaderLeaseDurationSeconds: 120
+    syncPeriodSeconds: 10
+    port: 8008
+    dynamicConfiguration:
+      loop_wait: 10
+      ttl: 120
+      retry_timeout: 60
+      postgresql:
+        parameters:
+          log_timezone: Europe/Warsaw
+          timezone: Europe/Warsaw
+        pg_hba:
+        - local all postgres peer
+        - hostssl replication _crunchyrepl all cert
+        - hostssl postgres _crunchyrepl all cert
+        - host all _crunchyrepl all reject
+        - host all ccp_monitoring 127.0.0.0/8 scram-sha-256
+        - host all ccp_monitoring ::1/128 scram-sha-256
+        - host all ccp_monitoring all reject
+        - hostssl all _crunchypgbouncer all scram-sha-256
+        - host all _crunchypgbouncer all reject
+        - host all all 0.0.0.0/0 md5
+        - hostssl all all all scram-sha-256
+        - local all all md5
+  port: 5432
+  proxy:
+    pgBouncer:
+      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbouncer:ubi9-1.25-2550
+      port: 5432
+      replicas: 1
+  service:
+    type: LoadBalancer
+    metadata:
+      annotations:
+        metallb.universe.tf/address-pool: general-pool
+      labels:
+        my-label: value2
+  users:
+  - name: accounts
+    databases:
+    - postgres
+    options: SUPERUSER

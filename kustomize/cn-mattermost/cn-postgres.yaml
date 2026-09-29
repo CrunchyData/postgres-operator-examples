@@ -1,0 +1,110 @@
+apiVersion: postgres-operator.crunchydata.com/v1
+kind: PostgresCluster
+metadata:
+  name: cn-mattermost
+  namespace: postgres-operator
+spec:
+  postgresVersion: 18
+
+  instances:
+    - name: instance1
+      resources:
+        requests:
+          cpu: 200m
+          memory: 512Mi
+        limits:
+          cpu: 1000m
+          memory: 2Gi
+
+      dataVolumeClaimSpec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: local-path
+        resources:
+          requests:
+            storage: 10Gi
+
+      walVolumeClaimSpec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: local-path
+        resources:
+          requests:
+            storage: 5Gi
+
+  users:
+    - name: cn-mattermost
+      databases: [cn-mattermost]
+      options: "NOSUPERUSER NOCREATEROLE NOCREATEDB"
+      password:
+        type: AlphaNumeric
+
+  service:
+    metadata:
+      labels:
+        my-label: mattermost
+    type: NodePort
+    nodePort: 31003
+
+  patroni:
+    dynamicConfiguration:
+      ttl: 60
+      loop_wait: 15
+      retry_timeout: 30
+      postgresql:
+        parameters:
+          shared_buffers: "512MB"
+          effective_cache_size: "1536MB"
+          work_mem: "8MB"
+          maintenance_work_mem: "128MB"
+          huge_pages: "off"
+          synchronous_commit: "on"
+          wal_buffers: "32MB"
+          max_wal_size: "2GB"
+          min_wal_size: "512MB"
+          checkpoint_timeout: "15min"
+          checkpoint_completion_target: "0.9"
+          max_connections: "200"
+          tcp_keepalives_idle: 60
+          tcp_keepalives_interval: 10
+          tcp_keepalives_count: 5
+          autovacuum_max_workers: "3"
+          autovacuum_naptime: "30s"
+          autovacuum_vacuum_scale_factor: "0.05"
+          autovacuum_analyze_scale_factor: "0.025"
+          log_min_duration_statement: "1000"
+          log_lock_waits: "on"
+          deadlock_timeout: "1s"
+
+        pg_hba:
+          - "host cn-mattermost cn-mattermost 10.244.0.0/16 scram-sha-256"
+          - "local all all peer"
+          - "host all all 0.0.0.0/0 md5"
+
+  proxy:
+    pgBouncer:
+      replicas: 1
+      config:
+        global:
+          pool_mode: transaction
+          max_client_conn: "500"
+          default_pool_size: "20"
+          server_idle_timeout: "600"
+          ignore_startup_parameters: "extra_float_digits"
+
+  backups:
+    pgbackrest:
+      global:
+        repo1-retention-full: "2"
+        repo1-retention-full-type: count
+        repo1-retention-diff: "7"
+      repos:
+        - name: repo1
+          schedules:
+            full: "0 1 * * 0"
+            differential: "0 1 * * 1-6"
+          volume:
+            volumeClaimSpec:
+              accessModes: ["ReadWriteOnce"]
+              storageClassName: local-path
+              resources:
+                requests:
+                  storage: 20Gi

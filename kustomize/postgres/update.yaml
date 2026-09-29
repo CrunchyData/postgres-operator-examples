@@ -1,0 +1,9 @@
+apiVersion: postgres-operator.crunchydata.com/v1beta1
+kind: PGUpgrade
+metadata:
+  name: hippo-upgrade
+spec:
+  image: registry.developers.crunchydata.com/crunchydata/crunchy-upgrade:ubi8-5.4.3-0
+  postgresClusterName: hippo
+  fromPostgresVersion: 14
+  toPostgresVersion: 15

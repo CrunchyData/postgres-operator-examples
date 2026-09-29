@@ -1,0 +1,39 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: crunchy-otel-collector
+  namespace: postgres-operator
+  labels:
+    release: prometheus-stack
+spec:
+  selector:
+    matchLabels:
+      postgres-operator.crunchydata.com/crunchy-otel-collector: "true"
+  podMetricsEndpoints:
+  - port: exporter
+    interval: 15s
+    scrapeTimeout: 15s
+    relabelings:
+      - sourceLabels: [__meta_kubernetes_pod_container_port_number]
+        action: keep
+        regex: "9187"
+      - sourceLabels: [__meta_kubernetes_namespace]
+        targetLabel: kubernetes_namespace
+      - sourceLabels: [__meta_kubernetes_pod_name]
+        targetLabel: pod
+      - sourceLabels: [__meta_kubernetes_namespace,__meta_kubernetes_pod_label_postgres_operator_crunchydata_com_cluster]
+        targetLabel: pg_cluster
+        separator: ":"
+        replacement: '$1$2'
+      - sourceLabels: [__meta_kubernetes_pod_ip]
+        targetLabel: ip
+      - sourceLabels: [__meta_kubernetes_pod_label_postgres_operator_crunchydata_com_instance]
+        targetLabel: deployment
+      - sourceLabels: [__meta_kubernetes_pod_label_postgres_operator_crunchydata_com_role]
+        targetLabel: role
+      - sourceLabels: [__meta_kubernetes_pod_label_postgres_operator_crunchydata_com_role]
+        targetLabel: exp_type
+      - sourceLabels: [__meta_kubernetes_namespace,__meta_kubernetes_pod_label_postgres_operator_crunchydata_com_cluster]
+        targetLabel: cluster_name
+        separator: ":"
+        replacement: '$1$2'

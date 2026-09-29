@@ -1,0 +1,39 @@
+apiVersion: postgres-operator.crunchydata.com/v1beta1
+kind: PostgresCluster
+metadata:
+  name: kuba
+spec:
+  # image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-15.4-1
+  image: registry.developers.crunchydata.com/crunchydata/crunchy-postgres:ubi8-14.9-1
+  postgresVersion: 14
+  shutdown: false
+  instances:
+    - name: emg
+      dataVolumeClaimSpec:
+        accessModes:
+        - "ReadWriteOnce"
+        resources:
+          requests:
+            storage: 5Gi
+  backups:
+    pgbackrest:
+      image: registry.developers.crunchydata.com/crunchydata/crunchy-pgbackrest:ubi8-2.47-1
+      repos:
+      - name: repo2
+        schedules:
+          full: "0 1 * * 0"
+          differential: "0 1 * * 1-6"
+        volume:
+          volumeClaimSpec:
+            accessModes:
+            - "ReadWriteOnce"
+            resources:
+              requests:
+                storage: 10Gi
+      global:
+        repo2-retention-full: "14"
+        repo2-retention-full-type: time
+      manual:
+        repoName: repo2
+        options:
+         - --type=full
